@@ -1,0 +1,12 @@
+{
+    "space": {
+        "id": "2A59DE51-BDE8-4FA6-9F8C-C4DA08E93A0B",
+        "name": "My super awesome space",
+        "slug": "my-super-awesome-space"
+    },
+    "user": {
+        "id": "0B9904C5-4006-4A77-B3A6-17C570DCDBFF",
+        "name": "Donald Duck",
+        "email": "donald.duck@disney.com"
+    }
+}
