@@ -1,0 +1,15 @@
+stages:
+  - "test"
+  - "deploy"
+
+.test:
+
+deploy:
+  stage: "deploy"
+  image:
+    name: "hashicorp/terraform:1.1.9"
+    # default entrypoint is terraform command, but we want to run shell scripts
+    entrypoint: ["/bin/sh", "-c"]
+  script:
+    - zip -r receiveEvent.zip receiveEvent
+    - echo "TODO more here"
