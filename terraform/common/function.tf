@@ -67,6 +67,13 @@ resource "google_cloudfunctions2_function" "holi-ocis-integration" {
     pubsub_topic   = "projects/holi-shared/topics/okuna_development"
     retry_policy   = "RETRY_POLICY_RETRY"
   }
+
+  # taken from https://github.com/hashicorp/terraform-provider-google/issues/1938#issuecomment-1229042663
+  lifecycle {
+    replace_triggered_by  = [
+      google_storage_bucket_object.object
+    ]
+  }
 }
 
 # TODO function for production deployment
