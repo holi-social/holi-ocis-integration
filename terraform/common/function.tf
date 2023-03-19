@@ -10,6 +10,15 @@ resource "google_service_account" "account" {
   display_name = "holi-ocis-integration Service Account"
 }
 
+resource "google_project_iam_binding" "iam_binding_gcf" {
+  project = data.terraform_remote_state.holi_infra_state.outputs.shared_project_id
+  members = [
+    "serviceAccount:service-984061681268@gcf-admin-robot.iam.gserviceaccount.com",
+    "serviceAccount:984061681268@cloudbuild.gserviceaccount.com"
+  ]
+  role    = "roles/storage.objectViewer"
+}
+
 resource "google_storage_bucket" "bucket" {
   project                     = data.terraform_remote_state.holi_infra_state.outputs.shared_project_id
   name                        = "${random_id.bucket_prefix.hex}-gcf-source"
@@ -20,12 +29,12 @@ resource "google_storage_bucket" "bucket" {
 resource "google_storage_bucket_object" "object" {
   name    = "receiveEvent.zip"
   bucket  = google_storage_bucket.bucket.name
-  source  = "receiveEvent.zip"
+  source  = "../../receiveEvent.zip"
 }
 
-resource "google_cloudfunctions2_function" "function" {
+resource "google_cloudfunctions2_function" "holi-ocis-integration" {
   project     = data.terraform_remote_state.holi_infra_state.outputs.shared_project_id
-  name        = "function"
+  name        = "holi-ocis-integration"
   location    = "europe-north1"
   description = "holi-ocis-integration function"
 
@@ -44,7 +53,7 @@ resource "google_cloudfunctions2_function" "function" {
   service_config {
     max_instance_count = 1
     min_instance_count = 1
-    available_memory   = "64M"
+    available_memory   = "128Mi"
     timeout_seconds    = 60
     
     ingress_settings               = "ALLOW_INTERNAL_ONLY"
@@ -55,7 +64,7 @@ resource "google_cloudfunctions2_function" "function" {
   event_trigger {
     trigger_region = "europe-north1"
     event_type     = "google.cloud.pubsub.topic.v1.messagePublished"
-    pubsub_topic   = data.terraform_remote_state.okuna-common_state.outputs.google_pubsub_topic_okuna_development
+    pubsub_topic   = "projects/holi-shared/topics/okuna_development"
     retry_policy   = "RETRY_POLICY_RETRY"
   }
 }
