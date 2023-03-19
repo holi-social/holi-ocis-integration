@@ -2,7 +2,7 @@
 
 This repository contains Google Cloud Functions implementation for the integration of OwnCloud Infinite Storage (OCIS) into holi. The cloud function
 
-* can be found in `receiveEvent`
+* can be found in the `receiveEvent` folder
 * and is triggered by events on Google Cloud Pub/Sub, emitted by Okuna on the `okuna_development` and `okuna_production` topics, respectively
 
 ## Links

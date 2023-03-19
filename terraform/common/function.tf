@@ -32,11 +32,11 @@ resource "google_storage_bucket_object" "object" {
   source  = "../../receiveEvent.zip"
 }
 
-resource "google_cloudfunctions2_function" "holi-ocis-integration_staging" {
+resource "google_cloudfunctions2_function" "holi-ocis-integration-staging" {
   project     = data.terraform_remote_state.holi_infra_state.outputs.shared_project_id
-  name        = "holi-ocis-integration_staging"
+  name        = "holi-ocis-integration-staging"
   location    = "europe-north1"
-  description = "holi-ocis-integration_staging function"
+  description = "holi-ocis-integration-staging function"
 
   build_config {
     runtime     = "nodejs18"
