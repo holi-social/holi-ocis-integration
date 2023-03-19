@@ -3,6 +3,7 @@ stages:
   - "deploy"
 
 .test:
+  stage: "test"
 
 deploy:
   stage: "deploy"
