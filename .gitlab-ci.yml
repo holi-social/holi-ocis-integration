@@ -17,6 +17,7 @@ deploy:
     - zip -r ../receiveEvent.zip ./*
     - cd ../
     - cd terraform/common/
+    - export GOOGLE_APPLICATION_CREDENTIALS=${GOOGLE_CLOUD_SERVICE_ACCOUNT}
     - terraform init
     - terraform apply -auto-approve
   only:
