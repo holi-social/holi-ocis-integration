@@ -17,6 +17,7 @@ deploy:
     - zip -r ../receiveEvent.zip ./*
     - cd ../
     - cd terraform/common/
+    - terraform init
     - terraform apply -auto-approve
   only:
     - main
