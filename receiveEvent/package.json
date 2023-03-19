@@ -1,14 +1,12 @@
 {
   "name": "holi-ocis-integration",
   "version": "1.0.0",
-  "description": "",
+  "description": "holi integration cloud functions for OwnCloud Infinite Storage (OCIS)",
   "main": "function.js",
   "scripts": {
     "start": "npx functions-framework --target=receiveEvent --signature-type=cloudevent",
     "help": "holi-ocis-integration contains cloud functions to process events received from holis Google Cloud Pub/Sub containing events from the okuna_{development|production} topics. Follows https://cloud.google.com/functions/docs/running/function-frameworks."
   },
-  "author": "",
-  "license": "ISC",
   "dependencies": {
     "@google-cloud/functions-framework": "^3.1.3"
   }
