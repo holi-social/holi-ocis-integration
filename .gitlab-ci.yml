@@ -30,7 +30,7 @@ deploy:
   script:
     - apk add zip
     - cd dist/
-    - zip -r ../handleEvent.zip ./*
+    - zip -r ../receiveEvent.zip ./*
     - cd ../
     - cd terraform/common/
     - export GOOGLE_APPLICATION_CREDENTIALS=${GOOGLE_CLOUD_SERVICE_ACCOUNT}
