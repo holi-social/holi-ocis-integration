@@ -1,0 +1,14 @@
+# Environment variable e.g. 'local'.
+export ENVIRONMENT=
+
+# URL of the oCIS instance
+export OCIS_URL=
+
+# Admin username for the oCIS instance
+export OCIS_ADMIN_USERNAME=
+
+# Admin password for the oCIS instance
+export OCIS_ADMIN_PASSWORD=
+
+# OIDC issuer for the oCIS instance (i.e. Ory)
+export OCIS_OIDC_ISSUER=
