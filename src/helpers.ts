@@ -1,6 +1,6 @@
 import axios, { AxiosResponse } from 'axios'
 import { Agent } from 'https'
-import { ENVIRONMENT, OCIS_URL, OCIS_ADMIN_USERNAME, OCIS_ADMIN_PASSWORD, OCIS_OIDC_ISSUER } from './config'
+import { ENVIRONMENT, OWNCLOUD_BASE_URL, OCIS_ADMIN_USERNAME, OCIS_ADMIN_PASSWORD, OCIS_OIDC_ISSUER } from './config'
 import { HOLI_PREFIX, HOLI_EMAIL_DOMAIN } from './constants'
 import {
   OcisApi,
@@ -29,7 +29,7 @@ const httpsAgent = new Agent({
  */
 export const findUserById = async (id: string): Promise<OcisUser | null> => {
   // Construct the URL to retrieve the user.
-  const url = `${OCIS_URL}/${OcisApi.LIBRE_GRAPH_API_PATH}/${OcisLibreGraphRoute.USERS}/${HOLI_PREFIX}_${id}`
+  const url = `${OWNCLOUD_BASE_URL}/${OcisApi.LIBRE_GRAPH_API_PATH}/${OcisLibreGraphRoute.USERS}/${HOLI_PREFIX}_${id}`
 
   try {
     // Send a GET request to retrieve the user.
@@ -61,7 +61,7 @@ export const findUserById = async (id: string): Promise<OcisUser | null> => {
  */
 export const createUser = async (user: UserPayload): Promise<OcisUser> => {
   // Construct the URL to create the user.
-  const url = `${OCIS_URL}/${OcisApi.LIBRE_GRAPH_API_PATH}/${OcisLibreGraphRoute.USERS}`
+  const url = `${OWNCLOUD_BASE_URL}/${OcisApi.LIBRE_GRAPH_API_PATH}/${OcisLibreGraphRoute.USERS}`
 
   try {
     // Send a POST request to create the user.
@@ -109,7 +109,7 @@ export const createUser = async (user: UserPayload): Promise<OcisUser> => {
  */
 export const assignUserRole = async (userId: string, roleId: string): Promise<void> => {
   // Construct the URL to assign the role.
-  const url = `${OCIS_URL}/${OcisApi.SETTINGS_API_PATH}/assignments-add`
+  const url = `${OWNCLOUD_BASE_URL}/${OcisApi.SETTINGS_API_PATH}/assignments-add`
 
   try {
     // Send a POST request to assign the role.
@@ -146,7 +146,7 @@ export const assignUserRole = async (userId: string, roleId: string): Promise<vo
  */
 export const createSpace = async (space: SpacePayload): Promise<OcisSpace> => {
   // Construct the URL to create the space.
-  const url = `${OCIS_URL}/${OcisApi.LIBRE_GRAPH_API_PATH}/${OcisLibreGraphRoute.DRIVES}`
+  const url = `${OWNCLOUD_BASE_URL}/${OcisApi.LIBRE_GRAPH_API_PATH}/${OcisLibreGraphRoute.DRIVES}`
 
   try {
     // Send a POST request to create the space.
@@ -186,7 +186,7 @@ export const createSpace = async (space: SpacePayload): Promise<OcisSpace> => {
  */
 export const shareSpaceWithUser = async (spaceId: string, username: string, role: OcisRole) => {
   // Construct the URL to share the space with the user.
-  const url = `${OCIS_URL}/${OcisApi.SHARE_API_PATH}`
+  const url = `${OWNCLOUD_BASE_URL}/${OcisApi.SHARE_API_PATH}`
 
   try {
     // Send a POST request to share the space with the user.

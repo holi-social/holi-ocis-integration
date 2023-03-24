@@ -2,7 +2,7 @@
 export const ENVIRONMENT = process.env.ENVIRONMENT
 
 // The URL of the oCIS instance being used by the application.
-export const OCIS_URL = process.env.OCIS_URL
+export const OWNCLOUD_BASE_URL = process.env.OWNCLOUD_BASE_URL
 
 // The username of the admin user for the oCIS instance.
 export const OCIS_ADMIN_USERNAME = process.env.OCIS_ADMIN_USERNAME

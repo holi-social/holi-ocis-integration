@@ -2,7 +2,7 @@
 export ENVIRONMENT=
 
 # URL of the oCIS instance
-export OCIS_URL=
+export OWNCLOUD_BASE_URL=
 
 # Admin username for the oCIS instance
 export OCIS_ADMIN_USERNAME=
