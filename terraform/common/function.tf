@@ -16,7 +16,7 @@ resource "google_project_iam_binding" "iam_binding_gcf" {
     "serviceAccount:service-984061681268@gcf-admin-robot.iam.gserviceaccount.com",
     "serviceAccount:984061681268@cloudbuild.gserviceaccount.com"
   ]
-  role    = "roles/storage.objectViewer"
+  role = "roles/storage.objectViewer"
 }
 
 resource "google_storage_bucket" "bucket" {
@@ -27,9 +27,9 @@ resource "google_storage_bucket" "bucket" {
 }
 
 resource "google_storage_bucket_object" "object" {
-  name    = "receiveEvent.zip"
-  bucket  = google_storage_bucket.bucket.name
-  source  = "../../receiveEvent.zip"
+  name   = "receiveEvent.zip"
+  bucket = google_storage_bucket.bucket.name
+  source = "../../receiveEvent.zip"
 }
 
 resource "google_cloudfunctions2_function" "holi-ocis-integration-staging" {
@@ -41,7 +41,7 @@ resource "google_cloudfunctions2_function" "holi-ocis-integration-staging" {
   build_config {
     runtime     = "nodejs18"
     entry_point = "receiveEvent"
-    
+
     source {
       storage_source {
         bucket = google_storage_bucket.bucket.name
@@ -55,7 +55,7 @@ resource "google_cloudfunctions2_function" "holi-ocis-integration-staging" {
     min_instance_count = 1
     available_memory   = "128Mi"
     timeout_seconds    = 60
-    
+
     ingress_settings               = "ALLOW_INTERNAL_ONLY"
     all_traffic_on_latest_revision = true
     service_account_email          = google_service_account.account.email
@@ -70,10 +70,53 @@ resource "google_cloudfunctions2_function" "holi-ocis-integration-staging" {
 
   # taken from https://github.com/hashicorp/terraform-provider-google/issues/1938#issuecomment-1229042663
   lifecycle {
-    replace_triggered_by  = [
+    replace_triggered_by = [
       google_storage_bucket_object.object
     ]
   }
+
+  environment_variables = {
+    ENVIRONMENT       = "development"
+    OCIS_OIDC_ISSUER  = "https://dev-auth.project-holi.org"
+    OWNCLOUD_BASE_URL = "https://development.cloud.project-holi.org"
+  }
+
+  resource "google_secret_manager_secret" "ocis_admin_username" {
+    secret_id = "OCIS_ADMIN_USERNAME"
+    replication {
+      user_managed {
+        replicas {
+          location = "europe-north1"
+        }
+      }
+    }
+  }
+  secret_environment_variables {
+    key        = "OCIS_ADMIN_USERNAME"
+    project_id = data.terraform_remote_state.holi_infra_state.outputs.shared_project_id
+    secret     = google_secret_manager_secret.ocis_admin_username.secret_id
+    version    = "latest"
+  }
+
+  resource "google_secret_manager_secret" "ocis_admin_password" {
+    secret_id = "OCIS_ADMIN_PASSWORD"
+    replication {
+      user_managed {
+        replicas {
+          location = "europe-north1"
+        }
+      }
+    }
+  }
+
+  secret_environment_variables {
+    key        = "OCIS_ADMIN_PASSWORD"
+    project_id = data.terraform_remote_state.holi_infra_state.outputs.shared_project_id
+    secret     = google_secret_manager_secret.ocis_admin_password.secret_id
+    version    = "latest"
+  }
+
+
 }
 
 # TODO function for production deployment
