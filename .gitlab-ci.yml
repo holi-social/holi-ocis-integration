@@ -3,22 +3,34 @@ default:
     - holi-small
 
 stages:
-  - "test"
-  - "deploy"
+  - 'test'
+  - 'build'
+  - 'deploy'
 
 .test:
-  stage: "test"
+  stage: 'test'
+
+build:
+  stage: 'build'
+  image:
+    name: 'node:latest'
+  script:
+    - yarn install
+    - yarn build
+  artifacts:
+    paths:
+      - dist/
 
 deploy:
-  stage: "deploy"
+  stage: 'deploy'
   image:
-    name: "hashicorp/terraform:1.3.7"
+    name: 'hashicorp/terraform:1.3.7'
     # default entrypoint is terraform command, but we want to run shell scripts
-    entrypoint: ["/bin/sh", "-c"]
+    entrypoint: ['/bin/sh', '-c']
   script:
     - apk add zip
-    - cd receiveEvent/
-    - zip -r ../receiveEvent.zip ./*
+    - cd dist/
+    - zip -r ../handleEvent.zip ./*
     - cd ../
     - cd terraform/common/
     - export GOOGLE_APPLICATION_CREDENTIALS=${GOOGLE_CLOUD_SERVICE_ACCOUNT}
