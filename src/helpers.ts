@@ -71,7 +71,7 @@ export const createUser = async (user: UserPayload): Promise<OcisUser> => {
         mail: `${user.id}@${HOLI_EMAIL_DOMAIN}`,
         displayName: user.id,
         onPremisesSamAccountName: `${HOLI_PREFIX}_${user.id}`,
-        surname: `${HOLI_PREFIX}_${user.id}`,
+        surname: user.name ? user.name : `${HOLI_PREFIX}_${user.id}`,
         userType: OcisUserType.MEMBER,
         identities: [
           {

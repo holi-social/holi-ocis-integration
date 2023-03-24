@@ -4,12 +4,12 @@
  * @typedef {Object} UserPayload
  * @property {string} id - The unique identifier of the user
  * @property {string} email - The email address of the user
- * @property {string} username - The username of the user
+ * @property {string} name - The name of the user
  */
 export type UserPayload = {
   id: string
   email: string
-  username: string
+  name: string
 }
 
 /**
