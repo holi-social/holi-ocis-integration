@@ -12,5 +12,5 @@ This repository contains Google Cloud Functions implementation for the integrati
 
 ## Local Execution
 
-- `yarn start` to run the cloud function locally.
+- `yarn start:dev` to run the cloud function locally.
 - `tests/space_created.sh` to send an example `SpaceCreated` event to the cloud function as if it was sent by Google Cloud Pub/Sub.

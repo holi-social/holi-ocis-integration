@@ -5,7 +5,8 @@
   "repository": "https://gitlab.com/holisticfoundation/holi-ocis-integration.git",
   "scripts": {
     "build": "tsc",
-    "start": "npx functions-framework --target=receiveEvent --signature-type=cloudevent --port=8086",
+    "start": "npx functions-framework --target=receiveEvent --signature-type=cloudevent",
+    "start:dev": "npx functions-framework --target=receiveEvent --signature-type=cloudevent --port=8086",
     "help": "holi-ocis-integration contains cloud functions to process events received from holis Google Cloud Pub/Sub containing events from the okuna_{development|production} topics. Follows https://cloud.google.com/functions/docs/running/function-frameworks.",
     "format": "prettier --write .",
     "clean": "rimraf dist",
