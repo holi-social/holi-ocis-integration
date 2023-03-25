@@ -1,4 +1,4 @@
-import axios, { AxiosResponse } from 'axios'
+import axios, { AxiosResponse, AxiosBasicCredentials, AxiosRequestHeaders } from 'axios'
 import { Agent } from 'https'
 import { ENVIRONMENT, OWNCLOUD_BASE_URL, OCIS_ADMIN_USERNAME, OCIS_ADMIN_PASSWORD, OCIS_OIDC_ISSUER } from './config'
 import { HOLI_PREFIX, HOLI_EMAIL_DOMAIN } from './constants'
@@ -18,6 +18,12 @@ import {
 const httpsAgent = new Agent({
   rejectUnauthorized: ENVIRONMENT === 'local' ? false : true,
 })
+
+// Axios basic authentication credentials.
+const auth: AxiosBasicCredentials = {
+  username: OCIS_ADMIN_USERNAME,
+  password: OCIS_ADMIN_PASSWORD,
+}
 
 /**
  * Finds an OcisUser by ID.
@@ -84,10 +90,7 @@ export const createUser = async (user: UserPayload): Promise<OcisUser> => {
         headers: {
           'Content-Type': 'application/json',
         },
-        auth: {
-          username: OCIS_ADMIN_USERNAME,
-          password: OCIS_ADMIN_PASSWORD,
-        },
+        auth,
         httpsAgent,
       }
     )
@@ -123,10 +126,7 @@ export const assignUserRole = async (userId: string, roleId: string): Promise<vo
         headers: {
           'Content-Type': 'application/json',
         },
-        auth: {
-          username: OCIS_ADMIN_USERNAME,
-          password: OCIS_ADMIN_PASSWORD,
-        },
+        auth,
         httpsAgent,
       }
     )
@@ -161,10 +161,7 @@ export const createSpace = async (space: SpacePayload): Promise<OcisSpace> => {
         headers: {
           'Content-Type': 'application/json',
         },
-        auth: {
-          username: OCIS_ADMIN_USERNAME,
-          password: OCIS_ADMIN_PASSWORD,
-        },
+        auth,
         httpsAgent,
       }
     )
@@ -194,10 +191,7 @@ export const shareSpaceWithUser = async (spaceId: string, username: string, role
       url,
       `space_ref=${spaceId}&shareType=${OcisShareType.SHARE_SPACE}&shareWith=${username}&role=${role}`,
       {
-        auth: {
-          username: OCIS_ADMIN_USERNAME,
-          password: OCIS_ADMIN_PASSWORD,
-        },
+        auth,
         httpsAgent,
       }
     )
