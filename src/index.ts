@@ -1,4 +1,4 @@
-import { assignUserRole, createSpace, createUser, findUserById, shareSpaceWithUser } from './helpers'
+import { assignUserRole, createSpace, createUser, findUserById, shareSpaceWithUser } from './ocis-api'
 import { OcisDefaultUUIDRole, OcisRole, SpaceCreatedDataPayload } from './types'
 
 export const receiveEvent = async (event) => {
