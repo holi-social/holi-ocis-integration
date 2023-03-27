@@ -29,9 +29,7 @@ deploy:
     entrypoint: ['/bin/sh', '-c']
   script:
     - apk add zip
-    - cd dist/
-    - zip -r ../receiveEvent.zip ./*
-    - cd ../
+    - zip -r receiveEvent.zip dist package.json yarn.lock
     - cd terraform/common/
     - export GOOGLE_APPLICATION_CREDENTIALS=${GOOGLE_CLOUD_SERVICE_ACCOUNT}
     - terraform init
