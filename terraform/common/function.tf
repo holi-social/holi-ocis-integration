@@ -135,7 +135,7 @@ resource "google_cloudfunctions2_function" "holi-ocis-integration-production" {
 
   service_config {
     max_instance_count = 3
-    min_instance_count = 1
+    min_instance_count = 0
     available_memory   = "256Mi"
     timeout_seconds    = 60
     environment_variables = {
