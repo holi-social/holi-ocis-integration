@@ -16,7 +16,7 @@ resource "google_project_iam_binding" "iam_binding_gcf" {
     "serviceAccount:service-984061681268@gcf-admin-robot.iam.gserviceaccount.com",
     "serviceAccount:984061681268@cloudbuild.gserviceaccount.com"
   ]
-  role = "roles/storage.objectViewer"
+  role = "roles/secretmanager.secretAccessor"
 }
 
 resource "google_storage_bucket" "bucket" {
