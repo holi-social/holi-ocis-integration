@@ -14,3 +14,11 @@ This repository contains Google Cloud Functions implementation for the integrati
 
 - `yarn start:dev` to run the cloud function locally.
 - `tests/space_created.sh` to send an example `SpaceCreated` event to the cloud function as if it was sent by Google Cloud Pub/Sub.
+
+### Dependencies
+
+Make sure that `jq` is installed before running the command. You can install it using the package manager of your choice:
+
+- Ubuntu/Debian: `sudo apt-get install jq`
+- macOS: `brew install jq`
+- Windows: `chocolatey install jq`
