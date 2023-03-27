@@ -131,7 +131,7 @@ export enum OcisRole {
  * @property {number} SHARE_SPACE - The share space type
  */
 export enum OcisShareType {
-  SHARE_SPACE = 7,
+  SHARE_SPACE = 7, // https://github.com/owncloud/ocis/blob/67296caf144ec053279ef04cf533628f3a2183f4/tests/acceptance/features/bootstrap/SpacesContext.php#L2021
 }
 
 /**
