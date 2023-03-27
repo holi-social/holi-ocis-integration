@@ -1,14 +1,14 @@
 # The environment where the application is running, e.g. 'local', 'staging', 'production'.
-export ENVIRONMENT=
+export ENVIRONMENT=local
 
 # URL of the oCIS instance
-export OWNCLOUD_BASE_URL=
+export OWNCLOUD_BASE_URL=https://dev-auth.project-holi.org
 
 # Admin username for the oCIS instance
-export OCIS_ADMIN_USERNAME=
+export OCIS_ADMIN_USERNAME=admin
 
 # Admin password for the oCIS instance
-export OCIS_ADMIN_PASSWORD=
+export OCIS_ADMIN_PASSWORD=password
 
 # OIDC issuer for the oCIS instance (i.e. Ory)
-export OCIS_OIDC_ISSUER=
+export OCIS_OIDC_ISSUER=https://local.cloud.project-holi.org
