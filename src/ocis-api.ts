@@ -154,7 +154,6 @@ export const createSpace = async (space: SpacePayload): Promise<OcisSpace> => {
       {
         name: space.name,
         driveAlias: space.slug,
-        description: space.description,
         quota: {
           total: MAX_SPACE_QUOTA,
         },
