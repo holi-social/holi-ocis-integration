@@ -15,7 +15,7 @@ create_message () {
 }
 
 send_message () {
-    echo $MESSAGE | curl localhost:8080 \
+    echo $MESSAGE | curl localhost:8086 \
         -X POST \
         -H "Content-Type: application/json" \
         -H "ce-id: 123451234512345" \
