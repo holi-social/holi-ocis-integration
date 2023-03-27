@@ -1,7 +1,7 @@
 import axios, { AxiosResponse, AxiosBasicCredentials, AxiosRequestHeaders } from 'axios'
 import { Agent } from 'https'
 import { ENVIRONMENT, OWNCLOUD_BASE_URL, OCIS_ADMIN_USERNAME, OCIS_ADMIN_PASSWORD, OCIS_OIDC_ISSUER } from './config'
-import { HOLI_PREFIX, HOLI_EMAIL_DOMAIN } from './constants'
+import { HOLI_PREFIX, HOLI_EMAIL_DOMAIN, MAX_SPACE_QUOTA } from './constants'
 import {
   OcisApi,
   OcisSpace,
@@ -156,6 +156,9 @@ export const createSpace = async (space: SpacePayload): Promise<OcisSpace> => {
         name: space.name,
         driveAlias: space.slug,
         description: space.description,
+        quota: {
+          total: MAX_SPACE_QUOTA,
+        },
       },
       {
         headers: {
