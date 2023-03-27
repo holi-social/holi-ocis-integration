@@ -1,4 +1,15 @@
 /**
+ * An enum that represents the type of event that can be triggered in the system.
+ *
+ * @enum {string}
+ * @readonly
+ * @property {string} SPACE_CREATED - The type of event that is triggered when a new space is created.
+ */
+export enum EventType {
+  SPACE_CREATED = 'SpaceCreated',
+}
+
+/**
  * Payload for a user
  *
  * @typedef {Object} UserPayload

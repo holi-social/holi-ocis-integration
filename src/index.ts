@@ -1,5 +1,5 @@
 import { assignUserRole, createSpace, createUser, findUserById, shareSpaceWithUser } from './ocis-api'
-import { OcisDefaultUUIDRole, OcisRole, SpaceCreatedDataPayload } from './types'
+import { EventType, OcisDefaultUUIDRole, OcisRole, SpaceCreatedDataPayload } from './types'
 
 export const receiveEvent = async (event) => {
   const message = event.data.message
@@ -9,7 +9,7 @@ export const receiveEvent = async (event) => {
 
   switch (eventType) {
     //Handles the SpaceCreated event from Google Cloud Pub/Sub and performs the following tasks
-    case 'SpaceCreated':
+    case EventType.SPACE_CREATED:
       try {
         const { user, space } = payload as SpaceCreatedDataPayload
 
