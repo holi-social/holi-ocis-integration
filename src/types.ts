@@ -36,18 +36,17 @@ export type SpacePayload = {
   id: string
   name: string
   slug: string
-  description: string
 }
 
 /**
  * Payload for data created when a space is created
  *
  * @typedef {Object} SpaceCreatedDataPayload
- * @property {UserPayload} user - The user who created the space
+ * @property {UserPayload} creator - The user who created the space
  * @property {SpacePayload} space - The created space
  */
 export type SpaceCreatedDataPayload = {
-  user: UserPayload
+  creator: UserPayload
   space: SpacePayload
 }
 

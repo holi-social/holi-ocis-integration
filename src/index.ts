@@ -11,12 +11,12 @@ export const receiveEvent = async (event) => {
     //Handles the SpaceCreated event from Google Cloud Pub/Sub and performs the following tasks
     case EventType.SPACE_CREATED:
       try {
-        const { user, space } = payload as SpaceCreatedDataPayload
+        const { creator, space } = payload as SpaceCreatedDataPayload
 
         //Finds or creates an oCIS user based on the user information in the event payload
-        let ocisUser = await findUserById(user.id)
+        let ocisUser = await findUserById(creator.id)
         if (!ocisUser) {
-          ocisUser = await createUser(user)
+          ocisUser = await createUser(creator)
         }
         //Assigns the "Space Admin" role to the user
         await assignUserRole(ocisUser.id, OcisDefaultUUIDRole.SPACE_ADMIN)
