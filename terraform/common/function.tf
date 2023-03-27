@@ -52,7 +52,7 @@ resource "google_cloudfunctions2_function" "holi-ocis-integration-staging" {
 
   service_config {
     max_instance_count = 1
-    min_instance_count = 1
+    min_instance_count = 0
     available_memory   = "128Mi"
     timeout_seconds    = 60
     
