@@ -1,2 +1,4 @@
 node_modules
 terraform/.holi-terraform.key
+dist
+.envrc.local

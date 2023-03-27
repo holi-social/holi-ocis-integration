@@ -2,17 +2,23 @@
 
 This repository contains Google Cloud Functions implementation for the integration of OwnCloud Infinite Storage (OCIS) into holi. The cloud function
 
-* can be found in the `receiveEvent` folder
-* and is triggered by events on Google Cloud Pub/Sub, emitted by Okuna on the `okuna_development` and `okuna_production` topics, respectively
+- can be found in the `src/index.ts`.
+- and is triggered by events on Google Cloud Pub/Sub, emitted by Okuna on the `okuna_development` and `okuna_production` topics, respectively
 
 ## Links
 
-* [Google Cloud Pub/Sub Topics](https://console.cloud.google.com/cloudpubsub/topic/list?project=holi-shared)
-* [Google Cloud Functions](https://console.cloud.google.com/functions/list?env=gen2&project=holi-shared&tab=logs)
+- [Google Cloud Pub/Sub Topics](https://console.cloud.google.com/cloudpubsub/topic/list?project=holi-shared)
+- [Google Cloud Functions](https://console.cloud.google.com/functions/list?env=gen2&project=holi-shared&tab=logs)
 
 ## Local Execution
 
-Within `receiveEvent` directory, run:
-
-- `npm start` to run the cloud function locally.
+- `yarn start:dev` to run the cloud function locally.
 - `tests/space_created.sh` to send an example `SpaceCreated` event to the cloud function as if it was sent by Google Cloud Pub/Sub.
+
+### Dependencies
+
+Make sure that `jq` is installed before running the command. You can install it using the package manager of your choice:
+
+- Ubuntu/Debian: `sudo apt-get install jq`
+- macOS: `brew install jq`
+- Windows: `chocolatey install jq`
