@@ -9,14 +9,14 @@ resource "google_service_account" "account" {
   account_id   = "holi-ocis-integration-sa"
   display_name = "holi-ocis-integration Service Account"
 }
-
-resource "google_project_iam_binding" "iam_binding_gcf" {
-  project = data.terraform_remote_state.holi_infra_state.outputs.shared_project_id
-  members = [
+resource "google_project_iam_member" "secretmanager_accessor" {
+  for_each = toset([
     "serviceAccount:service-984061681268@gcf-admin-robot.iam.gserviceaccount.com",
     "serviceAccount:984061681268@cloudbuild.gserviceaccount.com"
-  ]
-  role = "roles/secretmanager.secretAccessor"
+  ])
+  project = data.terraform_remote_state.holi_infra_state.outputs.shared_project_id
+  member  = each.key
+  role    = "roles/secretmanager.secretAccessor"
 }
 
 resource "google_storage_bucket" "bucket" {
