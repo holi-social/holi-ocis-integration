@@ -2,7 +2,7 @@
 export ENVIRONMENT=local
 
 # URL of the oCIS instance
-export OWNCLOUD_BASE_URL=https://dev-auth.project-holi.org
+export OWNCLOUD_BASE_URL=https://local.cloud.project-holi.org
 
 # Admin username for the oCIS instance
 export OCIS_ADMIN_USERNAME=admin
@@ -11,4 +11,10 @@ export OCIS_ADMIN_USERNAME=admin
 export OCIS_ADMIN_PASSWORD=password
 
 # OIDC issuer for the oCIS instance (i.e. Ory)
-export OCIS_OIDC_ISSUER=https://local.cloud.project-holi.org
+export OCIS_OIDC_ISSUER=https://dev-auth.project-holi.org
+
+export OCIS_INTEGRATION_DB_HOST=localhost
+export OCIS_INTEGRATION_DB_NAME=ocis-identity-db
+export OCIS_INTEGRATION_DB_USERNAME=postgres
+export OCIS_INTEGRATION_DB_PASSWORD=password
+export OCIS_INTEGRATION_DB_PORT=8087
