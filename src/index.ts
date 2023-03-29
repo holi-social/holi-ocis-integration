@@ -1,5 +1,7 @@
-import { assignUserRole, createSpace, createUser, findUserById, shareSpaceWithUser } from './ocis-api'
-import { EventType, OcisDefaultUUIDRole, OcisRole, SpaceCreatedDataPayload } from './types'
+import { spaceCreatedHandler } from './handlers/space-created-handler'
+import { spaceUserAddedHandler } from './handlers/space-user-added-handler'
+
+import { EventType } from './types'
 
 export const receiveEvent = async (event) => {
   const message = event.data.message
@@ -8,27 +10,11 @@ export const receiveEvent = async (event) => {
   const payload = JSON.parse(buffer.toString())
 
   switch (eventType) {
-    //Handles the SpaceCreated event from Google Cloud Pub/Sub and performs the following tasks
     case EventType.SPACE_CREATED:
-      try {
-        const { creator, space } = payload as SpaceCreatedDataPayload
-
-        //Finds or creates an oCIS user based on the user information in the event payload
-        let ocisUser = await findUserById(creator.id)
-        if (!ocisUser) {
-          ocisUser = await createUser(creator)
-        }
-        //Assigns the "Space Admin" role to the user
-        await assignUserRole(ocisUser.id, OcisDefaultUUIDRole.SPACE_ADMIN)
-
-        //Creates a new space in oCIS based on the space information in the event payload
-        const ocisSpace = await createSpace(space)
-
-        //Shares the new space with the user with the "manager" role
-        await shareSpaceWithUser(ocisSpace.id, ocisUser.onPremisesSamAccountName, OcisRole.MANAGER)
-      } catch (error) {
-        throw error
-      }
+      await spaceCreatedHandler(payload)
+      break
+    case EventType.SPACE_USER_ADDED:
+      await spaceUserAddedHandler(payload)
       break
     default:
       console.log('Received unexpected event', eventType)
