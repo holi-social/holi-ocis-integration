@@ -33,6 +33,18 @@ resource "google_storage_bucket_object" "object" {
   source = "../../receiveEvent.zip"
 }
 
+resource "google_sql_database" "database_development" {
+  name     = "ocis-identity-development"
+  project  = data.terraform_remote_state.holi_infra_state.outputs.shared_project_id
+  instance = data.terraform_remote_state.holi_infra_state.outputs.database_name_development
+}
+
+resource "google_sql_database" "database_production" {
+  name     = "ocis-identity-production"
+  project  = data.terraform_remote_state.holi_infra_state.outputs.shared_project_id
+  instance = data.terraform_remote_state.holi_infra_state.outputs.database_name_production
+}
+
 data "google_secret_manager_secret" "ocis_admin_username_development" {
   secret_id = "OCIS_ADMIN_USERNAME_DEVELOPMENT"
   project   = data.terraform_remote_state.holi_infra_state.outputs.shared_project_id
@@ -43,6 +55,16 @@ data "google_secret_manager_secret" "ocis_admin_password_development" {
   project   = data.terraform_remote_state.holi_infra_state.outputs.shared_project_id
 }
 
+data "google_secret_manager_secret" "ocis_integration_db_username_development" {
+  secret_id = "OCIS_INTEGRATION_DB_USERNAME_DEVELOPMENT"
+  project   = data.terraform_remote_state.holi_infra_state.outputs.shared_project_id
+}
+
+data "google_secret_manager_secret" "ocis_integration_db_password_development" {
+  secret_id = "OCIS_INTEGRATION_DB_PASSWORD_DEVELOPMENT"
+  project   = data.terraform_remote_state.holi_infra_state.outputs.shared_project_id
+}
+
 data "google_secret_manager_secret" "ocis_admin_username_production" {
   secret_id = "OCIS_ADMIN_USERNAME_PRODUCTION"
   project   = data.terraform_remote_state.holi_infra_state.outputs.shared_project_id
@@ -50,6 +72,16 @@ data "google_secret_manager_secret" "ocis_admin_username_production" {
 
 data "google_secret_manager_secret" "ocis_admin_password_production" {
   secret_id = "OCIS_ADMIN_PASSWORD_PRODUCTION"
+  project   = data.terraform_remote_state.holi_infra_state.outputs.shared_project_id
+}
+
+data "google_secret_manager_secret" "ocis_integration_db_username_production" {
+  secret_id = "OCIS_INTEGRATION_DB_USERNAME_PRODUCTION"
+  project   = data.terraform_remote_state.holi_infra_state.outputs.shared_project_id
+}
+
+data "google_secret_manager_secret" "ocis_integration_db_password_production" {
+  secret_id = "OCIS_INTEGRATION_DB_PASSWORD_PRODUCTION"
   project   = data.terraform_remote_state.holi_infra_state.outputs.shared_project_id
 }
 
@@ -77,9 +109,12 @@ resource "google_cloudfunctions2_function" "holi-ocis-integration-staging" {
     available_memory   = "128Mi"
     timeout_seconds    = 60
     environment_variables = {
-      ENVIRONMENT       = "development"
-      OCIS_OIDC_ISSUER  = "https://dev-auth.project-holi.org"
-      OWNCLOUD_BASE_URL = "https://development.cloud.project-holi.org"
+      ENVIRONMENT              = "development"
+      OCIS_OIDC_ISSUER         = "https://dev-auth.project-holi.org"
+      OWNCLOUD_BASE_URL        = "https://development.cloud.project-holi.org"
+      OCIS_INTEGRATION_DB_HOST = data.terraform_remote_state.holi_infra_state.outputs.database_ip_address_development
+      OCIS_INTEGRATION_DB_PORT = "5432"
+      OCIS_INTEGRATION_DB_NAME = google_sql_database.database_development.name
     }
 
     ingress_settings               = "ALLOW_INTERNAL_ONLY"
@@ -97,6 +132,20 @@ resource "google_cloudfunctions2_function" "holi-ocis-integration-staging" {
       key        = "OCIS_ADMIN_PASSWORD"
       project_id = data.terraform_remote_state.holi_infra_state.outputs.shared_project_id
       secret     = data.google_secret_manager_secret.ocis_admin_password_development.secret_id
+      version    = "latest"
+    }
+
+    secret_environment_variables {
+      key        = "OCIS_INTEGRATION_DB_USERNAME"
+      project_id = data.terraform_remote_state.holi_infra_state.outputs.shared_project_id
+      secret     = data.google_secret_manager_secret.ocis_integration_db_username_development.secret_id
+      version    = "latest"
+    }
+
+    secret_environment_variables {
+      key        = "OCIS_INTEGRATION_DB_PASSWORD"
+      project_id = data.terraform_remote_state.holi_infra_state.outputs.shared_project_id
+      secret     = data.google_secret_manager_secret.ocis_integration_db_password_development.secret_id
       version    = "latest"
     }
   }
@@ -140,10 +189,14 @@ resource "google_cloudfunctions2_function" "holi-ocis-integration-production" {
     available_memory   = "256Mi"
     timeout_seconds    = 60
     environment_variables = {
-      ENVIRONMENT       = "production"
-      OCIS_OIDC_ISSUER  = "https://auth.project-holi.org"
-      OWNCLOUD_BASE_URL = "https://production.cloud.project-holi.org/"
+      ENVIRONMENT              = "production"
+      OCIS_OIDC_ISSUER         = "https://auth.project-holi.org"
+      OWNCLOUD_BASE_URL        = "https://production.cloud.project-holi.org/"
+      OCIS_INTEGRATION_DB_HOST = data.terraform_remote_state.holi_infra_state.outputs.database_ip_address_production
+      OCIS_INTEGRATION_DB_PORT = "5432"
+      OCIS_INTEGRATION_DB_NAME = google_sql_database.database_production.name
     }
+
     ingress_settings               = "ALLOW_INTERNAL_ONLY"
     all_traffic_on_latest_revision = true
     service_account_email          = google_service_account.account.email
@@ -159,6 +212,19 @@ resource "google_cloudfunctions2_function" "holi-ocis-integration-production" {
       key        = "OCIS_ADMIN_PASSWORD"
       project_id = data.terraform_remote_state.holi_infra_state.outputs.shared_project_id
       secret     = data.google_secret_manager_secret.ocis_admin_password_production.secret_id
+      version    = "latest"
+    }
+
+    secret_environment_variables {
+      key        = "OCIS_INTEGRATION_DB_USERNAME"
+      project_id = data.terraform_remote_state.holi_infra_state.outputs.shared_project_id
+      secret     = data.google_secret_manager_secret.ocis_integration_db_username_production.secret_id
+      version    = "latest"
+    }
+    secret_environment_variables {
+      key        = "OCIS_INTEGRATION_DB_PASSWORD"
+      project_id = data.terraform_remote_state.holi_infra_state.outputs.shared_project_id
+      secret     = data.google_secret_manager_secret.ocis_integration_db_password_production.secret_id
       version    = "latest"
     }
   }
