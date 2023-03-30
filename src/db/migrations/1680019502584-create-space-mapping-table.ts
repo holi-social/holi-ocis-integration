@@ -1,6 +1,6 @@
 import { MigrationInterface, QueryRunner } from 'typeorm'
 
-export class createSpaceIndentityTable1680019502584 implements MigrationInterface {
+export class createSpaceMappingTable1680019502584 implements MigrationInterface {
   public async up(queryRunner: QueryRunner): Promise<void> {
     await queryRunner.query(`
           CREATE TABLE space_mapping (
