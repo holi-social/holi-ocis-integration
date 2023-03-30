@@ -35,7 +35,7 @@ const auth: AxiosBasicCredentials = {
  */
 export const findUserById = async (id: string): Promise<OcisUser | null> => {
   // Construct the URL to retrieve the user.
-  const url = `${OWNCLOUD_BASE_URL}/${OcisApi.LIBRE_GRAPH_API_PATH}/${OcisLibreGraphRoute.USERS}/${HOLI_PREFIX}_${id}`
+  const url = `${OWNCLOUD_BASE_URL}/${OcisApi.LIBRE_GRAPH_API_PATH}/${OcisLibreGraphRoute.USERS}/${id}`
 
   try {
     // Send a GET request to retrieve the user.
@@ -199,5 +199,32 @@ export const shareSpaceWithUser = async (spaceId: string, username: string, role
   } catch (error) {
     // Handle errors that occur during the request.
     throw error
+  }
+}
+
+/**
+ * Finds an OcisSpace by ID.
+ * @async
+ * @function
+ * @param {string} id - The ID of the space to find.
+ * @returns {Promise<OcisSpace>} A Promise that resolves to the OcisSpace found.
+ * @throws {Error} Throws an error if the request fails.
+ */
+export const findSpaceById = async (id: string): Promise<OcisSpace> => {
+  // Construct the URL to retrieve the space.
+  const url = `${OWNCLOUD_BASE_URL}/${OcisApi.LIBRE_GRAPH_API_PATH}/${OcisLibreGraphRoute.DRIVES}/${id}`
+
+  try {
+    // Send a GET request to retrieve the space.
+    const { data }: AxiosResponse<OcisSpace> = await axios.get(url, {
+      auth: {
+        username: OCIS_ADMIN_USERNAME,
+        password: OCIS_ADMIN_PASSWORD,
+      },
+      httpsAgent,
+    })
+    return data
+  } catch (error) {
+    throw error.error
   }
 }
