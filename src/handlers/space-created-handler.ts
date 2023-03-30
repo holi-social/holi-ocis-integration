@@ -11,16 +11,13 @@ export const spaceCreatedHandler = async (payload: SpaceCreatedDataPayload) => {
 
     const ocisUser = await findOrCreateOcisUser(creator)
 
-    //Assigns the "Space Admin" role to the user
-    await assignUserRole(ocisUser.id, OcisDefaultUUIDRole.SPACE_ADMIN)
-
     //Creates a new space in oCIS based on the space information in the event payload
     const ocisSpace = await createSpace(space)
     const spaceIdentity = new SpaceIdentity(space.id, ocisSpace.id)
     await IdentityDataSource.manager.save(spaceIdentity)
 
     //Shares the new space with the user with the "manager" role
-    await shareSpaceWithUser(ocisSpace.id, ocisUser.onPremisesSamAccountName, OcisRole.MANAGER)
+    await shareSpaceWithUser(ocisSpace.id, ocisUser.onPremisesSamAccountName, OcisRole.EDITOR)
   } catch (error) {
     throw error
   }
