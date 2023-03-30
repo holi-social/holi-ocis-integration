@@ -17,7 +17,7 @@ export const IdentityDataSource = new DataSource({
   password: OCIS_INTEGRATION_DB_PASSWORD,
   database: OCIS_INTEGRATION_DB_NAME,
   synchronize: false,
-  logging: true,
+  logging: false,
   entities: ['./dist/db/entities/**/*.js'],
   migrations: ['./dist/db/migrations/**/*{.ts,.js}'],
   applicationName: `holi-ocis-integration-${ENVIRONMENT}`,
