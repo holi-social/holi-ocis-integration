@@ -1,5 +1,5 @@
 import { IdentityDataSource } from '../db/data-source'
-import { SpaceIdentity } from '../db/entities/space-identity'
+import { SpaceMapping } from '../db/entities/space-mapping'
 import { findSpaceById, shareSpaceWithUser } from '../ocis-api'
 import { OcisRole, SpaceUserAddedDataPayload } from '../types'
 import { findOrCreateOcisUser } from './helpers'
@@ -12,7 +12,7 @@ export const spaceUserAddedHandler = async (payload: SpaceUserAddedDataPayload) 
     const ocisUser = await findOrCreateOcisUser(user)
 
     //Finds space in oCIS based on the space information in the event payload
-    const spaceIdentity = await IdentityDataSource.manager.findOneByOrFail(SpaceIdentity, { spaceId: space.id })
+    const spaceIdentity = await IdentityDataSource.manager.findOneByOrFail(SpaceMapping, { spaceId: space.id })
     const ocisSpace = await findSpaceById(spaceIdentity.ocisSpaceId)
 
     //Shares the space with the user with the "editor" role

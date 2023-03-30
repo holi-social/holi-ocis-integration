@@ -1,7 +1,7 @@
 import { Entity, PrimaryGeneratedColumn, Column } from 'typeorm'
 
-@Entity({ name: 'space_identity' })
-export class SpaceIdentity {
+@Entity({ name: 'space_mapping' })
+export class SpaceMapping {
   @PrimaryGeneratedColumn()
   id: number
 
