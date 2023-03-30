@@ -33,18 +33,6 @@ resource "google_storage_bucket_object" "object" {
   source = "../../receiveEvent.zip"
 }
 
-resource "google_sql_database" "database_development" {
-  name     = "ocis-identity-development"
-  project  = data.terraform_remote_state.holi_infra_state.outputs.shared_project_id
-  instance = data.terraform_remote_state.holi_infra_state.outputs.database_name_development
-}
-
-resource "google_sql_database" "database_production" {
-  name     = "ocis-identity-production"
-  project  = data.terraform_remote_state.holi_infra_state.outputs.shared_project_id
-  instance = data.terraform_remote_state.holi_infra_state.outputs.database_name_production
-}
-
 data "google_secret_manager_secret" "ocis_admin_username_development" {
   secret_id = "OCIS_ADMIN_USERNAME_DEVELOPMENT"
   project   = data.terraform_remote_state.holi_infra_state.outputs.shared_project_id
@@ -53,16 +41,6 @@ data "google_secret_manager_secret" "ocis_admin_username_development" {
 data "google_secret_manager_secret" "ocis_admin_password_development" {
   secret_id = "OCIS_ADMIN_PASSWORD_DEVELOPMENT"
   project   = data.terraform_remote_state.holi_infra_state.outputs.shared_project_id
-}
-
-data "google_secret_manager_secret_version_access" "ocis_integration_db_username_development" {
-  secret  = "OCIS_INTEGRATION_DB_USERNAME_DEVELOPMENT"
-  project = data.terraform_remote_state.holi_infra_state.outputs.shared_project_id
-}
-
-data "google_secret_manager_secret_version_access" "ocis_integration_db_password_development" {
-  secret  = "OCIS_INTEGRATION_DB_PASSWORD_DEVELOPMENT"
-  project = data.terraform_remote_state.holi_infra_state.outputs.shared_project_id
 }
 
 data "google_secret_manager_secret" "ocis_admin_username_production" {
@@ -74,31 +52,6 @@ data "google_secret_manager_secret" "ocis_admin_password_production" {
   secret_id = "OCIS_ADMIN_PASSWORD_PRODUCTION"
   project   = data.terraform_remote_state.holi_infra_state.outputs.shared_project_id
 }
-
-data "google_secret_manager_secret_version_access" "ocis_integration_db_username_production" {
-  secret  = "OCIS_INTEGRATION_DB_USERNAME_PRODUCTION"
-  project = data.terraform_remote_state.holi_infra_state.outputs.shared_project_id
-}
-
-data "google_secret_manager_secret_version_access" "ocis_integration_db_password_production" {
-  secret  = "OCIS_INTEGRATION_DB_PASSWORD_PRODUCTION"
-  project = data.terraform_remote_state.holi_infra_state.outputs.shared_project_id
-}
-
-resource "google_sql_user" "ocis_integration_db_user_development" {
-  name     = data.google_secret_manager_secret_version_access.ocis_integration_db_username_development.secret_data
-  project  = data.terraform_remote_state.holi_infra_state.outputs.shared_project_id
-  instance = data.terraform_remote_state.holi_infra_state.outputs.database_name_development
-  password = data.google_secret_manager_secret_version_access.ocis_integration_db_password_development.secret_data
-}
-
-resource "google_sql_user" "ocis_integration_db_user_production" {
-  name     = data.google_secret_manager_secret_version_access.ocis_integration_db_username_production.secret_data
-  project  = data.terraform_remote_state.holi_infra_state.outputs.shared_project_id
-  instance = data.terraform_remote_state.holi_infra_state.outputs.database_name_development
-  password = data.google_secret_manager_secret_version_access.ocis_integration_db_password_production.secret_data
-}
-
 
 resource "google_cloudfunctions2_function" "holi-ocis-integration-staging" {
   project     = data.terraform_remote_state.holi_infra_state.outputs.shared_project_id
@@ -128,7 +81,7 @@ resource "google_cloudfunctions2_function" "holi-ocis-integration-staging" {
       OCIS_OIDC_ISSUER         = "https://dev-auth.project-holi.org"
       OWNCLOUD_BASE_URL        = "https://development.cloud.project-holi.org"
       OCIS_INTEGRATION_DB_HOST = data.terraform_remote_state.holi_infra_state.outputs.database_ip_address_development
-      OCIS_INTEGRATION_DB_PORT = "5432"
+      OCIS_INTEGRATION_DB_PORT = local.ocis_integration_database_port
       OCIS_INTEGRATION_DB_NAME = google_sql_database.database_development.name
     }
 
@@ -208,7 +161,7 @@ resource "google_cloudfunctions2_function" "holi-ocis-integration-production" {
       OCIS_OIDC_ISSUER         = "https://auth.project-holi.org"
       OWNCLOUD_BASE_URL        = "https://production.cloud.project-holi.org/"
       OCIS_INTEGRATION_DB_HOST = data.terraform_remote_state.holi_infra_state.outputs.database_ip_address_production
-      OCIS_INTEGRATION_DB_PORT = "5432"
+      OCIS_INTEGRATION_DB_PORT = local.ocis_integration_database_port
       OCIS_INTEGRATION_DB_NAME = google_sql_database.database_production.name
     }
 
