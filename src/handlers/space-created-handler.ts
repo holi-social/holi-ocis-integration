@@ -1,5 +1,5 @@
 import { IdentityDataSource } from '../db/data-source'
-import { SpaceMapping } from '../db/entities/space-mapping'
+import { SpaceMapping } from '../db/entities/space-mapping.entity'
 import { createSpace, shareSpaceWithUser } from '../ocis-api'
 import { SpaceCreatedDataPayload, OcisRole } from '../types'
 import { findOrCreateOcisUser } from './helpers'

@@ -1,5 +1,5 @@
 import { IdentityDataSource } from '../db/data-source'
-import { UserMapping } from '../db/entities/user-mapping'
+import { UserMapping } from '../db/entities/user-mapping.entity'
 import { createUser, findUserById } from '../ocis-api'
 import { OcisUser, UserPayload } from '../types'
 
