@@ -14,7 +14,7 @@ export OCIS_ADMIN_PASSWORD=password
 export OCIS_OIDC_ISSUER=https://dev-auth.project-holi.org
 
 export OCIS_INTEGRATION_DB_HOST=localhost
-export OCIS_INTEGRATION_DB_NAME=ocis-identity-db
+export OCIS_INTEGRATION_DB_NAME=ocis-integration-db
 export OCIS_INTEGRATION_DB_USERNAME=postgres
 export OCIS_INTEGRATION_DB_PASSWORD=password
 export OCIS_INTEGRATION_DB_PORT=8087
