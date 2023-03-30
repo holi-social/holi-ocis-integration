@@ -14,6 +14,6 @@ export class createUserMappingTable1680019490311 implements MigrationInterface {
   }
 
   public async down(queryRunner: QueryRunner): Promise<void> {
-    await queryRunner.query(`DROP TABLE user_identity`)
+    await queryRunner.query(`DROP TABLE user_mapping`)
   }
 }

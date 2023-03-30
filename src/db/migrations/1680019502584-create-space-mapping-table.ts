@@ -14,6 +14,6 @@ export class createSpaceMappingTable1680019502584 implements MigrationInterface 
   }
 
   public async down(queryRunner: QueryRunner): Promise<void> {
-    await queryRunner.query(`DROP TABLE space_identity`)
+    await queryRunner.query(`DROP TABLE space_mapping`)
   }
 }
