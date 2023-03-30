@@ -4,7 +4,7 @@ import { spaceUserAddedHandler } from './handlers/space-user-added-handler'
 import { EventType } from './types'
 
 export const receiveEvent = async (event) => {
-  console.info(`Event recieved: ${event}`)
+  console.info(`Event recieved: ${JSON.stringify(event)}`)
 
   const message = event.data.message
   const eventType = message.attributes.eventType
