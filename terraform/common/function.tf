@@ -77,7 +77,7 @@ resource "google_cloudfunctions2_function" "holi-ocis-integration-staging" {
     available_memory   = "128Mi"
     timeout_seconds    = 60
     environment_variables = {
-      ENVIRONMENT              = "development"
+      ENVIRONMENT              = "staging"
       OCIS_OIDC_ISSUER         = "https://dev-auth.project-holi.org"
       OWNCLOUD_BASE_URL        = "https://development.cloud.project-holi.org"
       OCIS_INTEGRATION_DB_HOST = data.terraform_remote_state.holi_infra_state.outputs.database_ip_address_development
@@ -121,7 +121,7 @@ resource "google_cloudfunctions2_function" "holi-ocis-integration-staging" {
   event_trigger {
     trigger_region = "europe-north1"
     event_type     = "google.cloud.pubsub.topic.v1.messagePublished"
-    pubsub_topic   = "projects/holi-shared/topics/okuna_development"
+    pubsub_topic   = data.terraform_remote_state.okuna-common_state.outputs.google_pubsub_topic_okuna_staging
     retry_policy   = "RETRY_POLICY_RETRY"
   }
 
@@ -200,7 +200,7 @@ resource "google_cloudfunctions2_function" "holi-ocis-integration-production" {
   event_trigger {
     trigger_region = "europe-north1"
     event_type     = "google.cloud.pubsub.topic.v1.messagePublished"
-    pubsub_topic   = "projects/holi-shared/topics/okuna_production"
+    pubsub_topic   = data.terraform_remote_state.okuna-common_state.outputs.google_pubsub_topic_okuna_production
     retry_policy   = "RETRY_POLICY_RETRY"
   }
 
