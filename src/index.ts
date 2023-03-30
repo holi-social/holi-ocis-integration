@@ -4,11 +4,12 @@ import { spaceUserAddedHandler } from './handlers/space-user-added-handler'
 import { EventType } from './types'
 
 export const receiveEvent = async (event) => {
-  console.info(`Event recieved: ${JSON.stringify(event)}`)
+  const {
+    data,
+    attributes: { eventType },
+  } = event
 
-  const message = event.data.message
-  const eventType = message.attributes.eventType
-  const buffer = Buffer.from(message.data, 'base64')
+  const buffer = Buffer.from(data, 'base64')
   const payload = JSON.parse(buffer.toString())
 
   switch (eventType) {
