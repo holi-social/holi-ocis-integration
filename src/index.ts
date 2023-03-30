@@ -17,6 +17,6 @@ export const receiveEvent = async (event) => {
       await spaceUserAddedHandler(payload)
       break
     default:
-      console.log('Received unexpected event', eventType)
+      console.error('Received unexpected event', eventType)
   }
 }
