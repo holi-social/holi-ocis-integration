@@ -77,9 +77,12 @@ resource "google_cloudfunctions2_function" "holi-ocis-integration-staging" {
     available_memory   = "128Mi"
     timeout_seconds    = 60
     environment_variables = {
-      ENVIRONMENT       = "development"
-      OCIS_OIDC_ISSUER  = "https://dev-auth.project-holi.org"
-      OWNCLOUD_BASE_URL = "https://development.cloud.project-holi.org"
+      ENVIRONMENT              = "staging"
+      OCIS_OIDC_ISSUER         = "https://dev-auth.project-holi.org"
+      OWNCLOUD_BASE_URL        = "https://development.cloud.project-holi.org"
+      OCIS_INTEGRATION_DB_HOST = data.terraform_remote_state.holi_infra_state.outputs.database_ip_address_development
+      OCIS_INTEGRATION_DB_PORT = local.ocis_integration_database_port
+      OCIS_INTEGRATION_DB_NAME = google_sql_database.database_development.name
     }
 
     ingress_settings               = "ALLOW_INTERNAL_ONLY"
@@ -99,12 +102,26 @@ resource "google_cloudfunctions2_function" "holi-ocis-integration-staging" {
       secret     = data.google_secret_manager_secret.ocis_admin_password_development.secret_id
       version    = "latest"
     }
+
+    secret_environment_variables {
+      key        = "OCIS_INTEGRATION_DB_USERNAME"
+      project_id = data.terraform_remote_state.holi_infra_state.outputs.shared_project_id
+      secret     = google_sql_user.ocis_integration_db_user_development.name
+      version    = "latest"
+    }
+
+    secret_environment_variables {
+      key        = "OCIS_INTEGRATION_DB_PASSWORD"
+      project_id = data.terraform_remote_state.holi_infra_state.outputs.shared_project_id
+      secret     = google_sql_user.ocis_integration_db_user_development.password
+      version    = "latest"
+    }
   }
 
   event_trigger {
     trigger_region = "europe-north1"
     event_type     = "google.cloud.pubsub.topic.v1.messagePublished"
-    pubsub_topic   = "projects/holi-shared/topics/okuna_development"
+    pubsub_topic   = data.terraform_remote_state.okuna-common_state.outputs.google_pubsub_topic_okuna_staging
     retry_policy   = "RETRY_POLICY_RETRY"
   }
 
@@ -137,13 +154,17 @@ resource "google_cloudfunctions2_function" "holi-ocis-integration-production" {
   service_config {
     max_instance_count = 3
     min_instance_count = 0
-    available_memory   = "256Mi"
+    available_memory   = "128Mi"
     timeout_seconds    = 60
     environment_variables = {
-      ENVIRONMENT       = "production"
-      OCIS_OIDC_ISSUER  = "https://auth.project-holi.org"
-      OWNCLOUD_BASE_URL = "https://production.cloud.project-holi.org/"
+      ENVIRONMENT              = "production"
+      OCIS_OIDC_ISSUER         = "https://auth.project-holi.org"
+      OWNCLOUD_BASE_URL        = "https://production.cloud.project-holi.org/"
+      OCIS_INTEGRATION_DB_HOST = data.terraform_remote_state.holi_infra_state.outputs.database_ip_address_production
+      OCIS_INTEGRATION_DB_PORT = local.ocis_integration_database_port
+      OCIS_INTEGRATION_DB_NAME = google_sql_database.database_production.name
     }
+
     ingress_settings               = "ALLOW_INTERNAL_ONLY"
     all_traffic_on_latest_revision = true
     service_account_email          = google_service_account.account.email
@@ -161,12 +182,25 @@ resource "google_cloudfunctions2_function" "holi-ocis-integration-production" {
       secret     = data.google_secret_manager_secret.ocis_admin_password_production.secret_id
       version    = "latest"
     }
+
+    secret_environment_variables {
+      key        = "OCIS_INTEGRATION_DB_USERNAME"
+      project_id = data.terraform_remote_state.holi_infra_state.outputs.shared_project_id
+      secret     = google_sql_user.ocis_integration_db_user_production.name
+      version    = "latest"
+    }
+    secret_environment_variables {
+      key        = "OCIS_INTEGRATION_DB_PASSWORD"
+      project_id = data.terraform_remote_state.holi_infra_state.outputs.shared_project_id
+      secret     = google_sql_user.ocis_integration_db_user_production.password
+      version    = "latest"
+    }
   }
 
   event_trigger {
     trigger_region = "europe-north1"
     event_type     = "google.cloud.pubsub.topic.v1.messagePublished"
-    pubsub_topic   = "projects/holi-shared/topics/okuna_production"
+    pubsub_topic   = data.terraform_remote_state.okuna-common_state.outputs.google_pubsub_topic_okuna_production
     retry_policy   = "RETRY_POLICY_RETRY"
   }
 
