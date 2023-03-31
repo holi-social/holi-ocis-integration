@@ -8,23 +8,33 @@
 /* eslint-disable */
 // tslint:disable
 
-import AtdatabasesMigrationsApplied, {AtdatabasesMigrationsApplied_InsertParameters} from './atdatabases_migrations_applied'
-import AtdatabasesMigrationsVersion, {AtdatabasesMigrationsVersion_InsertParameters} from './atdatabases_migrations_version'
-import SpaceMapping, {SpaceMapping_InsertParameters} from './space_mapping'
-import UserMapping, {UserMapping_InsertParameters} from './user_mapping'
+import AtdatabasesMigrationsApplied, {
+  AtdatabasesMigrationsApplied_InsertParameters,
+} from './atdatabases_migrations_applied'
+import AtdatabasesMigrationsVersion, {
+  AtdatabasesMigrationsVersion_InsertParameters,
+} from './atdatabases_migrations_version'
+import SpaceMapping, { SpaceMapping_InsertParameters } from './space_mapping'
+import UserMapping, { UserMapping_InsertParameters } from './user_mapping'
 
 interface DatabaseSchema {
-  atdatabases_migrations_applied: {record: AtdatabasesMigrationsApplied, insert: AtdatabasesMigrationsApplied_InsertParameters};
-  atdatabases_migrations_version: {record: AtdatabasesMigrationsVersion, insert: AtdatabasesMigrationsVersion_InsertParameters};
-  space_mapping: {record: SpaceMapping, insert: SpaceMapping_InsertParameters};
-  user_mapping: {record: UserMapping, insert: UserMapping_InsertParameters};
+  atdatabases_migrations_applied: {
+    record: AtdatabasesMigrationsApplied
+    insert: AtdatabasesMigrationsApplied_InsertParameters
+  }
+  atdatabases_migrations_version: {
+    record: AtdatabasesMigrationsVersion
+    insert: AtdatabasesMigrationsVersion_InsertParameters
+  }
+  space_mapping: { record: SpaceMapping; insert: SpaceMapping_InsertParameters }
+  user_mapping: { record: UserMapping; insert: UserMapping_InsertParameters }
 }
-export default DatabaseSchema;
+export default DatabaseSchema
 
 function serializeValue(_tableName: string, _columnName: string, value: unknown): unknown {
-  return value;
+  return value
 }
-export {serializeValue}
+export { serializeValue }
 
 export type {
   AtdatabasesMigrationsApplied,

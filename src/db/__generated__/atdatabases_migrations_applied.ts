@@ -13,25 +13,25 @@ interface AtdatabasesMigrationsApplied {
   /**
    * @default nextval('atdatabases_migrations_applied_id_seq'::regclass)
    */
-  id: number & {readonly __brand?: 'atdatabases_migrations_applied_id'}
-  ignored_error: (string) | null
+  id: number & { readonly __brand?: 'atdatabases_migrations_applied_id' }
+  ignored_error: string | null
   index: number
   name: string
   obsolete: boolean
   script: string
 }
-export default AtdatabasesMigrationsApplied;
+export default AtdatabasesMigrationsApplied
 
 interface AtdatabasesMigrationsApplied_InsertParameters {
   applied_at: Date
   /**
    * @default nextval('atdatabases_migrations_applied_id_seq'::regclass)
    */
-  id?: number & {readonly __brand?: 'atdatabases_migrations_applied_id'}
-  ignored_error?: (string) | null
+  id?: number & { readonly __brand?: 'atdatabases_migrations_applied_id' }
+  ignored_error?: string | null
   index: number
   name: string
   obsolete: boolean
   script: string
 }
-export type {AtdatabasesMigrationsApplied_InsertParameters}
+export type { AtdatabasesMigrationsApplied_InsertParameters }

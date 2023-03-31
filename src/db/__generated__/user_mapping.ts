@@ -12,18 +12,18 @@ interface UserMapping {
   /**
    * @default nextval('user_mapping_id_seq'::regclass)
    */
-  id: number & {readonly __brand?: 'user_mapping_id'}
+  id: number & { readonly __brand?: 'user_mapping_id' }
   ocis_user_id: string
   user_id: string
 }
-export default UserMapping;
+export default UserMapping
 
 interface UserMapping_InsertParameters {
   /**
    * @default nextval('user_mapping_id_seq'::regclass)
    */
-  id?: number & {readonly __brand?: 'user_mapping_id'}
+  id?: number & { readonly __brand?: 'user_mapping_id' }
   ocis_user_id: string
   user_id: string
 }
-export type {UserMapping_InsertParameters}
+export type { UserMapping_InsertParameters }

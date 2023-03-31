@@ -12,18 +12,18 @@ interface SpaceMapping {
   /**
    * @default nextval('space_mapping_id_seq'::regclass)
    */
-  id: number & {readonly __brand?: 'space_mapping_id'}
+  id: number & { readonly __brand?: 'space_mapping_id' }
   ocis_space_id: string
   space_id: string
 }
-export default SpaceMapping;
+export default SpaceMapping
 
 interface SpaceMapping_InsertParameters {
   /**
    * @default nextval('space_mapping_id_seq'::regclass)
    */
-  id?: number & {readonly __brand?: 'space_mapping_id'}
+  id?: number & { readonly __brand?: 'space_mapping_id' }
   ocis_space_id: string
   space_id: string
 }
-export type {SpaceMapping_InsertParameters}
+export type { SpaceMapping_InsertParameters }
