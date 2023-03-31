@@ -85,6 +85,7 @@ resource "google_cloudfunctions2_function" "holi-ocis-integration-staging" {
       OCIS_INTEGRATION_DB_NAME     = google_sql_database.database_development.name
       OCIS_INTEGRATION_DB_USERNAME = google_sql_user.ocis_integration_db_user_development.name
       OCIS_INTEGRATION_DB_PASSWORD = google_sql_user.ocis_integration_db_user_development.password
+      APP_ROOT_PATH                = "/workspace"
     }
 
     ingress_settings               = "ALLOW_INTERNAL_ONLY"
@@ -153,6 +154,8 @@ resource "google_cloudfunctions2_function" "holi-ocis-integration-production" {
       OCIS_INTEGRATION_DB_NAME     = google_sql_database.database_production.name
       OCIS_INTEGRATION_DB_USERNAME = google_sql_user.ocis_integration_db_user_production.name
       OCIS_INTEGRATION_DB_PASSWORD = google_sql_user.ocis_integration_db_user_production.password
+      APP_ROOT_PATH                = "/workspace"
+
     }
 
     ingress_settings               = "ALLOW_INTERNAL_ONLY"
