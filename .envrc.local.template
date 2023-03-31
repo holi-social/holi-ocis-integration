@@ -13,4 +13,5 @@ export OCIS_ADMIN_PASSWORD=password
 # OIDC issuer for the oCIS instance (i.e. Ory)
 export OCIS_OIDC_ISSUER=https://dev-auth.project-holi.org
 
+# ocis-integration database connection URL
 export DATABASE_URL=postgres://postgres:password@localhost:8087/ocis-integration-db
