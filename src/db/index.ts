@@ -11,16 +11,13 @@ export const OCIS_INTEGRATION_DB_USERNAME = process.env.OCIS_INTEGRATION_DB_USER
 export const OCIS_INTEGRATION_DB_PASSWORD = process.env.OCIS_INTEGRATION_DB_PASSWORD
 
 // Configure database to run on Google Cloud SQL
-const db =
-  ENVIRONMENT === 'local'
-    ? createConnectionPool({ bigIntMode: 'number' })
-    : createConnectionPool({
-        bigIntMode: 'number',
-        user: OCIS_INTEGRATION_DB_USERNAME,
-        password: OCIS_INTEGRATION_DB_PASSWORD,
-        database: OCIS_INTEGRATION_DB_NAME,
-        host: OCIS_INTEGRATION_DB_HOST,
-      })
+const db = createConnectionPool({
+  bigIntMode: 'number',
+  user: OCIS_INTEGRATION_DB_USERNAME,
+  password: OCIS_INTEGRATION_DB_PASSWORD,
+  database: OCIS_INTEGRATION_DB_NAME,
+  host: OCIS_INTEGRATION_DB_HOST,
+})
 export default db
 
 // You can list whatever tables you actually have here:
