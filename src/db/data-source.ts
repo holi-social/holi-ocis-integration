@@ -6,10 +6,12 @@ import {
   OCIS_INTEGRATION_DB_PASSWORD,
   OCIS_INTEGRATION_DB_PORT,
   OCIS_INTEGRATION_DB_USERNAME,
-  ENTITIES_PATH,
-  MIGRATIONS_PATH,
   APPLICATION_NAME,
 } from './config'
+import { SpaceMapping } from './entities/space-mapping.entity'
+import { UserMapping } from './entities/user-mapping.entity'
+import { createUserMappingTable1680019490311 } from './migrations/1680019490311-create-user-mapping-table.migration'
+import { createSpaceMappingTable1680019502584 } from './migrations/1680019502584-create-space-mapping-table.migration'
 
 export const IdentityDataSource = new DataSource({
   type: 'postgres',
@@ -20,8 +22,8 @@ export const IdentityDataSource = new DataSource({
   database: OCIS_INTEGRATION_DB_NAME,
   synchronize: false,
   logging: false,
-  entities: [ENTITIES_PATH],
-  migrations: [MIGRATIONS_PATH],
+  entities: [UserMapping, SpaceMapping],
+  migrations: [createUserMappingTable1680019490311, createSpaceMappingTable1680019502584],
   applicationName: APPLICATION_NAME,
   migrationsRun: true,
 })
