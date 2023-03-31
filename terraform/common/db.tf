@@ -1,5 +1,5 @@
 locals {
-  ocis_integration_database_port = 5432
+  ocis_integration_database_port = "5432"
 }
 
 # Development database configuratrion
@@ -40,7 +40,7 @@ data "google_secret_manager_secret_version_access" "ocis_integration_db_password
 resource "google_sql_user" "ocis_integration_db_user_production" {
   name     = data.google_secret_manager_secret_version_access.ocis_integration_db_username_production.secret_data
   project  = data.terraform_remote_state.holi_infra_state.outputs.shared_project_id
-  instance = data.terraform_remote_state.holi_infra_state.outputs.database_name_development
+  instance = data.terraform_remote_state.holi_infra_state.outputs.database_name_production
   password = data.google_secret_manager_secret_version_access.ocis_integration_db_password_production.secret_data
 }
 

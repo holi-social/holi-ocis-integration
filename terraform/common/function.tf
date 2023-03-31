@@ -85,7 +85,7 @@ resource "google_cloudfunctions2_function" "holi-ocis-integration-staging" {
       OCIS_INTEGRATION_DB_NAME     = google_sql_database.database_development.name
       OCIS_INTEGRATION_DB_USERNAME = google_sql_user.ocis_integration_db_user_development.name
       OCIS_INTEGRATION_DB_PASSWORD = google_sql_user.ocis_integration_db_user_development.password
-      DATABASE_URL                 = "postgres://${google_sql_user.ocis_integration_db_user_development.name}:${google_sql_user.ocis_integration_db_user_development.password}@${data.terraform_remote_state.holi_infra_state.outputs.database_ip_address_development}:${local.ocis_integration_database_port}/${google_sql_database.database_development.name}"
+      INSTANCE_CONNECTION_NAME     = data.terraform_remote_state.holi_infra_state.outputs.database_name_development
     }
 
     ingress_settings               = "ALLOW_INTERNAL_ONLY"
@@ -154,8 +154,7 @@ resource "google_cloudfunctions2_function" "holi-ocis-integration-production" {
       OCIS_INTEGRATION_DB_NAME     = google_sql_database.database_production.name
       OCIS_INTEGRATION_DB_USERNAME = google_sql_user.ocis_integration_db_user_production.name
       OCIS_INTEGRATION_DB_PASSWORD = google_sql_user.ocis_integration_db_user_production.password
-      DATABASE_URL                 = "postgres://${google_sql_user.ocis_integration_db_user_production.name}:${google_sql_user.ocis_integration_db_user_production.password}@${data.terraform_remote_state.holi_infra_state.outputs.database_ip_address_production}:${local.ocis_integration_database_port}/${google_sql_database.database_production.name}"
-
+      INSTANCE_CONNECTION_NAME     = data.terraform_remote_state.holi_infra_state.outputs.database_name_development
     }
 
     ingress_settings               = "ALLOW_INTERNAL_ONLY"
