@@ -1,19 +1,16 @@
-import { IdentityDataSource } from '../db/data-source'
-import { UserMapping } from '../db/entities/user-mapping.entity'
+import db, { UserMapping } from '../db'
 import { createUser, findUserById } from '../ocis-api'
 import { OcisUser, UserPayload } from '../types'
 
 export const findOrCreateOcisUser = async (user: UserPayload): Promise<OcisUser> => {
-  let creatorIdentity = await IdentityDataSource.manager.findOneBy(UserMapping, { userId: user.id })
-
+  let creatorIdentity = await UserMapping(db).findOne({ user_id: user.id })
   let ocisUser: OcisUser
 
   if (!creatorIdentity) {
     ocisUser = await createUser(user)
-    creatorIdentity = new UserMapping(user.id, ocisUser.id)
-    await IdentityDataSource.manager.save(creatorIdentity)
+    await UserMapping(db).insert({ user_id: user.id, ocis_user_id: ocisUser.id })
   } else {
-    ocisUser = await findUserById(creatorIdentity.ocisUserId)
+    ocisUser = await findUserById(creatorIdentity.ocis_user_id)
   }
 
   return ocisUser
