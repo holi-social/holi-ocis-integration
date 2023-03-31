@@ -97,7 +97,8 @@ resource "google_cloudfunctions2_function" "holi-ocis-integration-staging" {
       OCIS_INTEGRATION_DB_PASSWORD = google_sql_user.ocis_integration_db_user_development.password
       INSTANCE_CONNECTION_NAME     = data.terraform_remote_state.holi_infra_state.outputs.database_name_development
     }
-
+    vpc_connector                  = data.terraform_remote_state.holi_infra_state.outputs.vpc_access_connector_name
+    vpc_connector_egress_settings  = "PRIVATE_RANGES_ONLY"
     ingress_settings               = "ALLOW_INTERNAL_ONLY"
     all_traffic_on_latest_revision = true
     service_account_email          = google_service_account.account.email
@@ -166,7 +167,8 @@ resource "google_cloudfunctions2_function" "holi-ocis-integration-production" {
       OCIS_INTEGRATION_DB_PASSWORD = google_sql_user.ocis_integration_db_user_production.password
       INSTANCE_CONNECTION_NAME     = data.terraform_remote_state.holi_infra_state.outputs.database_name_development
     }
-
+    vpc_connector                  = data.terraform_remote_state.holi_infra_state.outputs.vpc_access_connector_name
+    vpc_connector_egress_settings  = "PRIVATE_RANGES_ONLY"
     ingress_settings               = "ALLOW_INTERNAL_ONLY"
     all_traffic_on_latest_revision = true
     service_account_email          = google_service_account.account.email
