@@ -10,6 +10,7 @@ export const OCIS_INTEGRATION_DB_NAME = process.env.OCIS_INTEGRATION_DB_NAME
 export const OCIS_INTEGRATION_DB_USERNAME = process.env.OCIS_INTEGRATION_DB_USERNAME
 export const OCIS_INTEGRATION_DB_PASSWORD = process.env.OCIS_INTEGRATION_DB_PASSWORD
 
+// Configure database to run on Google Cloud SQL
 const db =
   ENVIRONMENT === 'local'
     ? createConnectionPool({ bigIntMode: 'number' })
