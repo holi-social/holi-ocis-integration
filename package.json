@@ -5,7 +5,6 @@
   "repository": "https://gitlab.com/holisticfoundation/holi-ocis-integration.git",
   "scripts": {
     "build": "yarn clean && tsc && yarn copy-files",
-    "prestart": "yarn pg-migrations apply --directory workspace/dist/db/migrations",
     "start": "npx functions-framework --target=receiveEvent --signature-type=cloudevent",
     "prestart:dev": "yarn pg-migrations apply --directory src/db/migrations",
     "start:dev": "npx functions-framework --target=receiveEvent --signature-type=cloudevent --port=8086",

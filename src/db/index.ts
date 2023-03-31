@@ -1,6 +1,5 @@
 import createConnectionPool, { sql } from '@databases/pg'
 import tables from '@databases/pg-typed'
-import { ENVIRONMENT } from '../config'
 import DatabaseSchema from './__generated__'
 
 export { sql }
