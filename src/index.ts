@@ -4,23 +4,25 @@ import { spaceUserAddedHandler } from './handlers/space-user-added-handler'
 
 import { EventType } from './types'
 
-export const receiveEvent = async (event) => {
-  let eventType
-  let buffer
-
+//Processes events received from both the Google Pub/Sub Emulator and Cloud Pub/Sub, which have different body structures.
+const extractEventDetails = (event) => {
+  let body
   if (ENVIRONMENT === 'local') {
-    const {
-      message: { data, attributes },
-    } = event.data
-    eventType = attributes.eventType
-    buffer = Buffer.from(data, 'base64')
+    body = { ...event.data.message }
   } else {
-    const { data, attributes } = event
-    eventType = attributes.eventType
-    buffer = Buffer.from(data, 'base64')
+    body = { ...event }
   }
-
+  const {
+    data,
+    attributes: { eventType },
+  } = body
+  const buffer = Buffer.from(data, 'base64')
   const payload = JSON.parse(buffer.toString())
+  return { eventType, payload }
+}
+
+export const receiveEvent = async (event) => {
+  const { eventType, payload } = extractEventDetails(event)
 
   switch (eventType) {
     case EventType.SPACE_CREATED:
