@@ -1,5 +1,5 @@
 locals {
-  ocis_integration_database_port = "5432"
+  ocis_integration_database_port = 5432
 }
 
 # Development database configuratrion
