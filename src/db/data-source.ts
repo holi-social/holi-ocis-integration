@@ -1,12 +1,14 @@
 import 'reflect-metadata'
 import { DataSource } from 'typeorm'
-import { ENVIRONMENT } from '../config'
 import {
   OCIS_INTEGRATION_DB_NAME,
   OCIS_INTEGRATION_DB_HOST,
   OCIS_INTEGRATION_DB_PASSWORD,
   OCIS_INTEGRATION_DB_PORT,
   OCIS_INTEGRATION_DB_USERNAME,
+  ENTITIES_PATH,
+  MIGRATIONS_PATH,
+  APPLICATION_NAME,
 } from './config'
 
 export const IdentityDataSource = new DataSource({
@@ -18,9 +20,9 @@ export const IdentityDataSource = new DataSource({
   database: OCIS_INTEGRATION_DB_NAME,
   synchronize: false,
   logging: false,
-  entities: [`${__dirname}/**/*.entity.js`],
-  migrations: [`${__dirname}/**/*.migration.js`],
-  applicationName: `holi-ocis-integration-${ENVIRONMENT}`,
+  entities: [ENTITIES_PATH],
+  migrations: [MIGRATIONS_PATH],
+  applicationName: APPLICATION_NAME,
   migrationsRun: true,
 })
 
