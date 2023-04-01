@@ -1,18 +1,23 @@
 import { UserMappingRepository } from '../db'
-import { createUser, findUserById } from '../ocis-api'
+import { createUser, findUserByAccountName, findUserById } from '../ocis-api'
 import { OcisUser, UserPayload } from '../types'
 
+//Finds an existing OCIS user (i.e. either by ID or by account name) or creates a new one based on the given user payload.
 export const findOrCreateOcisUser = async (user: UserPayload): Promise<OcisUser> => {
   const userMappingRepository = new UserMappingRepository()
-  let creatorIdentity = await userMappingRepository.findByUserId(user.id)
-  let ocisUser: OcisUser
+  const creatorIdentity = await userMappingRepository.findByUserId(user.id)
 
-  if (!creatorIdentity) {
-    ocisUser = await createUser(user)
-    await userMappingRepository.create(user.id, ocisUser.id)
-  } else {
-    ocisUser = await findUserById(creatorIdentity.ocis_user_id)
+  if (creatorIdentity) {
+    return await findUserById(creatorIdentity.ocis_user_id)
   }
+
+  let ocisUser = await findUserByAccountName(user.id)
+
+  if (!ocisUser) {
+    ocisUser = await createUser(user)
+  }
+
+  await userMappingRepository.create(user.id, ocisUser.id)
 
   return ocisUser
 }
