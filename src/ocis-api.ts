@@ -13,6 +13,7 @@ import {
   UserPayload,
   OcisUserType,
 } from './types'
+import { logger } from './logger'
 
 // Whether to reject unauthorized TLS certificates. Set to false in a local development environment.
 const httpsAgent = new Agent({
@@ -53,7 +54,8 @@ export const findUserById = async (id: string): Promise<OcisUser | null> => {
     if (response && response.status === 404) {
       return null
     }
-    throw error.error
+    logger.error({ error })
+    throw new Error(`Failed to find an oCIS user with ID ${id}`)
   }
 }
 
@@ -85,7 +87,8 @@ export const findUserByAccountName = async (id: string): Promise<OcisUser | null
     if (response && response.status === 404) {
       return null
     }
-    throw error.error
+    logger.error({ error })
+    throw new Error(`Failed to find an oCIS user with account name ${HOLI_PREFIX}_${id}`)
   }
 }
 
@@ -128,7 +131,8 @@ export const createUser = async (user: UserPayload): Promise<OcisUser> => {
     return data
   } catch (error) {
     // Handle errors that occur during the request.
-    throw error
+    logger.error({ error })
+    throw new Error(`Failed to create an oCIS account for user with ID ${user.id}`)
   }
 }
 
@@ -163,7 +167,8 @@ export const assignUserRole = async (userId: string, roleId: string): Promise<vo
     )
   } catch (error) {
     // Handle errors that occur during the request.
-    throw error
+    logger.error({ error })
+    throw new Error(`Failed to assign role ${roleId} to user ${userId}`)
   }
 }
 
@@ -201,7 +206,8 @@ export const createSpace = async (space: SpacePayload): Promise<OcisSpace> => {
     return data
   } catch (error) {
     // Handle errors that occur during the request.
-    throw error
+    logger.error({ error })
+    throw new Error(`Failed to create an oCIS drive for space ${space.id}`)
   }
 }
 
@@ -230,7 +236,8 @@ export const shareSpaceWithUser = async (spaceId: string, username: string, role
     )
   } catch (error) {
     // Handle errors that occur during the request.
-    throw error
+    logger.error({ error })
+    throw new Error(`Failed to share the oCIS space ${spaceId} with user ${username}`)
   }
 }
 
@@ -257,6 +264,7 @@ export const findSpaceById = async (id: string): Promise<OcisSpace> => {
     })
     return data
   } catch (error) {
-    throw error.error
+    logger.error({ error })
+    throw new Error(`Failed to find an oCIS space with ID ${id}`)
   }
 }

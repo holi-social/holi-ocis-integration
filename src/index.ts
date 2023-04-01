@@ -23,7 +23,7 @@ const extractEventDetails = (event) => {
 }
 
 export const receiveEvent = async (event) => {
-  logger.info({ event })
+  logger.info('Event recieved', { event })
 
   const { eventType, payload } = extractEventDetails(event)
 
