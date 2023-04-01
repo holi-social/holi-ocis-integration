@@ -1,4 +1,5 @@
 import { UserMappingRepository } from '../db'
+import { logger } from '../logger'
 import { createUser, findUserByAccountName, findUserById } from '../ocis-api'
 import { OcisUser, UserPayload } from '../types'
 
@@ -18,6 +19,7 @@ export const findOrCreateOcisUser = async (user: UserPayload): Promise<OcisUser>
   }
 
   await userMappingRepository.create(user.id, ocisUser.id)
+  logger.info('User created successfully', { ocisUser })
 
   return ocisUser
 }

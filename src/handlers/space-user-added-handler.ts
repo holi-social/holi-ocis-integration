@@ -1,4 +1,5 @@
 import { SpaceMappingRepository } from '../db'
+import { logger } from '../logger'
 import { findSpaceById, shareSpaceWithUser } from '../ocis-api'
 import { OcisRole, SpaceUserAddedDataPayload } from '../types'
 import { findOrCreateOcisUser } from './helpers'
@@ -17,7 +18,9 @@ export const spaceUserAddedHandler = async (payload: SpaceUserAddedDataPayload) 
 
     //Shares the space with the user with the "editor" role
     await shareSpaceWithUser(ocisSpace.id, ocisUser.onPremisesSamAccountName, OcisRole.EDITOR)
+    logger.info('User added to space successfully', { ocisUser, ocisSpace })
   } catch (error) {
+    logger.error('Failed to add user to space', { payload })
     throw error
   }
 }

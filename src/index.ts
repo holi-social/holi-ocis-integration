@@ -1,6 +1,7 @@
 import { ENVIRONMENT } from './config'
 import { spaceCreatedHandler } from './handlers/space-created-handler'
 import { spaceUserAddedHandler } from './handlers/space-user-added-handler'
+import { logger } from './logger'
 
 import { EventType } from './types'
 
@@ -22,6 +23,8 @@ const extractEventDetails = (event) => {
 }
 
 export const receiveEvent = async (event) => {
+  logger.info({ event })
+
   const { eventType, payload } = extractEventDetails(event)
 
   switch (eventType) {
