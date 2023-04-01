@@ -1,4 +1,4 @@
-import db, { SpaceMapping } from '../db'
+import { SpaceMappingRepository } from '../db'
 import { createSpace, shareSpaceWithUser } from '../ocis-api'
 import { SpaceCreatedDataPayload, OcisRole } from '../types'
 import { findOrCreateOcisUser } from './helpers'
@@ -11,8 +11,9 @@ export const spaceCreatedHandler = async (payload: SpaceCreatedDataPayload) => {
     const ocisUser = await findOrCreateOcisUser(creator)
 
     //Creates a new space in oCIS based on the space information in the event payload
+    const spaceMappingRepository = new SpaceMappingRepository()
     const ocisSpace = await createSpace(space)
-    await SpaceMapping(db).insert({ space_id: space.id, ocis_space_id: ocisSpace.id })
+    await spaceMappingRepository.create(space.id, ocisSpace.id)
 
     //Shares the new space with the user with the "manager" role
     await shareSpaceWithUser(ocisSpace.id, ocisUser.onPremisesSamAccountName, OcisRole.EDITOR)
