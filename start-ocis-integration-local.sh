@@ -1,8 +1,8 @@
 #!/bin/bash
 
-# This script checks if the docker container ocis-identity-db exists.
+# This script checks if the docker container ocis-integration-local exists.
 # If it is running do nothing, if it's stopped start it, otherwise create a new container with the same name.
-CONTAINER_NAME=ocis-integration-db
+CONTAINER_NAME=ocis-integration-local
 
 if docker ps -a --format '{{.Names}}' | grep -q "^$CONTAINER_NAME$"; then
   if docker ps -a --filter "name=$CONTAINER_NAME" --filter "status=running" --format '{{.Names}}' | grep -q "^$CONTAINER_NAME$"; then
