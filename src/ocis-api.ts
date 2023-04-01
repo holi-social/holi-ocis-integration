@@ -58,6 +58,38 @@ export const findUserById = async (id: string): Promise<OcisUser | null> => {
 }
 
 /**
+ * Finds an OcisUser by account name.
+ * @async
+ * @function
+ * @param {string} id - The ID of the user to find.
+ * @returns {Promise<OcisUser|null>} A Promise that resolves to the OcisUser found or null if not found.
+ * @throws {Error} Throws an error if the request fails or if an unexpected response is received.
+ */
+export const findUserByAccountName = async (id: string): Promise<OcisUser | null> => {
+  // Construct the URL to retrieve the user.
+  const url = `${OWNCLOUD_BASE_URL}/${OcisApi.LIBRE_GRAPH_API_PATH}/${OcisLibreGraphRoute.USERS}/${HOLI_PREFIX}_${id}`
+
+  try {
+    // Send a GET request to retrieve the user.
+    const { data }: AxiosResponse<OcisUser> = await axios.get(url, {
+      auth: {
+        username: OCIS_ADMIN_USERNAME,
+        password: OCIS_ADMIN_PASSWORD,
+      },
+      httpsAgent,
+    })
+    return data
+  } catch (error) {
+    // Handle errors that occur during the request.
+    const { response } = error
+    if (response && response.status === 404) {
+      return null
+    }
+    throw error.error
+  }
+}
+
+/**
  * Creates a new OcisUser.
  * @async
  * @function
