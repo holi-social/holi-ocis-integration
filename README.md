@@ -15,6 +15,11 @@ This repository contains Google Cloud Functions implementation for the integrati
 - `yarn start:dev` to run the cloud function locally.
 - `tests/space_created.sh` to send an example `SpaceCreated` event to the cloud function as if it was sent by Google Cloud Pub/Sub.
 
+## Database
+
+`holi-ocis-integration` depends on a database that serves as a repository for various identifiers that can be associated with entities within the ownCloud. This database serves as a crucial component for the seamless functioning of this repository by providing a structured and organized approach to mapping these identifiers to the relevant entities.
+Locally, the database is running within a Docker container on port 8087.
+
 ### Dependencies
 
 Make sure that `jq` is installed before running the command. You can install it using the package manager of your choice:
