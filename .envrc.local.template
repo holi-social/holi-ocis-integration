@@ -21,3 +21,5 @@ export OCIS_INTEGRATION_DB_PORT=8087
 
 # Used by @databases/pg-migrations CLI to automatically maintain the local database schema.  
 export DATABASE_URL=postgresql://$OCIS_INTEGRATION_DB_USERNAME:$OCIS_INTEGRATION_DB_PASSWORD@$OCIS_INTEGRATION_DB_HOST:$OCIS_INTEGRATION_DB_PORT/$OCIS_INTEGRATION_DB_NAME
+
+export DB_CONTAINER_NAME=ocis-postgres
