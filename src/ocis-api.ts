@@ -137,6 +137,41 @@ export const createUser = async (user: UserPayload): Promise<OcisUser> => {
 }
 
 /**
+ * Updates an existing OcisUser.
+ * @async
+ * @function
+ * @param {UserPayload} user - The payload representing the user to be updated.
+ * @returns {Promise<OcisUser>} A Promise that resolves to the updated OcisUser.
+ * @throws {Error} Throws an error if the request fails or if an unexpected response is received.
+ */
+export const updateUser = async (id: string, user: UserPayload): Promise<OcisUser> => {
+  // Construct the URL to update the user.
+  const url = `${OWNCLOUD_BASE_URL}/${OcisApi.LIBRE_GRAPH_API_PATH}/${OcisLibreGraphRoute.USERS}/${id}`
+
+  try {
+    // Send a PATCH request to update the user.
+    const { data }: AxiosResponse<OcisUser> = await axios.patch(
+      url,
+      {
+        displayName: user.name,
+      },
+      {
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        auth,
+        httpsAgent,
+      }
+    )
+    return data
+  } catch (error) {
+    // Handle errors that occur during the request.
+    logger.error({ error })
+    throw new Error(`Failed to update oCIS account for user with ID ${user.id}`)
+  }
+}
+
+/**
  * Assigns a role to an OcisUser.
  * @async
  * @function
