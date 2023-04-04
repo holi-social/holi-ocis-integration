@@ -8,6 +8,7 @@
 export enum EventType {
   SPACE_CREATED = 'SpaceCreated',
   SPACE_USER_ADDED = 'SpaceUserAdded',
+  USER_NAME_UPDATED = 'UserNameUpdated',
 }
 
 /**
@@ -61,6 +62,16 @@ export type SpaceCreatedDataPayload = {
 export type SpaceUserAddedDataPayload = {
   user: UserPayload
   space: SpacePayload
+}
+
+/**
+ * Payload for data created when a user name is updated
+ *
+ * @typedef {Object} UserNameUpdatedDataPayload
+ * @property {UserPayload} user - The user with a name that has been updated
+ */
+export type UserNameUpdatedDataPayload = {
+  user: UserPayload
 }
 
 /**
