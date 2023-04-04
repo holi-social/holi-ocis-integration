@@ -1,6 +1,7 @@
 import { ENVIRONMENT } from './config'
 import { spaceCreatedHandler } from './handlers/space-created-handler'
 import { spaceUserAddedHandler } from './handlers/space-user-added-handler'
+import { userNameUpdatedHandler } from './handlers/user-name-updated-handler'
 import { logger } from './logger'
 
 import { EventType } from './types'
@@ -33,6 +34,9 @@ export const receiveEvent = async (event) => {
       break
     case EventType.SPACE_USER_ADDED:
       await spaceUserAddedHandler(payload)
+      break
+    case EventType.USER_NAME_UPDATED:
+      await userNameUpdatedHandler(payload)
       break
     default:
       throw new Error(`Received unexpected event of type ${eventType}`)
