@@ -1,4 +1,4 @@
-import axios, { AxiosResponse, AxiosBasicCredentials, AxiosRequestHeaders } from 'axios'
+import axios, { AxiosResponse, AxiosBasicCredentials } from 'axios'
 import { Agent } from 'https'
 import { ENVIRONMENT, OWNCLOUD_BASE_URL, OCIS_ADMIN_USERNAME, OCIS_ADMIN_PASSWORD, OCIS_OIDC_ISSUER } from './config'
 import { HOLI_PREFIX, HOLI_EMAIL_DOMAIN, MAX_SPACE_QUOTA } from './constants'
