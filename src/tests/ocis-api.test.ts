@@ -1,0 +1,553 @@
+import axios, { AxiosResponse } from 'axios'
+import {
+  assignUserRole,
+  createSpace,
+  createUser,
+  findSpaceById,
+  findUserByAccountName,
+  findUserById,
+  shareSpaceWithUser,
+  updateUser,
+} from '../ocis-api'
+import {
+  OcisApi,
+  OcisLibreGraphRoute,
+  OcisRole,
+  OcisShareType,
+  OcisSpace,
+  OcisUser,
+  OcisUserType,
+  SpacePayload,
+  UserPayload,
+} from '../types'
+import { HOLI_PREFIX, MAX_SPACE_QUOTA } from '../constants'
+
+jest.mock('axios')
+
+const mockedAxios = axios as jest.Mocked<typeof axios>
+
+describe('/users', () => {
+  const id = 'test-user-id'
+  const userPayload: UserPayload = {
+    id,
+    name: 'Test User',
+    email: 'test-email@example.com',
+  }
+  const data: OcisUser = {
+    id,
+    onPremisesSamAccountName: 'test-username',
+    mail: 'test-email@example.com',
+    displayName: 'Test User',
+    accountEnabled: true,
+    givenName: '',
+    surname: '',
+    userType: OcisUserType.MEMBER,
+  }
+
+  describe('findUserById', () => {
+    afterEach(() => {
+      jest.resetAllMocks()
+    })
+
+    it('should return the user data when the request is successful', async () => {
+      const response: AxiosResponse<OcisUser> = {
+        data: data,
+        status: 200,
+        statusText: 'OK',
+        headers: { 'Content-Type': 'application/json' },
+        config: undefined,
+      }
+      mockedAxios.get.mockResolvedValueOnce(response)
+
+      const user = await findUserById(id)
+
+      expect(mockedAxios.get).toHaveBeenCalledWith(expect.stringContaining(id), expect.any(Object))
+      expect(user).toEqual(data)
+    })
+
+    it('should return null when the user is not found', async () => {
+      const response = {
+        response: {
+          status: 404,
+        },
+      }
+      mockedAxios.get.mockRejectedValueOnce(response)
+
+      const user = await findUserById(id)
+
+      expect(mockedAxios.get).toHaveBeenCalledWith(expect.stringContaining(id), expect.any(Object))
+      expect(user).toBeNull()
+    })
+
+    it('should throw an error when the request fails with a non-404 status', async () => {
+      const response = {
+        response: {
+          status: 500,
+        },
+      }
+      mockedAxios.get.mockRejectedValueOnce(response)
+
+      await expect(findUserById(id)).rejects.toThrowError(`Failed to find an oCIS user with ID ${id}`)
+      expect(mockedAxios.get).toHaveBeenCalledWith(expect.stringContaining(id), expect.any(Object))
+    })
+  })
+
+  describe('findUserByAccountName', () => {
+    afterEach(() => {
+      jest.resetAllMocks()
+    })
+
+    it('should return the user data when the request is successful', async () => {
+      const response: AxiosResponse<OcisUser> = {
+        data: data,
+        status: 200,
+        statusText: 'OK',
+        headers: { 'Content-Type': 'application/json' },
+        config: undefined,
+      }
+      mockedAxios.get.mockResolvedValueOnce(response)
+
+      const user = await findUserByAccountName(id)
+
+      expect(mockedAxios.get).toHaveBeenCalledWith(expect.stringContaining(id), expect.any(Object))
+      expect(user).toEqual(data)
+    })
+
+    it('should return null when the user is not found', async () => {
+      const response = {
+        response: {
+          status: 404,
+        },
+      }
+      mockedAxios.get.mockRejectedValueOnce(response)
+
+      const user = await findUserByAccountName(id)
+
+      expect(mockedAxios.get).toHaveBeenCalledWith(expect.stringContaining(id), expect.any(Object))
+      expect(user).toBeNull()
+    })
+
+    it('should throw an error when the request fails with a non-404 status', async () => {
+      const response = {
+        response: {
+          status: 500,
+        },
+      }
+      mockedAxios.get.mockRejectedValueOnce(response)
+
+      await expect(findUserByAccountName(id)).rejects.toThrowError(
+        `Failed to find an oCIS user with account name ${HOLI_PREFIX}_${id}`
+      )
+      expect(mockedAxios.get).toHaveBeenCalledWith(expect.stringContaining(id), expect.any(Object))
+    })
+  })
+
+  describe('createUser', () => {
+    afterEach(() => {
+      jest.resetAllMocks()
+    })
+
+    it('should create a user and return the created user data', async () => {
+      const response: AxiosResponse<OcisUser> = {
+        data: data,
+        status: 201,
+        statusText: 'Created',
+        headers: { 'Content-Type': 'application/json' },
+        config: undefined,
+      }
+      mockedAxios.post.mockResolvedValueOnce(response)
+
+      const user = await createUser(userPayload)
+
+      expect(mockedAxios.post).toHaveBeenCalledWith(
+        expect.stringContaining(OcisLibreGraphRoute.USERS),
+        {
+          mail: 'test-user-id@holi.team',
+          displayName: 'Test User',
+          onPremisesSamAccountName: 'holi_test-user-id',
+          userType: OcisUserType.MEMBER,
+          identities: expect.any(Array),
+        },
+        {
+          headers: { 'Content-Type': 'application/json' },
+          auth: expect.any(Object),
+          httpsAgent: expect.any(Object),
+        }
+      )
+      expect(user).toEqual(data)
+    })
+
+    it('should throw an error if user creation fails', async () => {
+      const error = new Error('User creation failed')
+      mockedAxios.post.mockRejectedValueOnce(error)
+
+      await expect(createUser(userPayload)).rejects.toThrowError(
+        `Failed to create an oCIS account for user with ID ${userPayload.id}`
+      )
+      expect(mockedAxios.post).toHaveBeenCalledWith(
+        expect.stringContaining(OcisLibreGraphRoute.USERS),
+        {
+          mail: 'test-user-id@holi.team',
+          displayName: 'Test User',
+          onPremisesSamAccountName: 'holi_test-user-id',
+          userType: OcisUserType.MEMBER,
+          identities: expect.any(Array),
+        },
+        {
+          headers: { 'Content-Type': 'application/json' },
+          auth: expect.any(Object),
+          httpsAgent: expect.any(Object),
+        }
+      )
+    })
+  })
+
+  describe('updateUser', () => {
+    const userPaylaod: UserPayload = {
+      id: 'test-user-id',
+      name: 'New Test User',
+      email: 'test-email@example.com',
+    }
+
+    const ocisUserId = 'ocis-user-id'
+
+    const data: OcisUser = {
+      id: ocisUserId,
+      onPremisesSamAccountName: 'holi_test-user-id',
+      mail: 'test-user-id@holi.team',
+      displayName: 'New Test User',
+      accountEnabled: true,
+      givenName: '',
+      surname: '',
+      userType: OcisUserType.MEMBER,
+    }
+    afterEach(() => {
+      jest.resetAllMocks()
+    })
+
+    it('should update a user and return the updated user data', async () => {
+      const response: AxiosResponse<OcisUser> = {
+        data,
+        status: 201,
+        statusText: 'Created',
+        headers: { 'Content-Type': 'application/json' },
+        config: undefined,
+      }
+      mockedAxios.patch.mockResolvedValueOnce(response)
+
+      const user = await updateUser(ocisUserId, userPaylaod)
+
+      expect(mockedAxios.patch).toHaveBeenCalledWith(
+        expect.stringContaining(`${OcisLibreGraphRoute.USERS}/${ocisUserId}`),
+        {
+          displayName: 'New Test User',
+        },
+        {
+          headers: { 'Content-Type': 'application/json' },
+          auth: expect.any(Object),
+          httpsAgent: expect.any(Object),
+        }
+      )
+      expect(user).toEqual(data)
+    })
+
+    it('should throw an error if user update fails', async () => {
+      const error = new Error('User update failed')
+      mockedAxios.patch.mockRejectedValueOnce(error)
+
+      await expect(updateUser(ocisUserId, userPaylaod)).rejects.toThrowError(
+        `Failed to update oCIS account for user with ID ${userPaylaod.id}`
+      )
+      expect(mockedAxios.patch).toHaveBeenCalledWith(
+        expect.stringContaining(`${OcisLibreGraphRoute.USERS}/${ocisUserId}`),
+        {
+          displayName: 'New Test User',
+        },
+        {
+          headers: { 'Content-Type': 'application/json' },
+          auth: expect.any(Object),
+          httpsAgent: expect.any(Object),
+        }
+      )
+    })
+  })
+
+  describe('assignUserRole', () => {
+    const userId = 'ocis-test-user-id'
+    const roleId = 'role-id'
+    afterEach(() => {
+      jest.resetAllMocks()
+    })
+
+    it('should assign a role to a user', async () => {
+      const response = 'success'
+      mockedAxios.post.mockResolvedValueOnce(response)
+
+      await assignUserRole(userId, roleId)
+
+      expect(mockedAxios.post).toHaveBeenCalledWith(
+        expect.stringContaining('/assignments-add'),
+        {
+          account_uuid: userId,
+          role_id: roleId,
+        },
+        {
+          headers: { 'Content-Type': 'application/json' },
+          auth: expect.any(Object),
+          httpsAgent: expect.any(Object),
+        }
+      )
+    })
+
+    it('should throw an error if role assignment fails', async () => {
+      const error = new Error('Role assignment failed')
+      mockedAxios.post.mockRejectedValueOnce(error)
+
+      await expect(assignUserRole(userId, roleId)).rejects.toThrowError(
+        `Failed to assign role ${roleId} to user ${userId}`
+      )
+      expect(mockedAxios.post).toHaveBeenCalledWith(
+        expect.stringContaining('/assignments-add'),
+        {
+          account_uuid: userId,
+          role_id: roleId,
+        },
+        {
+          headers: { 'Content-Type': 'application/json' },
+          auth: expect.any(Object),
+          httpsAgent: expect.any(Object),
+        }
+      )
+    })
+  })
+})
+describe('/drives', () => {
+  describe('createSpace', () => {
+    const spacePayload: SpacePayload = {
+      id: 'test-space-id',
+      name: 'Test Space',
+      slug: 'test-space',
+    }
+
+    const data: OcisSpace = {
+      driveAlias: 'test-space-id',
+      driveType: 'project',
+      id: 'test-drive-id',
+      lastModifiedDateTime: '',
+      name: 'Test Space',
+      owner: {
+        user: {
+          displayName: 'Test User',
+          id: 'test-user-id',
+        },
+      },
+      quota: {
+        remaining: MAX_SPACE_QUOTA,
+        state: 'normal',
+        total: MAX_SPACE_QUOTA,
+        used: 0,
+      },
+      root: {
+        eTag: 'test-space-root-etag',
+        id: 'test-space-root-id',
+        permissions: [
+          {
+            grantedTo: [
+              {
+                user: {
+                  displayName: 'Test User',
+                  id: 'test-user-id',
+                },
+              },
+            ],
+            roles: ['manager'],
+          },
+        ],
+        webDavUrl: 'test-web-dav-url',
+      },
+      webUrl: 'test-web-url',
+    }
+    afterEach(() => {
+      jest.resetAllMocks()
+    })
+
+    it('should create a space and return the created space data', async () => {
+      const response: AxiosResponse<OcisSpace> = {
+        data,
+        status: 201,
+        statusText: 'Created',
+        headers: { 'Content-Type': 'application/json' },
+        config: undefined,
+      }
+      mockedAxios.post.mockResolvedValueOnce(response)
+
+      const user = await createSpace(spacePayload)
+
+      expect(mockedAxios.post).toHaveBeenCalledWith(
+        expect.stringContaining(OcisLibreGraphRoute.DRIVES),
+        {
+          name: spacePayload.name,
+          driveAlias: spacePayload.slug,
+          quota: {
+            total: MAX_SPACE_QUOTA,
+          },
+        },
+        {
+          headers: { 'Content-Type': 'application/json' },
+          auth: expect.any(Object),
+          httpsAgent: expect.any(Object),
+        }
+      )
+      expect(user).toEqual(data)
+    })
+
+    it('should throw an error if space creation fails', async () => {
+      const error = new Error('Space creation failed')
+      mockedAxios.post.mockRejectedValueOnce(error)
+
+      await expect(createSpace(spacePayload)).rejects.toThrowError(
+        `Failed to create an oCIS drive for space ${spacePayload.id}`
+      )
+      expect(mockedAxios.post).toHaveBeenCalledWith(
+        expect.stringContaining(OcisLibreGraphRoute.DRIVES),
+        {
+          name: spacePayload.name,
+          driveAlias: spacePayload.slug,
+          quota: {
+            total: MAX_SPACE_QUOTA,
+          },
+        },
+        {
+          headers: { 'Content-Type': 'application/json' },
+          auth: expect.any(Object),
+          httpsAgent: expect.any(Object),
+        }
+      )
+    })
+  })
+
+  describe('shareSpaceWithUser', () => {
+    const spaceId = 'test-space-id'
+    const username = 'test-user-username'
+    const role = OcisRole.EDITOR
+
+    afterEach(() => {
+      jest.resetAllMocks()
+    })
+
+    it('should share a space and assign a role to a user', async () => {
+      // Set up mock Axios response.
+      const response = 'success'
+
+      mockedAxios.post.mockResolvedValueOnce(response)
+
+      await shareSpaceWithUser(spaceId, username, role)
+
+      expect(mockedAxios.post).toHaveBeenCalledWith(
+        expect.stringContaining(OcisApi.SHARE_API_PATH),
+        `space_ref=${spaceId}&shareType=${OcisShareType.SHARE_SPACE}&shareWith=${username}&role=${role}`,
+        {
+          auth: expect.any(Object),
+          httpsAgent: expect.any(Object),
+        }
+      )
+    })
+
+    it('should throw an error if space sharing fails', async () => {
+      const error = new Error('Space sharing failed')
+      mockedAxios.post.mockRejectedValueOnce(error)
+
+      await expect(shareSpaceWithUser(spaceId, username, role)).rejects.toThrowError(
+        `Failed to share the oCIS space ${spaceId} with user ${username}`
+      )
+      expect(mockedAxios.post).toHaveBeenCalledWith(
+        expect.stringContaining(OcisApi.SHARE_API_PATH),
+        `space_ref=${spaceId}&shareType=${OcisShareType.SHARE_SPACE}&shareWith=${username}&role=${role}`,
+        {
+          auth: expect.any(Object),
+          httpsAgent: expect.any(Object),
+        }
+      )
+    })
+  })
+
+  describe('findSpaceById', () => {
+    const id = 'test-space-id'
+
+    const data: OcisSpace = {
+      driveAlias: 'test-space-id',
+      driveType: 'project',
+      id: 'test-drive-id',
+      lastModifiedDateTime: '',
+      name: 'Test Space',
+      owner: {
+        user: {
+          displayName: 'Test User',
+          id: 'test-user-id',
+        },
+      },
+      quota: {
+        remaining: MAX_SPACE_QUOTA,
+        state: 'normal',
+        total: MAX_SPACE_QUOTA,
+        used: 0,
+      },
+      root: {
+        eTag: 'test-space-root-etag',
+        id: 'test-space-root-id',
+        permissions: [
+          {
+            grantedTo: [
+              {
+                user: {
+                  displayName: 'Test User',
+                  id: 'test-user-id',
+                },
+              },
+            ],
+            roles: ['manager'],
+          },
+        ],
+        webDavUrl: 'test-web-dav-url',
+      },
+      webUrl: 'test-web-url',
+    }
+    afterEach(() => {
+      jest.resetAllMocks()
+    })
+
+    it('should return the space data when the request is successful', async () => {
+      const response: AxiosResponse<OcisSpace> = {
+        data,
+        status: 200,
+        statusText: 'OK',
+        headers: { 'Content-Type': 'application/json' },
+        config: undefined,
+      }
+      mockedAxios.get.mockResolvedValueOnce(response)
+
+      const space = await findSpaceById(id)
+
+      expect(mockedAxios.get).toHaveBeenCalledWith(
+        expect.stringContaining(`${OcisLibreGraphRoute.DRIVES}/${id}`),
+        expect.any(Object)
+      )
+      expect(space).toEqual(data)
+    })
+
+    it('should throw an error when the request fails', async () => {
+      const response = {
+        response: {
+          status: 500,
+        },
+      }
+      mockedAxios.get.mockRejectedValueOnce(response)
+
+      await expect(findSpaceById(id)).rejects.toThrowError(`Failed to find an oCIS space with ID ${id}`)
+      expect(mockedAxios.get).toHaveBeenCalledWith(
+        expect.stringContaining(`${OcisLibreGraphRoute.DRIVES}/${id}`),
+        expect.any(Object)
+      )
+    })
+  })
+})
