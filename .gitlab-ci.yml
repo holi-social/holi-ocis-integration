@@ -7,8 +7,13 @@ stages:
   - 'build'
   - 'deploy'
 
-.test:
+test:
   stage: 'test'
+  image:
+    name: 'node:latest'
+  script:
+    - yarn install
+    - yarn test
 
 build:
   stage: 'build'
