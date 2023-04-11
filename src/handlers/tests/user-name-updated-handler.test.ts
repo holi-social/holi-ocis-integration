@@ -45,7 +45,7 @@ describe('spaceUserAddedHandler', () => {
 
     expect(UserMappingRepository.prototype.findByUserIdOrFail).toHaveBeenCalledWith(userNameUpdatedDataPayload.user.id)
     expect(findUserById).toHaveBeenCalledWith(userIdentity.ocis_user_id)
-    expect(logger.info).toHaveBeenCalledWith('User name updated successfully', { updatedOcisUser })
+    expect(logger.debug).toHaveBeenCalledWith('User name updated successfully', { updatedOcisUser })
   })
 
   it('should throw an error if any operation fails', async () => {

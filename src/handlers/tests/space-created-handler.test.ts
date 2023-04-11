@@ -45,7 +45,7 @@ describe('spaceCreatedHandler', () => {
     expect(createSpace).toHaveBeenCalledWith(spaceCreatedDataPayload.space)
     expect(SpaceMappingRepository.prototype.create).toHaveBeenCalledWith(spaceCreatedDataPayload.space.id, ocisSpace.id)
     expect(shareSpaceWithUser).toHaveBeenCalledWith(ocisSpace.id, ocisUser.onPremisesSamAccountName, OcisRole.EDITOR)
-    expect(logger.info).toHaveBeenCalledWith('Space created successfully', { ocisSpace: ocisSpace })
+    expect(logger.debug).toHaveBeenCalledWith('Space created successfully', { ocisSpace: ocisSpace })
   })
 
   it('should throw an error if any operation fails', async () => {

@@ -19,7 +19,7 @@ describe('findOrCreateOcisUser', () => {
   let findUserByIdMock: jest.MockedFunction<typeof findUserById>
   let findUserByAccountNameMock: jest.MockedFunction<typeof findUserByAccountName>
   let createUserMock: jest.MockedFunction<typeof createUser>
-  let loggerInfoMock: jest.MockedFunction<typeof logger.info>
+  let loggerDebugMock: jest.MockedFunction<typeof logger.debug>
 
   beforeEach(() => {
     user = {
@@ -44,7 +44,7 @@ describe('findOrCreateOcisUser', () => {
     findUserByIdMock = findUserById as jest.MockedFunction<typeof findUserById>
     findUserByAccountNameMock = findUserByAccountName as jest.MockedFunction<typeof findUserByAccountName>
     createUserMock = createUser as jest.MockedFunction<typeof createUser>
-    loggerInfoMock = logger.info as jest.MockedFunction<typeof logger.info>
+    loggerDebugMock = logger.debug as jest.MockedFunction<typeof logger.debug>
   })
 
   afterEach(() => {
@@ -90,6 +90,6 @@ describe('findOrCreateOcisUser', () => {
     expect(findUserByAccountNameMock).toHaveBeenCalledWith(user.id)
     expect(createUserMock).toHaveBeenCalledWith(user)
     expect(userMappingRepositorycreateMock).toHaveBeenCalledWith(user.id, ocisUser.id)
-    expect(loggerInfoMock).toHaveBeenCalledWith('User created successfully', { ocisUser })
+    expect(loggerDebugMock).toHaveBeenCalledWith('User created successfully', { ocisUser })
   })
 })

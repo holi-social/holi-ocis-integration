@@ -52,7 +52,7 @@ describe('spaceUserAddedHandler', () => {
     expect(findOrCreateOcisUser).toHaveBeenCalledWith(spaceUserAddedDataPayload.user)
     expect(SpaceMappingRepository.prototype.findBySpaceId).toHaveBeenCalledWith(spaceUserAddedDataPayload.space.id)
     expect(findSpaceById).toHaveBeenCalledWith(spaceIdentity.ocis_space_id)
-    expect(logger.info).toHaveBeenCalledWith('User added to space successfully', { ocisUser, ocisSpace })
+    expect(logger.debug).toHaveBeenCalledWith('User added to space successfully', { ocisUser, ocisSpace })
   })
 
   it('should throw an error if any operation fails', async () => {

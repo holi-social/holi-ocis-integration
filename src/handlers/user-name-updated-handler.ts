@@ -11,7 +11,7 @@ export const userNameUpdatedHandler = async (payload: UserNameUpdatedDataPayload
     const userIdentity = await userMappingRepository.findByUserIdOrFail(user.id)
     const ocisUser = await findUserById(userIdentity.ocis_user_id)
     const updatedOcisUser = await updateUser(ocisUser.id, user)
-    logger.info('User name updated successfully', { updatedOcisUser })
+    logger.debug('User name updated successfully', { updatedOcisUser })
   } catch (error) {
     throw new Error('Failed to update user name')
   }
