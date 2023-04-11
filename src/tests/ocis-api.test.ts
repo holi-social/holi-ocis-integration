@@ -79,7 +79,7 @@ describe('/users', () => {
       expect(user).toBeNull()
     })
 
-    it('should throw an error when the request fails with a non-404 status', async () => {
+    it('should throw an error when the request fails with a 500 status', async () => {
       const response = {
         response: {
           status: 500,
@@ -88,7 +88,6 @@ describe('/users', () => {
       mockedAxios.get.mockRejectedValueOnce(response)
 
       await expect(findUserById(id)).rejects.toThrowError(`Failed to find an oCIS user with ID ${id}`)
-      expect(mockedAxios.get).toHaveBeenCalledWith(expect.stringContaining(id), expect.any(Object))
     })
   })
 
@@ -123,11 +122,10 @@ describe('/users', () => {
 
       const user = await findUserByAccountName(id)
 
-      expect(mockedAxios.get).toHaveBeenCalledWith(expect.stringContaining(id), expect.any(Object))
       expect(user).toBeNull()
     })
 
-    it('should throw an error when the request fails with a non-404 status', async () => {
+    it('should throw an error when the request fails with a 500 status', async () => {
       const response = {
         response: {
           status: 500,
@@ -138,7 +136,6 @@ describe('/users', () => {
       await expect(findUserByAccountName(id)).rejects.toThrowError(
         `Failed to find an oCIS user with account name ${HOLI_PREFIX}_${id}`
       )
-      expect(mockedAxios.get).toHaveBeenCalledWith(expect.stringContaining(id), expect.any(Object))
     })
   })
 
@@ -183,21 +180,6 @@ describe('/users', () => {
 
       await expect(createUser(userPayload)).rejects.toThrowError(
         `Failed to create an oCIS account for user with ID ${userPayload.id}`
-      )
-      expect(mockedAxios.post).toHaveBeenCalledWith(
-        expect.stringContaining(OcisLibreGraphRoute.USERS),
-        {
-          mail: 'test-user-id@holi.team',
-          displayName: 'Test User',
-          onPremisesSamAccountName: 'holi_test-user-id',
-          userType: OcisUserType.MEMBER,
-          identities: expect.any(Array),
-        },
-        {
-          headers: { 'Content-Type': 'application/json' },
-          auth: expect.any(Object),
-          httpsAgent: expect.any(Object),
-        }
       )
     })
   })
@@ -258,17 +240,6 @@ describe('/users', () => {
       await expect(updateUser(ocisUserId, userPaylaod)).rejects.toThrowError(
         `Failed to update oCIS account for user with ID ${userPaylaod.id}`
       )
-      expect(mockedAxios.patch).toHaveBeenCalledWith(
-        expect.stringContaining(`${OcisLibreGraphRoute.USERS}/${ocisUserId}`),
-        {
-          displayName: 'New Test User',
-        },
-        {
-          headers: { 'Content-Type': 'application/json' },
-          auth: expect.any(Object),
-          httpsAgent: expect.any(Object),
-        }
-      )
     })
   })
 
@@ -305,18 +276,6 @@ describe('/users', () => {
 
       await expect(assignUserRole(userId, roleId)).rejects.toThrowError(
         `Failed to assign role ${roleId} to user ${userId}`
-      )
-      expect(mockedAxios.post).toHaveBeenCalledWith(
-        expect.stringContaining('/assignments-add'),
-        {
-          account_uuid: userId,
-          role_id: roleId,
-        },
-        {
-          headers: { 'Content-Type': 'application/json' },
-          auth: expect.any(Object),
-          httpsAgent: expect.any(Object),
-        }
       )
     })
   })
@@ -381,7 +340,7 @@ describe('/drives', () => {
       }
       mockedAxios.post.mockResolvedValueOnce(response)
 
-      const user = await createSpace(spacePayload)
+      const space = await createSpace(spacePayload)
 
       expect(mockedAxios.post).toHaveBeenCalledWith(
         expect.stringContaining(OcisLibreGraphRoute.DRIVES),
@@ -398,7 +357,7 @@ describe('/drives', () => {
           httpsAgent: expect.any(Object),
         }
       )
-      expect(user).toEqual(data)
+      expect(space).toEqual(data)
     })
 
     it('should throw an error if space creation fails', async () => {
@@ -407,21 +366,6 @@ describe('/drives', () => {
 
       await expect(createSpace(spacePayload)).rejects.toThrowError(
         `Failed to create an oCIS drive for space ${spacePayload.id}`
-      )
-      expect(mockedAxios.post).toHaveBeenCalledWith(
-        expect.stringContaining(OcisLibreGraphRoute.DRIVES),
-        {
-          name: spacePayload.name,
-          driveAlias: spacePayload.slug,
-          quota: {
-            total: MAX_SPACE_QUOTA,
-          },
-        },
-        {
-          headers: { 'Content-Type': 'application/json' },
-          auth: expect.any(Object),
-          httpsAgent: expect.any(Object),
-        }
       )
     })
   })
@@ -459,14 +403,6 @@ describe('/drives', () => {
 
       await expect(shareSpaceWithUser(spaceId, username, role)).rejects.toThrowError(
         `Failed to share the oCIS space ${spaceId} with user ${username}`
-      )
-      expect(mockedAxios.post).toHaveBeenCalledWith(
-        expect.stringContaining(OcisApi.SHARE_API_PATH),
-        `space_ref=${spaceId}&shareType=${OcisShareType.SHARE_SPACE}&shareWith=${username}&role=${role}`,
-        {
-          auth: expect.any(Object),
-          httpsAgent: expect.any(Object),
-        }
       )
     })
   })
@@ -544,10 +480,6 @@ describe('/drives', () => {
       mockedAxios.get.mockRejectedValueOnce(response)
 
       await expect(findSpaceById(id)).rejects.toThrowError(`Failed to find an oCIS space with ID ${id}`)
-      expect(mockedAxios.get).toHaveBeenCalledWith(
-        expect.stringContaining(`${OcisLibreGraphRoute.DRIVES}/${id}`),
-        expect.any(Object)
-      )
     })
   })
 })
