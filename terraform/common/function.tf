@@ -165,7 +165,7 @@ resource "google_cloudfunctions2_function" "holi-ocis-integration-production" {
       OCIS_INTEGRATION_DB_NAME     = google_sql_database.database_production.name
       OCIS_INTEGRATION_DB_USERNAME = google_sql_user.ocis_integration_db_user_production.name
       OCIS_INTEGRATION_DB_PASSWORD = google_sql_user.ocis_integration_db_user_production.password
-      INSTANCE_CONNECTION_NAME     = data.terraform_remote_state.holi_infra_state.outputs.database_name_development
+      INSTANCE_CONNECTION_NAME     = data.terraform_remote_state.holi_infra_state.outputs.database_name_production
     }
     vpc_connector                  = data.terraform_remote_state.holi_infra_state.outputs.vpc_access_connector_name
     vpc_connector_egress_settings  = "PRIVATE_RANGES_ONLY"
