@@ -188,8 +188,8 @@ export type OcisUser = {
  * @property {string} eTag - The ETag of the root folder.
  * @property {string} id - The unique identifier of the root folder.
  * @property {Object[]} permissions - The permissions for the root folder.
- * @property {Object[]} permissions.grantedToIdentities - The identities granted permission to the root folder.
- * @property {Object} permissions.grantedToIdentities.user - The user identity granted permission to the root folder.
+ * @property {Object[]} permissions.grantedTo - The identities granted permission to the root folder.
+ * @property {Object} permissions.grantedTo.user - The user identity granted permission to the root folder.
  * @property {string[]} permissions.roles - The roles granted to the identities.
  * @property {string} webDavUrl - The WebDAV URL of the root folder.
  */
@@ -198,7 +198,7 @@ type OcisSpaceRoot = {
   id: string
   permissions: [
     {
-      grantedToIdentities: [
+      grantedTo: [
         {
           user: {
             displayName: string

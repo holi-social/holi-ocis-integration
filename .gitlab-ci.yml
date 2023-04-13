@@ -1,21 +1,54 @@
+cache:
+  key: $CI_COMMIT_REF_SLUG
+  paths:
+    - node_modules/
+
 default:
   tags:
     - holi-small
 
 stages:
+  - 'install_dependencies'
   - 'test'
   - 'build'
   - 'deploy'
 
-.test:
-  stage: 'test'
+install_dependencies:
+  stage: install_dependencies
+  image:
+    name: 'node:latest'
+  cache:
+    key: $CI_COMMIT_REF_SLUG
+    paths:
+      - node_modules/
+  script:
+    - yarn install --immutable --immutable-cache --check-cache
+  only:
+    changes:
+      - yarn.lock
 
-build:
-  stage: 'build'
+test:
+  stage: 'test'
+  cache:
+    key: $CI_COMMIT_REF_SLUG
+    paths:
+      - node_modules/
+    policy: pull
   image:
     name: 'node:latest'
   script:
-    - yarn install
+    - yarn test
+
+build:
+  stage: 'build'
+  cache:
+    key: $CI_COMMIT_REF_SLUG
+    paths:
+      - node_modules/
+    policy: pull
+  image:
+    name: 'node:latest'
+  script:
     - yarn build
   artifacts:
     paths:

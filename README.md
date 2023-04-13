@@ -10,11 +10,6 @@ This repository contains Google Cloud Functions implementation for the integrati
 - [Google Cloud Pub/Sub Topics](https://console.cloud.google.com/cloudpubsub/topic/list?project=holi-shared)
 - [Google Cloud Functions](https://console.cloud.google.com/functions/list?env=gen2&project=holi-shared&tab=logs)
 
-## Local Execution
-
-- `yarn start:dev` to run the cloud function locally.
-- `tests/space_created.sh` to send an example `SpaceCreated` event to the cloud function as if it was sent by Google Cloud Pub/Sub.
-
 ## Database
 
 `holi-ocis-integration` depends on a database that serves as a repository for various identifiers that can be associated with entities within the ownCloud. This database serves as a crucial component for the seamless functioning of this repository by providing a structured and organized approach to mapping these identifiers to the relevant entities.
