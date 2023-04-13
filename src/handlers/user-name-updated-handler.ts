@@ -13,6 +13,6 @@ export const userNameUpdatedHandler = async (payload: UserNameUpdatedDataPayload
     const updatedOcisUser = await updateUser(ocisUser.id, user)
     logger.debug('User name updated successfully', { updatedOcisUser })
   } catch (error) {
-    throw new Error('Failed to update user name')
+    throw new Error(`Failed to update user name ${error}`)
   }
 }

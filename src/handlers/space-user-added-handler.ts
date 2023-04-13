@@ -20,6 +20,6 @@ export const spaceUserAddedHandler = async (payload: SpaceUserAddedDataPayload) 
     await shareSpaceWithUser(ocisSpace.id, ocisUser.onPremisesSamAccountName, OcisRole.EDITOR)
     logger.debug('User added to space successfully', { ocisUser, ocisSpace })
   } catch (error) {
-    throw new Error('Failed to add user to space')
+    throw new Error(`Failed to add user to space ${error}`)
   }
 }
