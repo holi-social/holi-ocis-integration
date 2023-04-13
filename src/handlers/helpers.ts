@@ -18,6 +18,8 @@ export const findOrCreateOcisUser = async (user: UserPayload): Promise<OcisUser>
     ocisUser = await createUser(user)
   }
 
+  logger.debug('findOrCreateOcisUser', { ocisUser })
+
   await userMappingRepository.create(user.id, ocisUser.id)
   logger.debug('User created successfully', { ocisUser })
 
