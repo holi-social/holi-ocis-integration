@@ -47,7 +47,6 @@ export const findUserById = async (id: string): Promise<OcisUser | null> => {
       },
       httpsAgent,
     })
-    logger.debug(`findUserById response: ${data}`)
     return data
   } catch (error) {
     // Handle errors that occur during the request.
@@ -81,7 +80,6 @@ export const findUserByAccountName = async (id: string): Promise<OcisUser | null
       },
       httpsAgent,
     })
-    logger.debug(`findUserByAccountName response: ${data}`)
     return data
   } catch (error) {
     // Handle errors that occur during the request.
@@ -130,7 +128,6 @@ export const createUser = async (user: UserPayload): Promise<OcisUser> => {
         httpsAgent,
       }
     )
-    logger.debug(`createUser response: ${data}`)
     return data
   } catch (error) {
     // Handle errors that occur during the request.

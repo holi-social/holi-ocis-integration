@@ -1,5 +1,4 @@
 import db, { UserMapping } from '.'
-import { logger } from '../logger'
 
 export class UserMappingRepository {
   async findByUserId(id: string) {
@@ -15,7 +14,6 @@ export class UserMappingRepository {
   }
 
   async create(userId: string, ocisUserId: string) {
-    logger.debug('UserMappingRepository create', { userId, ocisUserId })
     return UserMapping(db).insert({ user_id: userId, ocis_user_id: ocisUserId })
   }
 }
