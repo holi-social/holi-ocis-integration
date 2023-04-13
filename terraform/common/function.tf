@@ -159,7 +159,7 @@ resource "google_cloudfunctions2_function" "holi-ocis-integration-production" {
     environment_variables = {
       ENVIRONMENT                  = "production"
       OCIS_OIDC_ISSUER             = "https://auth.project-holi.org"
-      OWNCLOUD_BASE_URL            = "https://production.cloud.project-holi.org/"
+      OWNCLOUD_BASE_URL            = "https://production.cloud.project-holi.org"
       OCIS_INTEGRATION_DB_HOST     = data.terraform_remote_state.holi_infra_state.outputs.database_ip_address_production
       OCIS_INTEGRATION_DB_PORT     = local.ocis_integration_database_port
       OCIS_INTEGRATION_DB_NAME     = google_sql_database.database_production.name
