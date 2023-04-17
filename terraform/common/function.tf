@@ -118,13 +118,6 @@ resource "google_cloudfunctions2_function" "holi-ocis-integration-staging" {
     }
   }
 
-  event_trigger {
-    trigger_region = "europe-north1"
-    event_type     = "google.cloud.pubsub.topic.v1.messagePublished"
-    pubsub_topic   = data.terraform_remote_state.okuna-common_state.outputs.google_pubsub_topic_okuna_staging
-    retry_policy   = "RETRY_POLICY_RETRY"
-  }
-
   # taken from https://github.com/hashicorp/terraform-provider-google/issues/1938#issuecomment-1229042663
   lifecycle {
     replace_triggered_by = [
@@ -203,4 +196,17 @@ resource "google_cloudfunctions2_function" "holi-ocis-integration-production" {
   }
 }
 
+resource "google_pubsub_subscription" "holi-ocis-integration-subscription-development" {
+  name  = "holi-ocis-integration-subscrpition-development"
+  topic = data.terraform_remote_state.okuna-common_state.outputs.google_pubsub_topic_okuna_staging
 
+  ack_deadline_seconds = 10 * 60 # 10 minutes, max. value
+
+  push_config {
+    push_endpoint = google_cloudfunctions2_function.holi-ocis-integration-staging.service_config[0].uri
+
+    oidc_token {
+      service_account_email = google_service_account.account.email
+    }
+  }
+}
