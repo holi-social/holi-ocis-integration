@@ -30,6 +30,13 @@ resource "google_project_iam_member" "cloudsql_client" {
   member  = each.key
   role    = "roles/cloudsql.client"
 }
+
+resource "google_project_iam_member" "function_invoker" {
+  project = data.terraform_remote_state.holi_infra_state.outputs.shared_project_id
+  member  = "serviceAccount:holi-ocis-integration-sa@holi-shared.iam.gserviceaccount.com"
+  role    = "roles/run.invoker"
+}
+
 resource "google_storage_bucket" "bucket" {
   project                     = data.terraform_remote_state.holi_infra_state.outputs.shared_project_id
   name                        = "${random_id.bucket_prefix.hex}-gcf-source"
@@ -197,10 +204,14 @@ resource "google_cloudfunctions2_function" "holi-ocis-integration-production" {
 }
 
 resource "google_pubsub_subscription" "holi-ocis-integration-okuna-staging-sub" {
-  name  = "holi-ocis-integration-okuna-staging-sub"
-  topic = data.terraform_remote_state.okuna-common_state.outputs.google_pubsub_topic_okuna_staging
+  project = data.terraform_remote_state.holi_infra_state.outputs.shared_project_id
+  name    = "holi-ocis-integration-okuna-staging-sub"
+  topic   = data.terraform_remote_state.okuna-common_state.outputs.google_pubsub_topic_okuna_staging
 
   ack_deadline_seconds = 10 * 60 # 10 minutes, max. value
+  expiration_policy {
+    ttl = "" # never expire
+  }
 
   push_config {
     push_endpoint = google_cloudfunctions2_function.holi-ocis-integration-staging.service_config[0].uri
