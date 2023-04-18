@@ -1,8 +1,6 @@
-import { SpaceMappingRepository } from '../../db'
-import { logger } from '../../logger'
-import { createSpace, shareSpaceWithUser } from '../../ocis-api'
-import { SpaceCreatedDataPayload, OcisRole, OcisUser, OcisUserType } from '../../types'
-import { findOrCreateOcisUser } from '../helpers'
+import { shareSpaceWithUser } from '../../ocis-api'
+import { SpaceCreatedDataPayload, OcisRole } from '../../types'
+import { findOrCreateOcisUser, findOrCreateOcisSpace } from '../helpers'
 import { spaceCreatedHandler } from '../space-created-handler'
 
 jest.mock('../../db')
@@ -36,21 +34,19 @@ describe('spaceCreatedHandler', () => {
     const ocisSpace = {
       id: 'ocis-space-id',
     }
-    ;(findOrCreateOcisUser as jest.Mock).mockResolvedValue(ocisUser)
-    ;(createSpace as jest.Mock).mockResolvedValue(ocisSpace)
+      ; (findOrCreateOcisUser as jest.Mock).mockResolvedValue(ocisUser)
+      ; (findOrCreateOcisSpace as jest.Mock).mockResolvedValue(ocisSpace)
 
     await spaceCreatedHandler(spaceCreatedDataPayload)
 
     expect(findOrCreateOcisUser).toHaveBeenCalledWith(spaceCreatedDataPayload.creator)
-    expect(createSpace).toHaveBeenCalledWith(spaceCreatedDataPayload.space)
-    expect(SpaceMappingRepository.prototype.create).toHaveBeenCalledWith(spaceCreatedDataPayload.space.id, ocisSpace.id)
+    expect(findOrCreateOcisSpace).toHaveBeenCalledWith(spaceCreatedDataPayload.space)
     expect(shareSpaceWithUser).toHaveBeenCalledWith(ocisSpace.id, ocisUser.onPremisesSamAccountName, OcisRole.EDITOR)
-    expect(logger.debug).toHaveBeenCalledWith('Space created successfully', { ocisSpace: ocisSpace })
   })
 
   it('should throw an error if any operation fails', async () => {
     const error = 'Failed to create space'
-    ;(createSpace as jest.Mock).mockRejectedValue(new Error(error))
+      ; (findOrCreateOcisSpace as jest.Mock).mockRejectedValue(new Error(error))
 
     await expect(spaceCreatedHandler(spaceCreatedDataPayload)).rejects.toThrow(error)
   })
