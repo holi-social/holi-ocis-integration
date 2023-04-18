@@ -30,6 +30,13 @@ resource "google_project_iam_member" "cloudsql_client" {
   member  = each.key
   role    = "roles/cloudsql.client"
 }
+
+resource "google_project_iam_member" "function_invoker" {
+  project = data.terraform_remote_state.holi_infra_state.outputs.shared_project_id
+  member  = "serviceAccount:holi-ocis-integration-sa@holi-shared.iam.gserviceaccount.com"
+  role    = "roles/run.invoker"
+}
+
 resource "google_storage_bucket" "bucket" {
   project                     = data.terraform_remote_state.holi_infra_state.outputs.shared_project_id
   name                        = "${random_id.bucket_prefix.hex}-gcf-source"
@@ -37,7 +44,7 @@ resource "google_storage_bucket" "bucket" {
   uniform_bucket_level_access = true
 }
 
-resource "google_storage_bucket_object" "object" {
+resource "google_storage_bucket_object" "function_source" {
   name   = "receiveEvent.zip"
   bucket = google_storage_bucket.bucket.name
   source = "../../receiveEvent.zip"
@@ -76,7 +83,7 @@ resource "google_cloudfunctions2_function" "holi-ocis-integration-staging" {
     source {
       storage_source {
         bucket = google_storage_bucket.bucket.name
-        object = google_storage_bucket_object.object.name
+        object = google_storage_bucket_object.function_source.name
       }
     }
   }
@@ -118,17 +125,10 @@ resource "google_cloudfunctions2_function" "holi-ocis-integration-staging" {
     }
   }
 
-  event_trigger {
-    trigger_region = "europe-north1"
-    event_type     = "google.cloud.pubsub.topic.v1.messagePublished"
-    pubsub_topic   = data.terraform_remote_state.okuna-common_state.outputs.google_pubsub_topic_okuna_staging
-    retry_policy   = "RETRY_POLICY_RETRY"
-  }
-
   # taken from https://github.com/hashicorp/terraform-provider-google/issues/1938#issuecomment-1229042663
   lifecycle {
     replace_triggered_by = [
-      google_storage_bucket_object.object
+      google_storage_bucket_object.function_source
     ]
   }
 }
@@ -146,7 +146,7 @@ resource "google_cloudfunctions2_function" "holi-ocis-integration-production" {
     source {
       storage_source {
         bucket = google_storage_bucket.bucket.name
-        object = google_storage_bucket_object.object.name
+        object = google_storage_bucket_object.function_source.name
       }
     }
   }
@@ -188,19 +188,48 @@ resource "google_cloudfunctions2_function" "holi-ocis-integration-production" {
     }
   }
 
-  event_trigger {
-    trigger_region = "europe-north1"
-    event_type     = "google.cloud.pubsub.topic.v1.messagePublished"
-    pubsub_topic   = data.terraform_remote_state.okuna-common_state.outputs.google_pubsub_topic_okuna_production
-    retry_policy   = "RETRY_POLICY_RETRY"
-  }
-
   # taken from https://github.com/hashicorp/terraform-provider-google/issues/1938#issuecomment-1229042663
   lifecycle {
     replace_triggered_by = [
-      google_storage_bucket_object.object
+      google_storage_bucket_object.function_source
     ]
   }
 }
 
+resource "google_pubsub_subscription" "holi-ocis-integration-okuna-staging-sub" {
+  project = data.terraform_remote_state.holi_infra_state.outputs.shared_project_id
+  name    = "holi-ocis-integration-okuna-staging-sub"
+  topic   = data.terraform_remote_state.okuna-common_state.outputs.google_pubsub_topic_okuna_staging
 
+  ack_deadline_seconds = 10 * 60 # 10 minutes, max. value
+  expiration_policy {
+    ttl = "" # never expire
+  }
+
+  push_config {
+    push_endpoint = google_cloudfunctions2_function.holi-ocis-integration-staging.service_config[0].uri
+
+    oidc_token {
+      service_account_email = google_service_account.account.email
+    }
+  }
+}
+
+resource "google_pubsub_subscription" "holi-ocis-integration-okuna-production-sub" {
+  project = data.terraform_remote_state.holi_infra_state.outputs.shared_project_id
+  name    = "holi-ocis-integration-okuna-production-sub"
+  topic   = data.terraform_remote_state.okuna-common_state.outputs.google_pubsub_topic_okuna_production
+
+  ack_deadline_seconds = 10 * 60 # 10 minutes, max. value
+  expiration_policy {
+    ttl = "" # never expire
+  }
+
+  push_config {
+    push_endpoint = google_cloudfunctions2_function.holi-ocis-integration-production.service_config[0].uri
+
+    oidc_token {
+      service_account_email = google_service_account.account.email
+    }
+  }
+}
