@@ -1,8 +1,8 @@
-import { UserMappingRepository } from '../../db'
+import { SpaceMappingRepository, UserMappingRepository } from '../../db'
 import { logger } from '../../logger'
-import { findUserById, findUserByAccountName, createUser } from '../../ocis-api'
-import { UserPayload, OcisUser, OcisUserType } from '../../types'
-import { findOrCreateOcisUser } from '../helpers'
+import { findUserById, findUserByAccountName, createUser, findSpaceById, createSpace } from '../../ocis-api'
+import { UserPayload, OcisUser, OcisUserType, OcisSpace } from '../../types'
+import { findOrCreateOcisSpace, findOrCreateOcisUser } from '../helpers'
 
 jest.mock('../../db')
 jest.mock('../../logger')
@@ -91,5 +91,89 @@ describe('findOrCreateOcisUser', () => {
     expect(createUserMock).toHaveBeenCalledWith(user)
     expect(userMappingRepositorycreateMock).toHaveBeenCalledWith(user.id, ocisUser.id)
     expect(loggerDebugMock).toHaveBeenCalledWith('User created successfully', { ocisUser })
+  })
+})
+
+
+describe('findOrCreateOcisSpace', () => {
+  const ocisSpace: OcisSpace = {
+    id: 'ocis-space-id',
+    driveAlias: '',
+    driveType: '',
+    lastModifiedDateTime: '',
+    name: '',
+    owner: {
+      user: {
+        displayName: '',
+        id: ''
+      }
+    },
+    quota: {
+      remaining: 0,
+      state: '',
+      total: 0,
+      used: 0
+    },
+    root: {
+      eTag: '',
+      id: '',
+      permissions: [{
+        grantedTo: [{
+          user: {
+            id: 'ocis-user-id',
+            displayName: 'OCIS user',
+          }
+        }],
+        roles: [],
+      }],
+      webDavUrl: ''
+    },
+    webUrl: ''
+  }
+  const spacePayload = {
+    id: 'space-id',
+    name: 'Test Space',
+    slug: 'test-space',
+  }
+  const spaceMapping = { id: 1, space_id: spacePayload.id, ocis_space_id: ocisSpace.id }
+  let spaceMappingFindBySpaceIdMock: jest.MockedFunction<typeof SpaceMappingRepository.prototype.findBySpaceId>
+  let spaceMappingCreateMock: jest.MockedFunction<typeof SpaceMappingRepository.prototype.create>
+  let findSpaceByIdMock = findSpaceById as jest.MockedFunction<typeof findSpaceById>
+  let createSpaceMock = createSpace as jest.MockedFunction<typeof createSpace>
+  const loggerDebugMock = logger.debug as jest.MockedFunction<typeof logger.debug>
+
+  afterEach(() => {
+    jest.resetAllMocks()
+  })
+
+  beforeEach(() => {
+    spaceMappingFindBySpaceIdMock = SpaceMappingRepository.prototype.findBySpaceId as jest.Mock
+    spaceMappingCreateMock = SpaceMappingRepository.prototype.create as jest.Mock
+  })
+
+  it('should return an existing space by ID', async () => {
+    spaceMappingFindBySpaceIdMock.mockResolvedValueOnce(spaceMapping)
+    findSpaceByIdMock.mockResolvedValueOnce(ocisSpace)
+
+    const result = await findOrCreateOcisSpace(spacePayload)
+
+    expect(result).toEqual(ocisSpace)
+    expect(spaceMappingFindBySpaceIdMock).toHaveBeenCalledWith(spacePayload.id)
+    expect(findSpaceByIdMock).toHaveBeenCalledWith(ocisSpace.id)
+    expect(createSpaceMock).not.toHaveBeenCalled()
+    expect(spaceMappingCreateMock).not.toHaveBeenCalled()
+  })
+
+  it('should create a new space if none is found', async () => {
+    createSpaceMock.mockResolvedValueOnce(ocisSpace)
+
+    const result = await findOrCreateOcisSpace(spacePayload)
+
+    expect(result).toEqual(ocisSpace)
+    expect(spaceMappingFindBySpaceIdMock).toHaveBeenCalledWith(spacePayload.id)
+    expect(findSpaceByIdMock).not.toHaveBeenCalled()
+    expect(createSpaceMock).toHaveBeenCalledWith(spacePayload)
+    expect(spaceMappingCreateMock).toHaveBeenCalledWith(spacePayload.id, ocisSpace.id)
+    expect(loggerDebugMock).toHaveBeenCalledWith('Space created successfully', { ocisSpace })
   })
 })

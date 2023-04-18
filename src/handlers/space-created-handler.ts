@@ -2,7 +2,7 @@ import { SpaceMappingRepository } from '../db'
 import { logger } from '../logger'
 import { createSpace, shareSpaceWithUser } from '../ocis-api'
 import { SpaceCreatedDataPayload, OcisRole } from '../types'
-import { findOrCreateOcisUser } from './helpers'
+import { findOrCreateOcisSpace, findOrCreateOcisUser } from './helpers'
 
 //Handles the SpaceCreated event from Google Cloud Pub/Sub.
 export const spaceCreatedHandler = async (payload: SpaceCreatedDataPayload) => {
@@ -10,15 +10,10 @@ export const spaceCreatedHandler = async (payload: SpaceCreatedDataPayload) => {
     const { creator, space } = payload
 
     const ocisUser = await findOrCreateOcisUser(creator)
-
-    //Creates a new space in oCIS based on the space information in the event payload
-    const spaceMappingRepository = new SpaceMappingRepository()
-    const ocisSpace = await createSpace(space)
-    await spaceMappingRepository.create(space.id, ocisSpace.id)
+    const ocisSpace = await findOrCreateOcisSpace(space)
 
     //Shares the new space with the user with the "manager" role
     await shareSpaceWithUser(ocisSpace.id, ocisUser.onPremisesSamAccountName, OcisRole.EDITOR)
-    logger.debug('Space created successfully', { ocisSpace })
   } catch (error) {
     throw new Error(`Failed to create space ${error}`)
   }
