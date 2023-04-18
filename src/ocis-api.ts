@@ -14,6 +14,7 @@ import {
   OcisUserType,
 } from './types'
 import { logger } from './logger'
+import { sanitizeSpaceName } from './utils'
 
 // Whether to reject unauthorized TLS certificates. Set to false in a local development environment.
 const httpsAgent = new Agent({
@@ -224,7 +225,7 @@ export const createSpace = async (space: SpacePayload): Promise<OcisSpace> => {
     const { data }: AxiosResponse<OcisSpace> = await axios.post(
       url,
       {
-        name: space.name,
+        name: sanitizeSpaceName(space.name),
         driveAlias: space.slug,
         quota: {
           total: MAX_SPACE_QUOTA,
