@@ -10,9 +10,9 @@ import { EventType } from './types'
 const extractEventDetails = (event) => {
   let body
   if (ENVIRONMENT === 'local') {
-    body = event.data.message
+    body = { ...event.data.message }
   } else {
-    body = event.body?.message || event
+    body = { ...event }
   }
   const {
     data,
