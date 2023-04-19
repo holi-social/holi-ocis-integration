@@ -94,7 +94,6 @@ describe('findOrCreateOcisUser', () => {
   })
 })
 
-
 describe('findOrCreateOcisSpace', () => {
   const ocisSpace: OcisSpace = {
     id: 'ocis-space-id',
@@ -105,30 +104,34 @@ describe('findOrCreateOcisSpace', () => {
     owner: {
       user: {
         displayName: '',
-        id: ''
-      }
+        id: '',
+      },
     },
     quota: {
       remaining: 0,
       state: '',
       total: 0,
-      used: 0
+      used: 0,
     },
     root: {
       eTag: '',
       id: '',
-      permissions: [{
-        grantedTo: [{
-          user: {
-            id: 'ocis-user-id',
-            displayName: 'OCIS user',
-          }
-        }],
-        roles: [],
-      }],
-      webDavUrl: ''
+      permissions: [
+        {
+          grantedTo: [
+            {
+              user: {
+                id: 'ocis-user-id',
+                displayName: 'OCIS user',
+              },
+            },
+          ],
+          roles: [],
+        },
+      ],
+      webDavUrl: '',
     },
-    webUrl: ''
+    webUrl: '',
   }
   const spacePayload = {
     id: 'space-id',

@@ -144,8 +144,12 @@ describe('receiveEvent', () => {
     })
     it('should call the spaceCreatedHandler when the event type is SpaceCreated', async () => {
       const event = {
-        attributes: { eventType: 'SpaceCreated', eventVersion: '1.0.0' },
-        data: encodeBase64(spaceCreatedEventPayload),
+        body: {
+          message: {
+            attributes: { eventType: 'SpaceCreated', eventVersion: '1.0.0' },
+            data: encodeBase64(spaceCreatedEventPayload),
+          },
+        },
       }
 
       await receiveEvent(event)
@@ -155,8 +159,12 @@ describe('receiveEvent', () => {
 
     it('should call the spaceUserAddedHandler when the event type is SpaceUserAdded', async () => {
       const event = {
-        attributes: { eventType: 'SpaceUserAdded', eventVersion: '1.0.0' },
-        data: encodeBase64(spaceUserAddedEventPayload),
+        body: {
+          message: {
+            attributes: { eventType: 'SpaceUserAdded', eventVersion: '1.0.0' },
+            data: encodeBase64(spaceUserAddedEventPayload),
+          },
+        },
       }
 
       await receiveEvent(event)
@@ -166,8 +174,12 @@ describe('receiveEvent', () => {
 
     it('should call the userNameUpdatedHandler when the event type is UserNameUpdated', async () => {
       const event = {
-        attributes: { eventType: 'UserNameUpdated', eventVersion: '1.0.0' },
-        data: encodeBase64(userNameUpdatedEventPayload),
+        body: {
+          message: {
+            attributes: { eventType: 'UserNameUpdated', eventVersion: '1.0.0' },
+            data: encodeBase64(userNameUpdatedEventPayload),
+          },
+        },
       }
 
       await receiveEvent(event)
@@ -178,8 +190,12 @@ describe('receiveEvent', () => {
     it('should throw an error when the event type is unexpected', async () => {
       const unsupportedEvent = 'UnsupportedEvent'
       const event = {
-        attributes: { eventType: unsupportedEvent, eventVersion: '1.0.0' },
-        data: encodeBase64(unsupportedEventPayload),
+        body: {
+          message: {
+            attributes: { eventType: unsupportedEvent, eventVersion: '1.0.0' },
+            data: encodeBase64(unsupportedEventPayload),
+          },
+        },
       }
 
       await expect(receiveEvent(event)).rejects.toThrow(`Received unexpected event of type ${unsupportedEvent}`)

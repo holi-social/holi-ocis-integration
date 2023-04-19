@@ -34,8 +34,8 @@ describe('spaceCreatedHandler', () => {
     const ocisSpace = {
       id: 'ocis-space-id',
     }
-      ; (findOrCreateOcisUser as jest.Mock).mockResolvedValue(ocisUser)
-      ; (findOrCreateOcisSpace as jest.Mock).mockResolvedValue(ocisSpace)
+    ;(findOrCreateOcisUser as jest.Mock).mockResolvedValue(ocisUser)
+    ;(findOrCreateOcisSpace as jest.Mock).mockResolvedValue(ocisSpace)
 
     await spaceCreatedHandler(spaceCreatedDataPayload)
 
@@ -46,7 +46,7 @@ describe('spaceCreatedHandler', () => {
 
   it('should throw an error if any operation fails', async () => {
     const error = 'Failed to create space'
-      ; (findOrCreateOcisSpace as jest.Mock).mockRejectedValue(new Error(error))
+    ;(findOrCreateOcisSpace as jest.Mock).mockRejectedValue(new Error(error))
 
     await expect(spaceCreatedHandler(spaceCreatedDataPayload)).rejects.toThrow(error)
   })
