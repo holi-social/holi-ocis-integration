@@ -8,16 +8,16 @@ import { EventType } from './types'
 
 //Processes events received from both the Google Pub/Sub Emulator and Cloud Pub/Sub, which have different body structures.
 const extractEventDetails = (event) => {
-  let body
+  let message
   if (ENVIRONMENT === 'local') {
-    body = { ...event.data.message }
+    message = { ...event.data.message }
   } else {
-    body = { ...event }
+    message = { ...event.body.message }
   }
   const {
     data,
     attributes: { eventType },
-  } = body
+  } = message
   const buffer = Buffer.from(data, 'base64')
   const payload = JSON.parse(buffer.toString())
   return { eventType, payload }
