@@ -30,12 +30,15 @@ export const receiveEvent = async (event) => {
 
   switch (eventType) {
     case EventType.SPACE_CREATED:
+      logger.debug('Handling SPACE_CREATED event')
       await spaceCreatedHandler(payload)
       break
     case EventType.SPACE_USER_ADDED:
+      logger.debug('Handling SPACE_USER_ADDED event')
       await spaceUserAddedHandler(payload)
       break
     case EventType.USER_NAME_UPDATED:
+      logger.debug('Handling USER_NAME_UPDATED event')
       await userNameUpdatedHandler(payload)
       break
     default:

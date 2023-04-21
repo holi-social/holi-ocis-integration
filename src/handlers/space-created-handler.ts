@@ -1,5 +1,5 @@
 import { SpaceMappingRepository } from '../db'
-import { logger } from '../logger'
+import { logger, logPhase } from '../logger'
 import { createSpace, shareSpaceWithUser } from '../ocis-api'
 import { SpaceCreatedDataPayload, OcisRole } from '../types'
 import { findOrCreateOcisSpace, findOrCreateOcisUser } from './helpers'
@@ -9,11 +9,11 @@ export const spaceCreatedHandler = async (payload: SpaceCreatedDataPayload) => {
   try {
     const { creator, space } = payload
 
-    const ocisUser = await findOrCreateOcisUser(creator)
-    const ocisSpace = await findOrCreateOcisSpace(space)
+    const ocisUser = await logPhase('findOrCreateOcisUser')(() => findOrCreateOcisUser(creator))
+    const ocisSpace = await logPhase('findOrCreateOcisSpace')(() => findOrCreateOcisSpace(space))
 
     //Shares the new space with the user with the "manager" role
-    await shareSpaceWithUser(ocisSpace.id, ocisUser.onPremisesSamAccountName, OcisRole.EDITOR)
+    await logPhase('shareSpaceWithUser')(() => shareSpaceWithUser(ocisSpace.id, ocisUser.onPremisesSamAccountName, OcisRole.EDITOR))
   } catch (error) {
     throw new Error(`Failed to create space ${error}`)
   }
