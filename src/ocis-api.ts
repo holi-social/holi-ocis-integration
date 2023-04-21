@@ -1,4 +1,4 @@
-import axios, { AxiosResponse, AxiosBasicCredentials } from 'axios'
+import axios, { AxiosResponse, AxiosBasicCredentials, AxiosInstance } from 'axios'
 import { Agent } from 'https'
 import { ENVIRONMENT, OWNCLOUD_BASE_URL, OCIS_ADMIN_USERNAME, OCIS_ADMIN_PASSWORD, OCIS_OIDC_ISSUER } from './config'
 import { HOLI_PREFIX, HOLI_EMAIL_DOMAIN, MAX_SPACE_QUOTA } from './constants'
@@ -15,6 +15,10 @@ import {
 } from './types'
 import { logger } from './logger'
 import { sanitizeSpaceName } from './utils'
+
+export const client: AxiosInstance = axios.create({
+  timeout: 30 * 1000,
+});
 
 // Whether to reject unauthorized TLS certificates. Set to false in a local development environment.
 const httpsAgent = new Agent({
@@ -41,7 +45,7 @@ export const findUserById = async (id: string): Promise<OcisUser | null> => {
 
   try {
     // Send a GET request to retrieve the user.
-    const { data }: AxiosResponse<OcisUser> = await axios.get(url, {
+    const { data }: AxiosResponse<OcisUser> = await client.get(url, {
       auth: {
         username: OCIS_ADMIN_USERNAME,
         password: OCIS_ADMIN_PASSWORD,
@@ -74,7 +78,7 @@ export const findUserByAccountName = async (id: string): Promise<OcisUser | null
 
   try {
     // Send a GET request to retrieve the user.
-    const { data }: AxiosResponse<OcisUser> = await axios.get(url, {
+    const { data }: AxiosResponse<OcisUser> = await client.get(url, {
       auth: {
         username: OCIS_ADMIN_USERNAME,
         password: OCIS_ADMIN_PASSWORD,
@@ -107,7 +111,7 @@ export const createUser = async (user: UserPayload): Promise<OcisUser> => {
 
   try {
     // Send a POST request to create the user.
-    const { data }: AxiosResponse<OcisUser> = await axios.post(
+    const { data }: AxiosResponse<OcisUser> = await client.post(
       url,
       {
         mail: `${user.id}@${HOLI_EMAIL_DOMAIN}`,
@@ -151,7 +155,7 @@ export const updateUser = async (id: string, user: UserPayload): Promise<OcisUse
 
   try {
     // Send a PATCH request to update the user.
-    const { data }: AxiosResponse<OcisUser> = await axios.patch(
+    const { data }: AxiosResponse<OcisUser> = await client.patch(
       url,
       {
         displayName: user.name,
@@ -187,7 +191,7 @@ export const assignUserRole = async (userId: string, roleId: string): Promise<vo
 
   try {
     // Send a POST request to assign the role.
-    await axios.post(
+    await client.post(
       url,
       {
         account_uuid: userId,
@@ -222,7 +226,7 @@ export const createSpace = async (space: SpacePayload): Promise<OcisSpace> => {
 
   try {
     // Send a POST request to create the space.
-    const { data }: AxiosResponse<OcisSpace> = await axios.post(
+    const { data }: AxiosResponse<OcisSpace> = await client.post(
       url,
       {
         name: sanitizeSpaceName(space.name),
@@ -262,7 +266,7 @@ export const shareSpaceWithUser = async (spaceId: string, username: string, role
 
   try {
     // Send a POST request to share the space with the user.
-    await axios.post(
+    await client.post(
       url,
       `space_ref=${spaceId}&shareType=${OcisShareType.SHARE_SPACE}&shareWith=${username}&role=${role}`,
       {
@@ -291,7 +295,7 @@ export const findSpaceById = async (id: string): Promise<OcisSpace> => {
 
   try {
     // Send a GET request to retrieve the space.
-    const { data }: AxiosResponse<OcisSpace> = await axios.get(url, {
+    const { data }: AxiosResponse<OcisSpace> = await client.get(url, {
       auth: {
         username: OCIS_ADMIN_USERNAME,
         password: OCIS_ADMIN_PASSWORD,
