@@ -26,7 +26,7 @@ const extractEventDetails = (event) => {
   return { eventType, payload, messageId }
 }
 
-export const receiveEvent = async (event) => {
+export const receiveEvent = async (event): Promise<void> => {
   logger.debug('Event received', { event })
 
   const { eventType, payload, messageId } = extractEventDetails(event)
@@ -45,3 +45,6 @@ export const receiveEvent = async (event) => {
       throw new Error(`Received unexpected event of type ${eventType}`)
   }
 }
+
+const functions = require('@google-cloud/functions-framework');
+functions.cloudEvent('receiveEvent', receiveEvent);
