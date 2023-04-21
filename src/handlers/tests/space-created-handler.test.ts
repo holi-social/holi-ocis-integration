@@ -1,16 +1,23 @@
+import { logger } from '../../logger'
 import { shareSpaceWithUser } from '../../ocis-api'
 import { SpaceCreatedDataPayload, OcisRole } from '../../types'
 import { findOrCreateOcisUser, findOrCreateOcisSpace } from '../helpers'
 import { spaceCreatedHandler } from '../space-created-handler'
 
+let loggerDebugMock: jest.MockedFunction<typeof logger.debug>
+
 jest.mock('../../db')
-jest.mock('../../logger')
 jest.mock('../../ocis-api')
 jest.mock('../helpers')
 
 const MESSAGE_ID = '42'
 
 describe('spaceCreatedHandler', () => {
+
+  beforeEach(() => {
+    loggerDebugMock = logger.debug as jest.MockedFunction<typeof logger.debug>
+  })
+
   afterEach(() => {
     jest.resetAllMocks()
   })
@@ -38,6 +45,7 @@ describe('spaceCreatedHandler', () => {
     }
     ;(findOrCreateOcisUser as jest.Mock).mockResolvedValue(ocisUser)
     ;(findOrCreateOcisSpace as jest.Mock).mockResolvedValue(ocisSpace)
+    ;(shareSpaceWithUser as jest.Mock).mockResolvedValue(null)
 
     await spaceCreatedHandler(MESSAGE_ID, spaceCreatedDataPayload)
 
