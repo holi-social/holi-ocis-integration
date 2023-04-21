@@ -8,6 +8,8 @@ jest.mock('../../logger')
 jest.mock('../../ocis-api')
 jest.mock('../helpers')
 
+const MESSAGE_ID = '42'
+
 describe('spaceCreatedHandler', () => {
   afterEach(() => {
     jest.resetAllMocks()
@@ -37,7 +39,7 @@ describe('spaceCreatedHandler', () => {
     ;(findOrCreateOcisUser as jest.Mock).mockResolvedValue(ocisUser)
     ;(findOrCreateOcisSpace as jest.Mock).mockResolvedValue(ocisSpace)
 
-    await spaceCreatedHandler(spaceCreatedDataPayload)
+    await spaceCreatedHandler(MESSAGE_ID, spaceCreatedDataPayload)
 
     expect(findOrCreateOcisUser).toHaveBeenCalledWith(spaceCreatedDataPayload.creator)
     expect(findOrCreateOcisSpace).toHaveBeenCalledWith(spaceCreatedDataPayload.space)
@@ -48,6 +50,6 @@ describe('spaceCreatedHandler', () => {
     const error = 'Failed to create space'
     ;(findOrCreateOcisSpace as jest.Mock).mockRejectedValue(new Error(error))
 
-    await expect(spaceCreatedHandler(spaceCreatedDataPayload)).rejects.toThrow(error)
+    await expect(spaceCreatedHandler(MESSAGE_ID, spaceCreatedDataPayload)).rejects.toThrow(error)
   })
 })

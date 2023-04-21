@@ -10,6 +10,8 @@ jest.mock('../../logger')
 jest.mock('../../ocis-api')
 jest.mock('../helpers')
 
+const MESSAGE_ID = '42'
+
 describe('spaceUserAddedHandler', () => {
   afterEach(() => {
     jest.resetAllMocks()
@@ -47,7 +49,7 @@ describe('spaceUserAddedHandler', () => {
     ;(findSpaceById as jest.Mock).mockResolvedValue(ocisSpace)
     ;(SpaceMappingRepository.prototype.findBySpaceId as jest.Mock).mockResolvedValue(spaceIdentity)
 
-    await spaceUserAddedHandler(spaceUserAddedDataPayload)
+    await spaceUserAddedHandler(MESSAGE_ID, spaceUserAddedDataPayload)
 
     expect(findOrCreateOcisUser).toHaveBeenCalledWith(spaceUserAddedDataPayload.user)
     expect(SpaceMappingRepository.prototype.findBySpaceId).toHaveBeenCalledWith(spaceUserAddedDataPayload.space.id)
@@ -60,6 +62,6 @@ describe('spaceUserAddedHandler', () => {
 
     ;(createSpace as jest.Mock).mockRejectedValue(new Error(error))
 
-    await expect(spaceUserAddedHandler(spaceUserAddedDataPayload)).rejects.toThrow(error)
+    await expect(spaceUserAddedHandler(MESSAGE_ID, spaceUserAddedDataPayload)).rejects.toThrow(error)
   })
 })

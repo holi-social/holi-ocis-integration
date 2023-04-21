@@ -9,6 +9,8 @@ jest.mock('../../logger')
 jest.mock('../../ocis-api')
 jest.mock('../helpers')
 
+const MESSAGE_ID = '42'
+
 describe('spaceUserAddedHandler', () => {
   const userNameUpdatedDataPayload: UserNameUpdatedDataPayload = {
     user: {
@@ -41,7 +43,7 @@ describe('spaceUserAddedHandler', () => {
     ;(findUserById as jest.Mock).mockResolvedValue(ocisUser)
     ;(updateUser as jest.Mock).mockResolvedValue(updatedOcisUser)
 
-    await userNameUpdatedHandler(userNameUpdatedDataPayload)
+    await userNameUpdatedHandler(MESSAGE_ID, userNameUpdatedDataPayload)
 
     expect(UserMappingRepository.prototype.findByUserIdOrFail).toHaveBeenCalledWith(userNameUpdatedDataPayload.user.id)
     expect(findUserById).toHaveBeenCalledWith(userIdentity.ocis_user_id)
@@ -53,6 +55,6 @@ describe('spaceUserAddedHandler', () => {
 
     ;(updateUser as jest.Mock).mockRejectedValue(new Error(error))
 
-    await expect(userNameUpdatedHandler(userNameUpdatedDataPayload)).rejects.toThrow(error)
+    await expect(userNameUpdatedHandler(MESSAGE_ID, userNameUpdatedDataPayload)).rejects.toThrow(error)
   })
 })

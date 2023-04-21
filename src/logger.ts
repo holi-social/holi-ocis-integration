@@ -5,13 +5,11 @@ export const logger = createLogger({
   level: 'debug',
 })
 
-export const logPhase = (phaseName: String) => (fn: () => Promise<any>) => {
+export const logPhase = (messageId: string, phaseName: string) => (fn: () => Promise<any>) => {
   const before = Date.now()
-  logger.debug('Starting phase ' + phaseName)
-  return fn()
-  .finally(() => {
+  logger.debug('[' + messageId + '] Starting ' + phaseName)
+  return fn().finally(() => {
     const duration = Date.now() - before
-    logger.debug('Completed phase ' + phaseName + ' after ' + duration + ' ms')
+    logger.debug('[' + messageId + '] Completed ' + phaseName + ' after ' + duration + ' ms')
   })
 }
-
