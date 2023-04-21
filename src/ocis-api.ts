@@ -256,7 +256,7 @@ export const createSpace = async (space: SpacePayload): Promise<OcisSpace> => {
  * @param {Role} role - The role to assign to the user for the shared space.
  * @throws {Error} Throws an error if the request fails or if an unexpected response is received.
  */
-export const shareSpaceWithUser = async (spaceId: string, username: string, role: OcisRole) => {
+export const shareSpaceWithUser = async (spaceId: string, username: string, role: OcisRole): Promise<void> => {
   // Construct the URL to share the space with the user.
   const url = `${OWNCLOUD_BASE_URL}/${OcisApi.SHARE_API_PATH}`
 
