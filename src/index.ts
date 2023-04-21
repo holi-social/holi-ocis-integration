@@ -2,7 +2,7 @@ import { ENVIRONMENT } from './config'
 import { spaceCreatedHandler } from './handlers/space-created-handler'
 import { spaceUserAddedHandler } from './handlers/space-user-added-handler'
 import { userNameUpdatedHandler } from './handlers/user-name-updated-handler'
-import { logger } from './logger'
+import { logPhase, logger } from './logger'
 
 import { EventType } from './types'
 
@@ -10,33 +10,36 @@ import { EventType } from './types'
 const extractEventDetails = (event) => {
   let message
   if (ENVIRONMENT === 'local') {
+    // Pub/Sub Emulator
     message = { ...event.data.message }
   } else {
+    // Cloud Pub/Sub
     message = { ...event.body.message }
   }
   const {
     data,
     attributes: { eventType },
+    messageId,
   } = message
   const buffer = Buffer.from(data, 'base64')
   const payload = JSON.parse(buffer.toString())
-  return { eventType, payload }
+  return { eventType, payload, messageId }
 }
 
 export const receiveEvent = async (event) => {
   logger.debug('Event received', { event })
 
-  const { eventType, payload } = extractEventDetails(event)
+  const { eventType, payload, messageId } = extractEventDetails(event)
 
   switch (eventType) {
     case EventType.SPACE_CREATED:
-      await spaceCreatedHandler(payload)
+      await logPhase(messageId, 'spaceCreatedHandler')(() => spaceCreatedHandler(messageId, payload))
       break
     case EventType.SPACE_USER_ADDED:
-      await spaceUserAddedHandler(payload)
+      await logPhase(messageId, 'spaceUserAddedHandler')(() => spaceUserAddedHandler(messageId, payload))
       break
     case EventType.USER_NAME_UPDATED:
-      await userNameUpdatedHandler(payload)
+      await logPhase(messageId, 'userNameUpdatedHandler')(() => userNameUpdatedHandler(messageId, payload))
       break
     default:
       throw new Error(`Received unexpected event of type ${eventType}`)

@@ -8,6 +8,8 @@ jest.mock('../handlers/space-created-handler')
 jest.mock('../handlers/space-user-added-handler')
 jest.mock('../handlers/user-name-updated-handler')
 
+const MESSAGE_ID = '42'
+
 const encodeBase64 = (payload) => {
   return Buffer.from(JSON.stringify(payload))
 }
@@ -81,13 +83,16 @@ describe('receiveEvent', () => {
           message: {
             attributes: { eventType: 'SpaceCreated', eventVersion: '1.0.0' },
             data: encodeBase64(spaceCreatedEventPayload),
+            messageId: MESSAGE_ID,
           },
         },
       }
 
+      spaceCreatedHandlerMock.mockResolvedValue()
+
       await receiveEvent(event)
 
-      expect(spaceCreatedHandlerMock).toHaveBeenCalledWith(spaceCreatedEventPayload)
+      expect(spaceCreatedHandlerMock).toHaveBeenCalledWith(MESSAGE_ID, spaceCreatedEventPayload)
     })
 
     it('should call the spaceUserAddedHandler when the event type is SpaceUserAdded', async () => {
@@ -96,13 +101,16 @@ describe('receiveEvent', () => {
           message: {
             attributes: { eventType: 'SpaceUserAdded', eventVersion: '1.0.0' },
             data: encodeBase64(spaceUserAddedEventPayload),
+            messageId: MESSAGE_ID,
           },
         },
       }
 
+      spaceUserAddedHandlerMock.mockResolvedValue()
+
       await receiveEvent(event)
 
-      expect(spaceUserAddedHandlerMock).toHaveBeenCalledWith(spaceUserAddedEventPayload)
+      expect(spaceUserAddedHandlerMock).toHaveBeenCalledWith(MESSAGE_ID, spaceUserAddedEventPayload)
     })
 
     it('should call the userNameUpdatedHandler when the event type is UserNameUpdated', async () => {
@@ -111,13 +119,16 @@ describe('receiveEvent', () => {
           message: {
             attributes: { eventType: 'UserNameUpdated', eventVersion: '1.0.0' },
             data: encodeBase64(userNameUpdatedEventPayload),
+            messageId: MESSAGE_ID,
           },
         },
       }
 
+      userNameUpdatedHandlerMock.mockResolvedValue()
+
       await receiveEvent(event)
 
-      expect(userNameUpdatedHandlerMock).toHaveBeenCalledWith(userNameUpdatedEventPayload)
+      expect(userNameUpdatedHandlerMock).toHaveBeenCalledWith(MESSAGE_ID, userNameUpdatedEventPayload)
     })
 
     it('should throw an error when the event type is unexpected', async () => {
@@ -148,13 +159,16 @@ describe('receiveEvent', () => {
           message: {
             attributes: { eventType: 'SpaceCreated', eventVersion: '1.0.0' },
             data: encodeBase64(spaceCreatedEventPayload),
+            messageId: MESSAGE_ID,
           },
         },
       }
 
+      spaceCreatedHandlerMock.mockResolvedValue()
+
       await receiveEvent(event)
 
-      expect(spaceCreatedHandlerMock).toHaveBeenCalledWith(spaceCreatedEventPayload)
+      expect(spaceCreatedHandlerMock).toHaveBeenCalledWith(MESSAGE_ID, spaceCreatedEventPayload)
     })
 
     it('should call the spaceUserAddedHandler when the event type is SpaceUserAdded', async () => {
@@ -163,13 +177,16 @@ describe('receiveEvent', () => {
           message: {
             attributes: { eventType: 'SpaceUserAdded', eventVersion: '1.0.0' },
             data: encodeBase64(spaceUserAddedEventPayload),
+            messageId: MESSAGE_ID,
           },
         },
       }
 
+      spaceUserAddedHandlerMock.mockResolvedValue()
+
       await receiveEvent(event)
 
-      expect(spaceUserAddedHandlerMock).toHaveBeenCalledWith(spaceUserAddedEventPayload)
+      expect(spaceUserAddedHandlerMock).toHaveBeenCalledWith(MESSAGE_ID, spaceUserAddedEventPayload)
     })
 
     it('should call the userNameUpdatedHandler when the event type is UserNameUpdated', async () => {
@@ -178,13 +195,16 @@ describe('receiveEvent', () => {
           message: {
             attributes: { eventType: 'UserNameUpdated', eventVersion: '1.0.0' },
             data: encodeBase64(userNameUpdatedEventPayload),
+            messageId: MESSAGE_ID,
           },
         },
       }
 
+      userNameUpdatedHandlerMock.mockResolvedValue()
+
       await receiveEvent(event)
 
-      expect(userNameUpdatedHandlerMock).toHaveBeenCalledWith(userNameUpdatedEventPayload)
+      expect(userNameUpdatedHandlerMock).toHaveBeenCalledWith(MESSAGE_ID, userNameUpdatedEventPayload)
     })
 
     it('should throw an error when the event type is unexpected', async () => {
