@@ -13,7 +13,6 @@ jest.mock('../helpers')
 const MESSAGE_ID = '42'
 
 describe('spaceCreatedHandler', () => {
-
   beforeEach(() => {
     loggerDebugMock = logger.debug as jest.MockedFunction<typeof logger.debug>
   })

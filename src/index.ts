@@ -46,5 +46,5 @@ export const receiveEvent = async (event): Promise<void> => {
   }
 }
 
-const functions = require('@google-cloud/functions-framework');
-functions.cloudEvent('receiveEvent', receiveEvent);
+const functions = require('@google-cloud/functions-framework')
+functions.cloudEvent('receiveEvent', receiveEvent)

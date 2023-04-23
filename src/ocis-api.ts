@@ -18,7 +18,7 @@ import { sanitizeSpaceName } from './utils'
 
 export const client: AxiosInstance = axios.create({
   timeout: 30 * 1000,
-});
+})
 
 // Whether to reject unauthorized TLS certificates. Set to false in a local development environment.
 const httpsAgent = new Agent({

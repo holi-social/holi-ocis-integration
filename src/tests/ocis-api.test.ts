@@ -1,6 +1,7 @@
-import axios, { AxiosResponse } from 'axios'
+import { AxiosResponse } from 'axios'
 import {
   assignUserRole,
+  client,
   createSpace,
   createUser,
   findSpaceById,
@@ -22,9 +23,11 @@ import {
 } from '../types'
 import { HOLI_PREFIX, MAX_SPACE_QUOTA } from '../constants'
 
-jest.mock('axios')
+const mockedAxios = client as jest.Mocked<typeof client>
 
-const mockedAxios = axios as jest.Mocked<typeof axios>
+mockedAxios.get = jest.fn()
+mockedAxios.post = jest.fn()
+mockedAxios.patch = jest.fn()
 
 describe('/users', () => {
   const id = 'test-user-id'

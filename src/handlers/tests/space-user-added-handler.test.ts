@@ -2,7 +2,7 @@ import { SpaceMappingRepository } from '../../db'
 import { logger } from '../../logger'
 import { createSpace, findSpaceById, shareSpaceWithUser } from '../../ocis-api'
 import { SpaceUserAddedDataPayload } from '../../types'
-import { findOrCreateOcisUser } from '../helpers'
+import { findOrCreateOcisSpace, findOrCreateOcisUser } from '../helpers'
 import { spaceUserAddedHandler } from '../space-user-added-handler'
 
 jest.mock('../../db')
@@ -51,16 +51,13 @@ describe('spaceUserAddedHandler', () => {
     }
 
     ;(findOrCreateOcisUser as jest.Mock).mockResolvedValue(ocisUser)
-    ;(findSpaceById as jest.Mock).mockResolvedValue(ocisSpace)
+    ;(findOrCreateOcisSpace as jest.Mock).mockResolvedValue(ocisSpace)
     ;(shareSpaceWithUser as jest.Mock).mockResolvedValue(null)
-    
-    ;(SpaceMappingRepository.prototype.findBySpaceId as jest.Mock).mockResolvedValue(spaceIdentity)
 
     await spaceUserAddedHandler(MESSAGE_ID, spaceUserAddedDataPayload)
 
     expect(findOrCreateOcisUser).toHaveBeenCalledWith(spaceUserAddedDataPayload.user)
-    expect(SpaceMappingRepository.prototype.findBySpaceId).toHaveBeenCalledWith(spaceUserAddedDataPayload.space.id)
-    expect(findSpaceById).toHaveBeenCalledWith(spaceIdentity.ocis_space_id)
+    expect(findOrCreateOcisSpace).toHaveBeenCalledWith(spaceUserAddedDataPayload.space)
     //expect(logger.debug).toHaveBeenCalledWith('User added to space successfully', { ocisUser, ocisSpace })
   })
 

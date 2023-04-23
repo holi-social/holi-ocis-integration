@@ -8,8 +8,15 @@ export const spaceCreatedHandler = async (messageId: string, payload: SpaceCreat
   try {
     const { creator, space } = payload
 
-    const ocisUser = await logPhase(messageId, 'spaceCreatedHandler.findOrCreateOcisUser')(() => findOrCreateOcisUser(creator))
-    const ocisSpace = await logPhase(messageId, 'spaceCreatedHandler.findOrCreateOcisSpace')(() => findOrCreateOcisSpace(space))
+    const ocisUser = await logPhase(
+      messageId,
+      'spaceCreatedHandler.findOrCreateOcisUser'
+    )(() => findOrCreateOcisUser(creator))
+
+    const ocisSpace = await logPhase(
+      messageId,
+      'spaceCreatedHandler.findOrCreateOcisSpace'
+    )(() => findOrCreateOcisSpace(space))
 
     //Shares the new space with the user with the "manager" role
     await logPhase(
