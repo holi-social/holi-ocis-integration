@@ -133,6 +133,12 @@ resource "google_cloudfunctions2_function" "holi-ocis-integration-staging" {
       google_storage_bucket_object.function_source
     ]
   }
+  event_trigger {
+    trigger_region = "europe-north1"
+    event_type     = "google.cloud.pubsub.topic.v1.messagePublished"
+    pubsub_topic   = data.terraform_remote_state.okuna-common_state.outputs.google_pubsub_topic_okuna_staging
+    retry_policy   = "RETRY_POLICY_RETRY"
+  }
 }
 
 resource "google_cloudfunctions2_function" "holi-ocis-integration-production" {
