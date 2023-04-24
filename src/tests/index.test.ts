@@ -2,7 +2,6 @@ import { receiveEvent } from '..'
 import { spaceCreatedHandler } from '../handlers/space-created-handler'
 import { spaceUserAddedHandler } from '../handlers/space-user-added-handler'
 import { userNameUpdatedHandler } from '../handlers/user-name-updated-handler'
-import * as config from '../config'
 
 jest.mock('../handlers/space-created-handler')
 jest.mock('../handlers/space-user-added-handler')
@@ -72,156 +71,101 @@ describe('receiveEvent', () => {
     jest.resetAllMocks()
   })
 
-  describe('Google Pub/Sub Emulator', () => {
-    beforeEach(() => {
-      Object.defineProperty(config, 'ENVIRONMENT', { value: 'local', configurable: true })
-    })
-
-    it('should call the spaceCreatedHandler when the event type is SpaceCreated', async () => {
-      const event = {
-        data: {
-          message: {
-            attributes: { eventType: 'SpaceCreated', eventVersion: '1.0.0' },
-            data: encodeBase64(spaceCreatedEventPayload),
-            messageId: MESSAGE_ID,
-          },
+  it('should call the spaceCreatedHandler when the event type is SpaceCreated', async () => {
+    const requestMock = {
+      body: {
+        message: {
+          attributes: { eventType: 'SpaceCreated', eventVersion: '1.0.0' },
+          data: encodeBase64(spaceCreatedEventPayload),
+          messageId: MESSAGE_ID,
         },
-      }
+      },
+    }
 
-      spaceCreatedHandlerMock.mockResolvedValue()
+    const responseMock = {
+      sendStatus: jest.fn(),
+    }
 
-      await receiveEvent(event)
+    spaceCreatedHandlerMock.mockResolvedValue()
 
-      expect(spaceCreatedHandlerMock).toHaveBeenCalledWith(MESSAGE_ID, spaceCreatedEventPayload)
-    })
+    await receiveEvent(requestMock, responseMock)
 
-    it('should call the spaceUserAddedHandler when the event type is SpaceUserAdded', async () => {
-      const event = {
-        data: {
-          message: {
-            attributes: { eventType: 'SpaceUserAdded', eventVersion: '1.0.0' },
-            data: encodeBase64(spaceUserAddedEventPayload),
-            messageId: MESSAGE_ID,
-          },
-        },
-      }
-
-      spaceUserAddedHandlerMock.mockResolvedValue()
-
-      await receiveEvent(event)
-
-      expect(spaceUserAddedHandlerMock).toHaveBeenCalledWith(MESSAGE_ID, spaceUserAddedEventPayload)
-    })
-
-    it('should call the userNameUpdatedHandler when the event type is UserNameUpdated', async () => {
-      const event = {
-        data: {
-          message: {
-            attributes: { eventType: 'UserNameUpdated', eventVersion: '1.0.0' },
-            data: encodeBase64(userNameUpdatedEventPayload),
-            messageId: MESSAGE_ID,
-          },
-        },
-      }
-
-      userNameUpdatedHandlerMock.mockResolvedValue()
-
-      await receiveEvent(event)
-
-      expect(userNameUpdatedHandlerMock).toHaveBeenCalledWith(MESSAGE_ID, userNameUpdatedEventPayload)
-    })
-
-    it('should throw an error when the event type is unexpected', async () => {
-      const unsupportedEvent = 'UnsupportedEvent'
-      const event = {
-        data: {
-          message: {
-            attributes: { eventType: unsupportedEvent, eventVersion: '1.0.0' },
-            data: encodeBase64(unsupportedEventPayload),
-          },
-        },
-      }
-
-      await expect(receiveEvent(event)).rejects.toThrow(`Received unexpected event of type ${unsupportedEvent}`)
-      expect(spaceCreatedHandlerMock).not.toHaveBeenCalled()
-      expect(spaceUserAddedHandlerMock).not.toHaveBeenCalled()
-      expect(userNameUpdatedHandlerMock).not.toHaveBeenCalled()
-    })
+    expect(spaceCreatedHandlerMock).toHaveBeenCalledWith(MESSAGE_ID, spaceCreatedEventPayload)
+    expect(responseMock.sendStatus).toHaveBeenCalledWith(201)
   })
 
-  describe('Google Pub/Sub Cloud', () => {
-    beforeEach(() => {
-      Object.defineProperty(config, 'ENVIRONMENT', { value: 'staging', configurable: true })
-    })
-    it('should call the spaceCreatedHandler when the event type is SpaceCreated', async () => {
-      const event = {
-        body: {
-          message: {
-            attributes: { eventType: 'SpaceCreated', eventVersion: '1.0.0' },
-            data: encodeBase64(spaceCreatedEventPayload),
-            messageId: MESSAGE_ID,
-          },
+  it('should call the spaceUserAddedHandler when the event type is SpaceUserAdded', async () => {
+    const requestMock = {
+      body: {
+        message: {
+          attributes: { eventType: 'SpaceUserAdded', eventVersion: '1.0.0' },
+          data: encodeBase64(spaceUserAddedEventPayload),
+          messageId: MESSAGE_ID,
         },
-      }
+      },
+    }
 
-      spaceCreatedHandlerMock.mockResolvedValue()
+    const responseMock = {
+      sendStatus: jest.fn(),
+    }
 
-      await receiveEvent(event)
+    spaceUserAddedHandlerMock.mockResolvedValue()
 
-      expect(spaceCreatedHandlerMock).toHaveBeenCalledWith(MESSAGE_ID, spaceCreatedEventPayload)
-    })
+    await receiveEvent(requestMock, responseMock)
 
-    it('should call the spaceUserAddedHandler when the event type is SpaceUserAdded', async () => {
-      const event = {
-        body: {
-          message: {
-            attributes: { eventType: 'SpaceUserAdded', eventVersion: '1.0.0' },
-            data: encodeBase64(spaceUserAddedEventPayload),
-            messageId: MESSAGE_ID,
-          },
+    expect(spaceUserAddedHandlerMock).toHaveBeenCalledWith(MESSAGE_ID, spaceUserAddedEventPayload)
+    expect(responseMock.sendStatus).toHaveBeenCalledWith(200)
+  })
+
+  it('should call the userNameUpdatedHandler when the event type is UserNameUpdated', async () => {
+    const requestMock = {
+      body: {
+        message: {
+          attributes: { eventType: 'UserNameUpdated', eventVersion: '1.0.0' },
+          data: encodeBase64(userNameUpdatedEventPayload),
+          messageId: MESSAGE_ID,
         },
-      }
+      },
+    }
 
-      spaceUserAddedHandlerMock.mockResolvedValue()
+    const responseMock = {
+      sendStatus: jest.fn(),
+    }
 
-      await receiveEvent(event)
+    userNameUpdatedHandlerMock.mockResolvedValue()
 
-      expect(spaceUserAddedHandlerMock).toHaveBeenCalledWith(MESSAGE_ID, spaceUserAddedEventPayload)
-    })
+    await receiveEvent(requestMock, responseMock)
 
-    it('should call the userNameUpdatedHandler when the event type is UserNameUpdated', async () => {
-      const event = {
-        body: {
-          message: {
-            attributes: { eventType: 'UserNameUpdated', eventVersion: '1.0.0' },
-            data: encodeBase64(userNameUpdatedEventPayload),
-            messageId: MESSAGE_ID,
-          },
+    expect(userNameUpdatedHandlerMock).toHaveBeenCalledWith(MESSAGE_ID, userNameUpdatedEventPayload)
+    expect(responseMock.sendStatus).toHaveBeenCalledWith(200)
+  })
+
+  it('should throw an error when the event type is unexpected', async () => {
+    const unsupportedEvent = 'UnsupportedEvent'
+
+    const requestMock = {
+      body: {
+        message: {
+          attributes: { eventType: unsupportedEvent, eventVersion: '1.0.0' },
+          data: encodeBase64(unsupportedEventPayload),
+          messageId: MESSAGE_ID,
         },
-      }
+      },
+    }
 
-      userNameUpdatedHandlerMock.mockResolvedValue()
+    const sendMock = jest.fn()
 
-      await receiveEvent(event)
+    const responseMock = {
+      status: jest.fn().mockReturnValue({ send: sendMock }),
+    }
 
-      expect(userNameUpdatedHandlerMock).toHaveBeenCalledWith(MESSAGE_ID, userNameUpdatedEventPayload)
-    })
-
-    it('should throw an error when the event type is unexpected', async () => {
-      const unsupportedEvent = 'UnsupportedEvent'
-      const event = {
-        body: {
-          message: {
-            attributes: { eventType: unsupportedEvent, eventVersion: '1.0.0' },
-            data: encodeBase64(unsupportedEventPayload),
-          },
-        },
-      }
-
-      await expect(receiveEvent(event)).rejects.toThrow(`Received unexpected event of type ${unsupportedEvent}`)
-      expect(spaceCreatedHandlerMock).not.toHaveBeenCalled()
-      expect(spaceUserAddedHandlerMock).not.toHaveBeenCalled()
-      expect(userNameUpdatedHandlerMock).not.toHaveBeenCalled()
-    })
+    await expect(receiveEvent(requestMock, responseMock)).rejects.toThrow(
+      `Received unexpected event of type ${unsupportedEvent}`
+    )
+    expect(responseMock.status).toHaveBeenCalledWith(500)
+    expect(sendMock).toHaveBeenCalledWith({ error: `Error while processing message: [${MESSAGE_ID}]` })
+    expect(spaceCreatedHandlerMock).not.toHaveBeenCalled()
+    expect(spaceUserAddedHandlerMock).not.toHaveBeenCalled()
+    expect(userNameUpdatedHandlerMock).not.toHaveBeenCalled()
   })
 })
