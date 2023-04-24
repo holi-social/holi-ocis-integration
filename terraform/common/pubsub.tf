@@ -1,9 +1,14 @@
-resource "google_project_iam_member" "pubsub_editor" {
+resource "google_project_iam_member" "pubsub_subscriber" {
   project = data.terraform_remote_state.holi_infra_state.outputs.shared_project_id
   member  = "serviceAccount:holi-ocis-integration-sa@holi-shared.iam.gserviceaccount.com"
-  role    = "roles/pubsub.editor"
+  role    = "roles/pubsub.subscriber"
 }
 
+resource "google_project_iam_member" "pubsub_publisher" {
+  project = data.terraform_remote_state.holi_infra_state.outputs.shared_project_id
+  member  = "serviceAccount:holi-ocis-integration-sa@holi-shared.iam.gserviceaccount.com"
+  role    = "roles/pubsub.publisher"
+}
 resource "google_pubsub_topic" "okuna_staging_dead_letter" {
   project = data.terraform_remote_state.holi_infra_state.outputs.shared_project_id
   name    = "okuna_staging_dead_letter"
