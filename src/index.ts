@@ -9,19 +9,11 @@ import { EventType } from './types'
 //Processes events received from both the Google Pub/Sub Emulator and Cloud Pub/Sub, which have different body structures.
 const extractEventDetails = (event) => {
   try {
-    let message
-    if (ENVIRONMENT === 'local') {
-      // Pub/Sub Emulator
-      message = { ...event.data.message }
-    } else {
-      // Cloud Pub/Sub
-      message = { ...event.body.message }
-    }
     const {
       data,
       attributes: { eventType },
       messageId,
-    } = message
+    } = event.body.message
     const buffer = Buffer.from(data, 'base64')
     const payload = JSON.parse(buffer.toString())
     logger.debug('[' + messageId + '] Event of type ' + eventType + ' extracted successfully', { event })
@@ -32,10 +24,10 @@ const extractEventDetails = (event) => {
   }
 }
 
-export const receiveEvent = async (event): Promise<void> => {
-  logger.debug('Event received', { event })
+export const receiveEvent = async (request, response): Promise<void> => {
+  logger.debug('Event received', { request })
 
-  const { eventType, payload, messageId } = extractEventDetails(event)
+  const { eventType, payload, messageId } = extractEventDetails(request)
 
   try {
     switch (eventType) {
@@ -51,6 +43,7 @@ export const receiveEvent = async (event): Promise<void> => {
       default:
         throw new Error(`Received unexpected event of type ${eventType}`)
     }
+    response.send('OK')
   } catch (e) {
     logger.error('[' + messageId + '] Error while processing message:', e)
     throw e
@@ -58,4 +51,4 @@ export const receiveEvent = async (event): Promise<void> => {
 }
 
 const functions = require('@google-cloud/functions-framework')
-functions.cloudEvent('receiveEvent', receiveEvent)
+functions.http('receiveEvent', receiveEvent)
