@@ -1,6 +1,5 @@
-import { SpaceMappingRepository } from '../../db'
 import { logger } from '../../logger'
-import { createSpace, findSpaceById, shareSpaceWithUser } from '../../ocis-api'
+import { createSpace, shareSpaceWithUser } from '../../ocis-api'
 import { SpaceUserAddedDataPayload } from '../../types'
 import { findOrCreateOcisSpace, findOrCreateOcisUser } from '../helpers'
 import { spaceUserAddedHandler } from '../space-user-added-handler'
