@@ -89,10 +89,11 @@ resource "google_cloudfunctions2_function" "holi-ocis-integration-staging" {
   }
 
   service_config {
-    max_instance_count = 1
-    min_instance_count = 0
-    available_memory   = "128Mi"
-    timeout_seconds    = 60
+    max_instance_count               = 1
+    min_instance_count               = 0
+    available_memory                 = "128Mi"
+    timeout_seconds                  = 60
+    max_instance_request_concurrency = 10
     environment_variables = {
       ENVIRONMENT                  = "staging"
       OCIS_OIDC_ISSUER             = "https://dev-auth.project-holi.org"
