@@ -1,8 +1,8 @@
 import { SpaceMappingRepository, UserMappingRepository } from '../../db'
 import { logger } from '../../logger'
-import { findUserById, findUserByAccountName, createUser, findSpaceById, createSpace } from '../../ocis-api'
+import { findUserById, findUserByAccountName, createUser, findSpaceById, createSpace, updateUser } from '../../ocis-api'
 import { UserPayload, OcisUser, OcisUserType, OcisSpace } from '../../types'
-import { findOrCreateOcisSpace, findOrCreateOcisUser } from '../helpers'
+import { findOrCreateOcisSpace, findOrCreateOcisUser, updateOrCreateOcisUser } from '../helpers'
 
 jest.mock('../../db')
 jest.mock('../../logger')
@@ -91,6 +91,82 @@ describe('findOrCreateOcisUser', () => {
     expect(createUserMock).toHaveBeenCalledWith(user)
     expect(userMappingRepositorycreateMock).toHaveBeenCalledWith(user.id, ocisUser.id)
     expect(loggerDebugMock).toHaveBeenCalledWith('User created successfully', { ocisUser })
+  })
+})
+
+describe('updateOrCreateOcisUser', () => {
+  let user: UserPayload
+  let ocisUser: OcisUser
+  let userIdentity
+
+  let userMappingRepositoryfindByUserIdMock: jest.MockedFunction<typeof UserMappingRepository.prototype.findByUserId>
+  let userMappingRepositorycreateMock: jest.MockedFunction<typeof UserMappingRepository.prototype.create>
+
+  let createUserMock: jest.MockedFunction<typeof createUser>
+  let updateUserMock: jest.MockedFunction<typeof updateUser>
+  let loggerDebugMock: jest.MockedFunction<typeof logger.debug>
+  let loggerWarningMock: jest.MockedFunction<typeof logger.warn>
+
+  beforeEach(() => {
+    user = {
+      id: 'user-id',
+      email: 'user-email@example.com',
+      name: 'Test User',
+    }
+    ocisUser = {
+      id: 'ocis-user-id',
+      accountEnabled: true,
+      displayName: 'Test User',
+      givenName: '',
+      mail: '',
+      onPremisesSamAccountName: 'holi_user-id',
+      surname: '',
+      userType: OcisUserType.MEMBER,
+    }
+    userIdentity = { id: 1, user_id: user.id, ocis_user_id: ocisUser.id }
+    userMappingRepositoryfindByUserIdMock = UserMappingRepository.prototype.findByUserId as jest.Mock
+    userMappingRepositorycreateMock = UserMappingRepository.prototype.create as jest.Mock
+
+    createUserMock = createUser as jest.MockedFunction<typeof createUser>
+    updateUserMock = updateUser as jest.MockedFunction<typeof updateUser>
+    loggerDebugMock = logger.debug as jest.MockedFunction<typeof logger.debug>
+    loggerWarningMock = logger.warn as jest.MockedFunction<typeof logger.warn>
+  })
+
+  afterEach(() => {
+    jest.resetAllMocks()
+  })
+
+  it('should update an existing user', async () => {
+    userMappingRepositoryfindByUserIdMock.mockResolvedValueOnce(userIdentity)
+
+    const ocisUser = await updateOrCreateOcisUser(user)
+
+    expect(userMappingRepositoryfindByUserIdMock).toHaveBeenCalledWith(user.id)
+    expect(updateUserMock).toHaveBeenCalledWith(userIdentity.ocis_user_id, user)
+
+    expect(loggerDebugMock).toHaveBeenCalledWith('User name updated successfully', { ocisUser })
+
+    expect(userMappingRepositorycreateMock).not.toHaveBeenCalled()
+    expect(createUserMock).not.toHaveBeenCalled()
+  })
+
+  it('should create a new user if none is found', async () => {
+    userMappingRepositoryfindByUserIdMock.mockResolvedValueOnce(null)
+
+    createUserMock.mockResolvedValueOnce(ocisUser)
+
+    await updateOrCreateOcisUser(user)
+
+    expect(userMappingRepositoryfindByUserIdMock).toHaveBeenCalledWith(user.id)
+    expect(loggerWarningMock).toHaveBeenCalledWith('User with ID user-id was not found. A new user will be created.', {
+      user,
+    })
+    expect(createUserMock).toHaveBeenCalledWith(user)
+    expect(userMappingRepositorycreateMock).toHaveBeenCalledWith(user.id, ocisUser.id)
+    expect(loggerDebugMock).toHaveBeenCalledWith('User created successfully', { ocisUser })
+
+    expect(updateUserMock).not.toHaveBeenCalledWith()
   })
 })
 
