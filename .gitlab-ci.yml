@@ -16,7 +16,7 @@ stages:
 install_dependencies:
   stage: install_dependencies
   image:
-    name: 'node:latest'
+    name: 'node:18.16.0'
   cache:
     key: $CI_COMMIT_REF_SLUG
     paths:
@@ -27,7 +27,7 @@ install_dependencies:
     changes:
       - yarn.lock
 
-.test:
+test:
   stage: 'test'
   cache:
     key: $CI_COMMIT_REF_SLUG
@@ -35,7 +35,7 @@ install_dependencies:
       - node_modules/
     policy: pull
   image:
-    name: 'node:latest'
+    name: 'node:18.16.0'
   script:
     - yarn test
 
@@ -47,7 +47,7 @@ build:
       - node_modules/
     policy: pull
   image:
-    name: 'node:latest'
+    name: 'node:18.16.0'
   script:
     - yarn build
   artifacts:

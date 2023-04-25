@@ -1,6 +1,5 @@
-import { SpaceMappingRepository } from '../../db'
 import { logger } from '../../logger'
-import { createSpace, findSpaceById, shareSpaceWithUser } from '../../ocis-api'
+import { createSpace, shareSpaceWithUser } from '../../ocis-api'
 import { SpaceUserAddedDataPayload } from '../../types'
 import { findOrCreateOcisSpace, findOrCreateOcisUser } from '../helpers'
 import { spaceUserAddedHandler } from '../space-user-added-handler'
@@ -9,15 +8,18 @@ jest.mock('../../db')
 jest.mock('../../ocis-api')
 jest.mock('../helpers')
 
-let loggerDebugMock: jest.MockedFunction<typeof logger.debug>
+jest.mock('../../logger', () => {
+  return {
+    logger: {
+      debug: jest.fn(),
+    },
+    logPhase: jest.fn((_messageId: string, _phaseName: string) => (fn) => fn()),
+  }
+})
 
 const MESSAGE_ID = '42'
 
 describe('spaceUserAddedHandler', () => {
-  beforeEach(() => {
-    loggerDebugMock = logger.debug as jest.MockedFunction<typeof logger.debug>
-  })
-
   afterEach(() => {
     jest.resetAllMocks()
   })
@@ -58,7 +60,7 @@ describe('spaceUserAddedHandler', () => {
 
     expect(findOrCreateOcisUser).toHaveBeenCalledWith(spaceUserAddedDataPayload.user)
     expect(findOrCreateOcisSpace).toHaveBeenCalledWith(spaceUserAddedDataPayload.space)
-    //expect(logger.debug).toHaveBeenCalledWith('User added to space successfully', { ocisUser, ocisSpace })
+    expect(logger.debug).toHaveBeenCalledWith('User added to space successfully', { ocisUser, ocisSpace })
   })
 
   it('should throw an error if any operation fails', async () => {

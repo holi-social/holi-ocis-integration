@@ -1,6 +1,5 @@
-import { SpaceMappingRepository } from '../db'
 import { logPhase, logger } from '../logger'
-import { findSpaceById, shareSpaceWithUser } from '../ocis-api'
+import { shareSpaceWithUser } from '../ocis-api'
 import { OcisRole, SpaceUserAddedDataPayload } from '../types'
 import { findOrCreateOcisUser, findOrCreateOcisSpace } from './helpers'
 
