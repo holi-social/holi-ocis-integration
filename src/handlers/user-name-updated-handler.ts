@@ -1,4 +1,4 @@
-import { logPhase, logger } from '../logger'
+import { logPhase } from '../logger'
 import { UserNameUpdatedDataPayload } from '../types'
 import { updateOrCreateOcisUser } from './helpers'
 
@@ -6,11 +6,7 @@ import { updateOrCreateOcisUser } from './helpers'
 export const userNameUpdatedHandler = async (messageId: string, payload: UserNameUpdatedDataPayload): Promise<void> => {
   try {
     const { user } = payload
-    const ocisUser = await logPhase(
-      messageId,
-      'userNameUpdatedHandler.updateOrCreateOcisUser'
-    )(() => updateOrCreateOcisUser(user))
-    logger.debug('User name updated successfully', { ocisUser })
+    await logPhase(messageId, 'userNameUpdatedHandler.updateOrCreateOcisUser')(() => updateOrCreateOcisUser(user))
   } catch (error) {
     throw new Error(`Failed to update user name ${error}`)
   }
