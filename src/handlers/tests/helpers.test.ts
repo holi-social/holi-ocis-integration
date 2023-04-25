@@ -159,9 +159,12 @@ describe('updateOrCreateOcisUser', () => {
     await updateOrCreateOcisUser(user)
 
     expect(userMappingRepositoryfindByUserIdMock).toHaveBeenCalledWith(user.id)
-    expect(loggerWarningMock).toHaveBeenCalledWith('User with ID user-id was not found. A new user will be created.', {
-      user,
-    })
+    expect(loggerWarningMock).toHaveBeenCalledWith(
+      `User with ID ${user.id} was not found. A new user will be created.`,
+      {
+        user,
+      }
+    )
     expect(createUserMock).toHaveBeenCalledWith(user)
     expect(userMappingRepositorycreateMock).toHaveBeenCalledWith(user.id, ocisUser.id)
     expect(loggerDebugMock).toHaveBeenCalledWith('User created successfully', { ocisUser })
