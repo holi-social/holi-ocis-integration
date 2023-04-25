@@ -101,6 +101,7 @@ describe('updateOrCreateOcisUser', () => {
 
   let userMappingRepositoryfindByUserIdMock: jest.MockedFunction<typeof UserMappingRepository.prototype.findByUserId>
   let userMappingRepositorycreateMock: jest.MockedFunction<typeof UserMappingRepository.prototype.create>
+  let findUserByAccountNameMock: jest.MockedFunction<typeof findUserByAccountName>
 
   let createUserMock: jest.MockedFunction<typeof createUser>
   let updateUserMock: jest.MockedFunction<typeof updateUser>
@@ -126,6 +127,7 @@ describe('updateOrCreateOcisUser', () => {
     userIdentity = { id: 1, user_id: user.id, ocis_user_id: ocisUser.id }
     userMappingRepositoryfindByUserIdMock = UserMappingRepository.prototype.findByUserId as jest.Mock
     userMappingRepositorycreateMock = UserMappingRepository.prototype.create as jest.Mock
+    findUserByAccountNameMock = findUserByAccountName as jest.MockedFunction<typeof findUserByAccountName>
 
     createUserMock = createUser as jest.MockedFunction<typeof createUser>
     updateUserMock = updateUser as jest.MockedFunction<typeof updateUser>
@@ -137,15 +139,32 @@ describe('updateOrCreateOcisUser', () => {
     jest.resetAllMocks()
   })
 
-  it('should update an existing user', async () => {
+  it('should update an existing user if user identity record exist', async () => {
     userMappingRepositoryfindByUserIdMock.mockResolvedValueOnce(userIdentity)
 
     const ocisUser = await updateOrCreateOcisUser(user)
 
     expect(userMappingRepositoryfindByUserIdMock).toHaveBeenCalledWith(user.id)
+    expect(findUserByAccountNameMock).not.toHaveBeenCalled()
+
     expect(updateUserMock).toHaveBeenCalledWith(userIdentity.ocis_user_id, user)
 
     expect(loggerDebugMock).toHaveBeenCalledWith('User name updated successfully', { ocisUser })
+
+    expect(userMappingRepositorycreateMock).not.toHaveBeenCalled()
+    expect(createUserMock).not.toHaveBeenCalled()
+  })
+
+  it('should update an existing user if user exists on oCIS', async () => {
+    userMappingRepositoryfindByUserIdMock.mockResolvedValueOnce(null)
+    findUserByAccountNameMock.mockResolvedValueOnce(ocisUser)
+
+    const updatedOcisUser = await updateOrCreateOcisUser(user)
+
+    expect(userMappingRepositoryfindByUserIdMock).toHaveBeenCalledWith(user.id)
+    expect(updateUserMock).toHaveBeenCalledWith(userIdentity.ocis_user_id, user)
+
+    expect(loggerDebugMock).toHaveBeenCalledWith('User name updated successfully', { ocisUser: updatedOcisUser })
 
     expect(userMappingRepositorycreateMock).not.toHaveBeenCalled()
     expect(createUserMock).not.toHaveBeenCalled()
