@@ -1,4 +1,3 @@
-import { ENVIRONMENT } from './config'
 import { spaceCreatedHandler } from './handlers/space-created-handler'
 import { spaceUserAddedHandler } from './handlers/space-user-added-handler'
 import { userNameUpdatedHandler } from './handlers/user-name-updated-handler'
@@ -7,17 +6,17 @@ import { logPhase, logger } from './logger'
 import { EventType } from './types'
 
 //Processes events received from both the Google Pub/Sub Emulator and Cloud Pub/Sub, which have different body structures.
-const extractEventDetails = (event) => {
+const extractEventDetails = (request) => {
   try {
     const {
       data,
       attributes: { eventType },
       messageId,
-    } = event.body.message
+    } = request.body.message
     const buffer = Buffer.from(data, 'base64')
-    const payload = JSON.parse(buffer.toString())
+    const event = JSON.parse(buffer.toString())
     logger.debug('[' + messageId + '] Event of type ' + eventType + ' extracted successfully', { event })
-    return { eventType, payload, messageId }
+    return { eventType, event, messageId }
   } catch (e) {
     logger.error('Error parsing message:', e)
     throw e
@@ -25,27 +24,29 @@ const extractEventDetails = (event) => {
 }
 
 export const receiveEvent = async (request, response): Promise<void> => {
-  logger.debug('Event received', { request })
+  logger.debug('Event received', { event: request.body.message })
 
-  const { eventType, payload, messageId } = extractEventDetails(request)
+  const { eventType, event, messageId } = extractEventDetails(request)
 
   try {
     switch (eventType) {
       case EventType.SPACE_CREATED:
-        await logPhase(messageId, 'spaceCreatedHandler')(() => spaceCreatedHandler(messageId, payload))
+        await logPhase(messageId, 'spaceCreatedHandler')(() => spaceCreatedHandler(messageId, event))
+        response.sendStatus(201)
         break
       case EventType.SPACE_USER_ADDED:
-        await logPhase(messageId, 'spaceUserAddedHandler')(() => spaceUserAddedHandler(messageId, payload))
+        await logPhase(messageId, 'spaceUserAddedHandler')(() => spaceUserAddedHandler(messageId, event))
+        response.sendStatus(200)
         break
       case EventType.USER_NAME_UPDATED:
-        await logPhase(messageId, 'userNameUpdatedHandler')(() => userNameUpdatedHandler(messageId, payload))
+        await logPhase(messageId, 'userNameUpdatedHandler')(() => userNameUpdatedHandler(messageId, event))
+        response.sendStatus(200)
         break
       default:
         throw new Error(`Received unexpected event of type ${eventType}`)
     }
-    response.send('OK')
   } catch (e) {
-    logger.error('[' + messageId + '] Error while processing message:', e)
+    response.status(500).send({ error: `Error while processing message: [${messageId}]` })
     throw e
   }
 }
