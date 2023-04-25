@@ -1,6 +1,6 @@
 import { SpaceMappingRepository, UserMappingRepository } from '../db'
 import { logger } from '../logger'
-import { createSpace, createUser, findSpaceById, findUserByAccountName, findUserById } from '../ocis-api'
+import { createSpace, createUser, findSpaceById, findUserByAccountName, findUserById, updateUser } from '../ocis-api'
 import { OcisSpace, OcisUser, SpacePayload, UserPayload } from '../types'
 
 //Finds an existing OCIS user (i.e. either by ID or by account name) or creates a new one based on the given user payload.
@@ -21,6 +21,29 @@ export const findOrCreateOcisUser = async (user: UserPayload): Promise<OcisUser>
   await userMappingRepository.create(user.id, ocisUser.id)
   logger.debug('User created successfully', { ocisUser })
 
+  return ocisUser
+}
+
+//Updates an existing OCIS user or creates a new one based on the given user payload.
+export const updateOrCreateOcisUser = async (user: UserPayload): Promise<OcisUser> => {
+  const userMappingRepository = new UserMappingRepository()
+  const userIdentity = await userMappingRepository.findByUserId(user.id)
+
+  if (!userIdentity) {
+    // Warning: Do not remove the following log statement as it is useful for debugging and troubleshooting in case of unexpected issues in the future.
+    // This log message helps to identify when a new user is being created because the corresponding user identity record could not be found.
+    // Removing this log statement could make it difficult to trace the root cause of certain issues.
+    logger.warn(`User with ID ${user.id} was not found. A new user will be created.`, {
+      user,
+    })
+    const ocisUser = await createUser(user)
+    await userMappingRepository.create(user.id, ocisUser.id)
+    logger.debug('User created successfully', { ocisUser })
+    return ocisUser
+  }
+
+  const ocisUser = await updateUser(userIdentity.ocis_user_id, user)
+  logger.debug('User name updated successfully', { ocisUser })
   return ocisUser
 }
 
