@@ -24,27 +24,38 @@ export const findOrCreateOcisUser = async (user: UserPayload): Promise<OcisUser>
   return ocisUser
 }
 
-//Updates an existing OCIS user or creates a new one based on the given user payload.
+// Updates an existing OCIS user or creates a new one based on the given user payload.
 export const updateOrCreateOcisUser = async (user: UserPayload): Promise<OcisUser> => {
   const userMappingRepository = new UserMappingRepository()
   const userIdentity = await userMappingRepository.findByUserId(user.id)
 
-  if (!userIdentity) {
+  if (userIdentity) {
+    // If a user mapping record exists, update the corresponding oCIS user with the new user name.
+    const updatedOcisUser = await updateUser(userIdentity.ocis_user_id, user)
+    logger.debug('User name updated successfully', { ocisUser: updatedOcisUser })
+    return updatedOcisUser
+  } else {
+    // If a user mapping record does not exist, look up the oCIS user by account name.
+    const ocisUser = await findUserByAccountName(user.id)
+    if (ocisUser) {
+      // If an oCIS user with the same account name exists, update it with the new user name.
+      const updatedOcisUser = await updateUser(ocisUser.id, user)
+      logger.debug('User name updated successfully', { ocisUser: updatedOcisUser })
+      return updatedOcisUser
+    }
+
     // Warning: Do not remove the following log statement as it is useful for debugging and troubleshooting in case of unexpected issues in the future.
     // This log message helps to identify when a new user is being created because the corresponding user identity record could not be found.
     // Removing this log statement could make it difficult to trace the root cause of certain issues.
     logger.warn(`User with ID ${user.id} was not found. A new user will be created.`, {
       user,
     })
-    const ocisUser = await createUser(user)
-    await userMappingRepository.create(user.id, ocisUser.id)
-    logger.debug('User created successfully', { ocisUser })
-    return ocisUser
+    // If neither a user mapping record nor an oCIS user with the same account name exists, create a new OCIS user.
+    const newOcisUser = await createUser(user)
+    await userMappingRepository.create(user.id, newOcisUser.id)
+    logger.debug('User created successfully', { ocisUser: newOcisUser })
+    return newOcisUser
   }
-
-  const ocisUser = await updateUser(userIdentity.ocis_user_id, user)
-  logger.debug('User name updated successfully', { ocisUser })
-  return ocisUser
 }
 
 // Finds an existing OCIS space or creates a new one incl. mapping with the given space payload.
