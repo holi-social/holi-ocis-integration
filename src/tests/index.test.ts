@@ -153,17 +153,14 @@ describe('receiveEvent', () => {
       },
     }
 
-    const sendMock = jest.fn()
-
     const responseMock = {
-      status: jest.fn().mockReturnValue({ send: sendMock }),
+      sendStatus: jest.fn(),
     }
 
     await expect(receiveEvent(requestMock, responseMock)).rejects.toThrow(
       `Received unexpected event of type ${unsupportedEvent}`
     )
-    expect(responseMock.status).toHaveBeenCalledWith(500)
-    expect(sendMock).toHaveBeenCalledWith({ error: `Error while processing message: [${MESSAGE_ID}]` })
+    expect(responseMock.sendStatus).toHaveBeenCalledWith(500)
     expect(spaceCreatedHandlerMock).not.toHaveBeenCalled()
     expect(spaceUserAddedHandlerMock).not.toHaveBeenCalled()
     expect(userNameUpdatedHandlerMock).not.toHaveBeenCalled()

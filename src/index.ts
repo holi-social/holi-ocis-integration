@@ -46,7 +46,8 @@ export const receiveEvent = async (request, response): Promise<void> => {
         throw new Error(`Received unexpected event of type ${eventType}`)
     }
   } catch (e) {
-    response.status(500).send({ error: `Error while processing message: [${messageId}]` })
+    logger.error('[' + messageId + '] Error while processing message:', e)
+    response.sendStatus(500)
     throw e
   }
 }
