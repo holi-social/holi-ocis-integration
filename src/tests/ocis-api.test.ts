@@ -4,6 +4,8 @@ import {
   client,
   createSpace,
   createUser,
+  deleteSpaceById,
+  disableSpaceById,
   findSpaceById,
   findUserByAccountName,
   findUserById,
@@ -28,6 +30,7 @@ const mockedAxios = client as jest.Mocked<typeof client>
 mockedAxios.get = jest.fn()
 mockedAxios.post = jest.fn()
 mockedAxios.patch = jest.fn()
+mockedAxios.delete = jest.fn()
 
 describe('/users', () => {
   const id = 'test-user-id'
@@ -483,6 +486,84 @@ describe('/drives', () => {
       mockedAxios.get.mockRejectedValueOnce(response)
 
       await expect(findSpaceById(id)).rejects.toThrowError(`Failed to find an oCIS space with ID ${id}`)
+    })
+  })
+
+  describe('disableSpaceById', () => {
+    const id = 'test-space-id'
+
+    afterEach(() => {
+      jest.resetAllMocks()
+    })
+
+    it('should delete the space when the request is successful', async () => {
+      const response: AxiosResponse = {
+        data: undefined,
+        status: 204,
+        statusText: undefined,
+        headers: undefined,
+        config: undefined,
+      }
+
+      mockedAxios.delete.mockResolvedValueOnce(response)
+
+      await disableSpaceById(id)
+
+      expect(mockedAxios.delete).toHaveBeenCalledWith(
+        expect.stringContaining(`${OcisLibreGraphRoute.DRIVES}/${id}`),
+        expect.any(Object)
+      )
+    })
+
+    it('should throw an error when the request fails', async () => {
+      const response = {
+        response: {
+          status: 500,
+        },
+      }
+
+      mockedAxios.delete.mockRejectedValueOnce(response)
+
+      await expect(disableSpaceById(id)).rejects.toThrowError(`Failed to disable oCIS space with ID ${id}`)
+    })
+  })
+
+  describe('deleteSpaceById', () => {
+    const id = 'test-space-id'
+
+    afterEach(() => {
+      jest.resetAllMocks()
+    })
+
+    it('should delete the space when the request is successful', async () => {
+      const response: AxiosResponse = {
+        data: undefined,
+        status: 204,
+        statusText: undefined,
+        headers: { Purge: 'T' },
+        config: undefined,
+      }
+
+      mockedAxios.delete.mockResolvedValueOnce(response)
+
+      await deleteSpaceById(id)
+      expect(mockedAxios.delete).toHaveBeenCalledTimes(2)
+      expect(mockedAxios.delete).toHaveBeenCalledWith(
+        expect.stringContaining(`${OcisLibreGraphRoute.DRIVES}/${id}`),
+        expect.any(Object)
+      )
+    })
+
+    it('should throw an error when the request fails', async () => {
+      const response = {
+        response: {
+          status: 500,
+        },
+      }
+
+      mockedAxios.delete.mockRejectedValueOnce(response)
+
+      await expect(deleteSpaceById(id)).rejects.toThrowError(`Failed to delete oCIS space with ID ${id}`)
     })
   })
 })
