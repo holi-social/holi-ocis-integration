@@ -308,3 +308,60 @@ export const findSpaceById = async (id: string): Promise<OcisSpace> => {
     throw new Error(`Failed to find an oCIS space with ID ${id}`)
   }
 }
+/**
+ * Makes the space content unavailable for all space members. No data will be deleted
+ * @async
+ * @function
+ * @param {string} id - The ID of the space to delete.
+ * @throws {Error} Throws an error if the request fails.
+ */
+export const disableSpaceById = async (id: string): Promise<void> => {
+  // Construct the URL to disable the space.
+  const url = `${OWNCLOUD_BASE_URL}/${OcisApi.LIBRE_GRAPH_API_PATH}/${OcisLibreGraphRoute.DRIVES}/${id}`
+
+  try {
+    // Send a DELETE request to disable the space.
+    await client.delete(url, {
+      auth: {
+        username: OCIS_ADMIN_USERNAME,
+        password: OCIS_ADMIN_PASSWORD,
+      },
+      httpsAgent,
+    })
+  } catch (error) {
+    logger.error({ error })
+    throw new Error(`Failed to disable oCIS space with ID ${id}`)
+  }
+}
+
+/**
+ * Permanently deletes an OcisSpace by ID. This is restricted to spaces that are already disabled.
+ * @async
+ * @function
+ * @param {string} id - The ID of the space to delete.
+ * @throws {Error} Throws an error if the request fails.
+ */
+export const deleteSpaceById = async (id: string): Promise<void> => {
+  // Construct the URL to delete the space permanently.
+  const url = `${OWNCLOUD_BASE_URL}/${OcisApi.LIBRE_GRAPH_API_PATH}/${OcisLibreGraphRoute.DRIVES}/${id}`
+
+  try {
+    // disable the space
+    await disableSpaceById(id)
+
+    // Send a DELETE request to remove the space.
+    await client.delete(url, {
+      headers: {
+        Purge: 'T',
+      },
+      auth: {
+        username: OCIS_ADMIN_USERNAME,
+        password: OCIS_ADMIN_PASSWORD,
+      },
+      httpsAgent,
+    })
+  } catch (error) {
+    logger.error({ error })
+    throw new Error(`Failed to delete oCIS space with ID ${id}`)
+  }
+}
