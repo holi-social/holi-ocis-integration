@@ -58,6 +58,13 @@ export const updateOrCreateOcisUser = async (user: UserPayload): Promise<OcisUse
   }
 }
 
+// Finds an oCIS space
+export const findOcisSpace = async (space: SpacePayload): Promise<OcisSpace | null> => {
+  const spaceMappingRepository = new SpaceMappingRepository()
+  const spaceMapping = await spaceMappingRepository.findBySpaceId(space.id)
+  return findSpaceById(spaceMapping.ocis_space_id)
+}
+
 // Finds an existing OCIS space or creates a new one incl. mapping with the given space payload.
 export const findOrCreateOcisSpace = async (space: SpacePayload): Promise<OcisSpace> => {
   const spaceMappingRepository = new SpaceMappingRepository()
