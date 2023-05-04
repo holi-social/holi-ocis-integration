@@ -3,12 +3,12 @@
  *
  * @enum {string}
  * @readonly
- * @property {string} SPACE_CREATED - The type of event that is triggered when a new space is created.
  */
 export enum EventType {
   SPACE_CREATED = 'SpaceCreated',
   SPACE_USER_ADDED = 'SpaceUserAdded',
   USER_NAME_UPDATED = 'UserNameUpdated',
+  SPACE_DELETED = 'SpaceDeleted',
 }
 
 /**
@@ -72,6 +72,16 @@ export type SpaceUserAddedDataPayload = {
  */
 export type UserNameUpdatedDataPayload = {
   user: UserPayload
+}
+
+/**
+ * Payload for data created when a space is deleted
+ *
+ * @typedef {Object} SpaceDeletedDataPayload
+ * @property {SpacePayload} space - The space that has been deleted
+ */
+export type SpaceDeletedDataPayload = {
+  space: SpacePayload
 }
 
 /**
