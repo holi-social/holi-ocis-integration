@@ -1,4 +1,5 @@
 import { spaceCreatedHandler } from './handlers/space-created-handler'
+import { spaceDeletedHandler } from './handlers/space-deleted-handler'
 import { spaceUserAddedHandler } from './handlers/space-user-added-handler'
 import { userNameUpdatedHandler } from './handlers/user-name-updated-handler'
 import { logPhase, logger } from './logger'
@@ -40,6 +41,10 @@ export const receiveEvent = async (request, response): Promise<void> => {
         break
       case EventType.USER_NAME_UPDATED:
         await logPhase(messageId, 'userNameUpdatedHandler')(() => userNameUpdatedHandler(messageId, event))
+        response.sendStatus(200)
+        break
+      case EventType.SPACE_DELETED:
+        await logPhase(messageId, 'spaceDeletedHandler')(() => spaceDeletedHandler(messageId, event))
         response.sendStatus(200)
         break
       default:

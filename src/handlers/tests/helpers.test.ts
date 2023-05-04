@@ -2,7 +2,7 @@ import { SpaceMappingRepository, UserMappingRepository } from '../../db'
 import { logger } from '../../logger'
 import { findUserById, findUserByAccountName, createUser, findSpaceById, createSpace, updateUser } from '../../ocis-api'
 import { UserPayload, OcisUser, OcisUserType, OcisSpace } from '../../types'
-import { findOrCreateOcisSpace, findOrCreateOcisUser, updateOrCreateOcisUser } from '../helpers'
+import { findOcisSpace, findOrCreateOcisSpace, findOrCreateOcisUser, updateOrCreateOcisUser } from '../helpers'
 
 jest.mock('../../db')
 jest.mock('../../logger')
@@ -189,6 +189,84 @@ describe('updateOrCreateOcisUser', () => {
     expect(loggerDebugMock).toHaveBeenCalledWith('User created successfully', { ocisUser })
 
     expect(updateUserMock).not.toHaveBeenCalledWith()
+  })
+})
+
+describe('findOcisSpace', () => {
+  const ocisSpace: OcisSpace = {
+    id: 'ocis-space-id',
+    driveAlias: '',
+    driveType: '',
+    lastModifiedDateTime: '',
+    name: '',
+    owner: {
+      user: {
+        displayName: '',
+        id: '',
+      },
+    },
+    quota: {
+      remaining: 0,
+      state: '',
+      total: 0,
+      used: 0,
+    },
+    root: {
+      eTag: '',
+      id: '',
+      permissions: [
+        {
+          grantedTo: [
+            {
+              user: {
+                id: 'ocis-user-id',
+                displayName: 'OCIS user',
+              },
+            },
+          ],
+          roles: [],
+        },
+      ],
+      webDavUrl: '',
+    },
+    webUrl: '',
+  }
+  const spacePayload = {
+    id: 'space-id',
+    name: 'Test Space',
+    slug: 'test-space',
+  }
+  const spaceMapping = { id: 1, space_id: spacePayload.id, ocis_space_id: ocisSpace.id }
+  let spaceMappingFindBySpaceIdMock: jest.MockedFunction<typeof SpaceMappingRepository.prototype.findBySpaceId>
+  let findSpaceByIdMock = findSpaceById as jest.MockedFunction<typeof findSpaceById>
+
+  afterEach(() => {
+    jest.resetAllMocks()
+  })
+
+  beforeEach(() => {
+    spaceMappingFindBySpaceIdMock = SpaceMappingRepository.prototype.findBySpaceId as jest.Mock
+  })
+
+  it('should return an existing space by ID', async () => {
+    spaceMappingFindBySpaceIdMock.mockResolvedValueOnce(spaceMapping)
+    findSpaceByIdMock.mockResolvedValueOnce(ocisSpace)
+
+    const result = await findOcisSpace(spacePayload)
+
+    expect(result).toEqual(ocisSpace)
+    expect(spaceMappingFindBySpaceIdMock).toHaveBeenCalledWith(spacePayload.id)
+    expect(findSpaceByIdMock).toHaveBeenCalledWith(ocisSpace.id)
+  })
+
+  it('should return undefined if space does not exist', async () => {
+    spaceMappingFindBySpaceIdMock.mockResolvedValueOnce(null)
+
+    const result = await findOcisSpace(spacePayload)
+
+    expect(spaceMappingFindBySpaceIdMock).toHaveBeenCalledWith(spacePayload.id)
+    expect(findSpaceByIdMock).not.toHaveBeenCalled()
+    expect(result).toBe(undefined)
   })
 })
 
