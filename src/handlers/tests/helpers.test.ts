@@ -258,6 +258,16 @@ describe('findOcisSpace', () => {
     expect(spaceMappingFindBySpaceIdMock).toHaveBeenCalledWith(spacePayload.id)
     expect(findSpaceByIdMock).toHaveBeenCalledWith(ocisSpace.id)
   })
+
+  it('should return undefined if space does not exist', async () => {
+    spaceMappingFindBySpaceIdMock.mockResolvedValueOnce(null)
+
+    const result = await findOcisSpace(spacePayload)
+
+    expect(spaceMappingFindBySpaceIdMock).toHaveBeenCalledWith(spacePayload.id)
+    expect(findSpaceByIdMock).not.toHaveBeenCalled()
+    expect(result).toBe(undefined)
+  })
 })
 
 describe('findOrCreateOcisSpace', () => {
