@@ -555,13 +555,23 @@ describe('/drives', () => {
     })
 
     it('should throw an error when the request fails', async () => {
-      const response = {
+      const disableSpaceResponse: AxiosResponse = {
+        data: undefined,
+        status: 204,
+        statusText: undefined,
+        headers: undefined,
+        config: undefined,
+      }
+
+      mockedAxios.delete.mockResolvedValueOnce(disableSpaceResponse)
+
+      const deleteSpaceResponse = {
         response: {
           status: 500,
         },
       }
 
-      mockedAxios.delete.mockRejectedValueOnce(response)
+      mockedAxios.delete.mockRejectedValueOnce(deleteSpaceResponse)
 
       await expect(deleteSpaceById(id)).rejects.toThrowError(`Failed to delete oCIS space with ID ${id}`)
     })

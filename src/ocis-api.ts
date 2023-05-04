@@ -345,10 +345,10 @@ export const deleteSpaceById = async (id: string): Promise<void> => {
   // Construct the URL to delete the space permanently.
   const url = `${OWNCLOUD_BASE_URL}/${OcisApi.LIBRE_GRAPH_API_PATH}/${OcisLibreGraphRoute.DRIVES}/${id}`
 
-  try {
-    // disable the space
-    await disableSpaceById(id)
+  // disable the space
+  await disableSpaceById(id)
 
+  try {
     // Send a DELETE request to remove the space.
     await client.delete(url, {
       headers: {
