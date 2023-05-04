@@ -97,8 +97,8 @@ resource "google_cloudfunctions2_function" "holi-ocis-integration-staging" {
     available_cpu                    = 1
     environment_variables = {
       ENVIRONMENT                  = "staging"
-      OCIS_OIDC_ISSUER             = "https://dev-auth.project-holi.org"
-      OWNCLOUD_BASE_URL            = "https://development.cloud.project-holi.org"
+      OCIS_OIDC_ISSUER             = "https://dev-auth.holi.social"
+      OWNCLOUD_BASE_URL            = "https://development.cloud.holi.social"
       OCIS_INTEGRATION_DB_HOST     = data.terraform_remote_state.holi_infra_state.outputs.database_ip_address_development
       OCIS_INTEGRATION_DB_PORT     = local.ocis_integration_database_port
       OCIS_INTEGRATION_DB_NAME     = google_sql_database.database_development.name
@@ -160,8 +160,8 @@ resource "google_cloudfunctions2_function" "holi-ocis-integration-production" {
     timeout_seconds    = 60
     environment_variables = {
       ENVIRONMENT                  = "production"
-      OCIS_OIDC_ISSUER             = "https://auth.project-holi.org"
-      OWNCLOUD_BASE_URL            = "https://production.cloud.project-holi.org"
+      OCIS_OIDC_ISSUER             = "https://auth.holi.social"
+      OWNCLOUD_BASE_URL            = "https://production.cloud.holi.social"
       OCIS_INTEGRATION_DB_HOST     = data.terraform_remote_state.holi_infra_state.outputs.database_ip_address_production
       OCIS_INTEGRATION_DB_PORT     = local.ocis_integration_database_port
       OCIS_INTEGRATION_DB_NAME     = google_sql_database.database_production.name
