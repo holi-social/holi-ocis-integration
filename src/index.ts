@@ -1,6 +1,7 @@
 import { spaceCreatedHandler } from './handlers/space-created-handler'
 import { spaceDeletedHandler } from './handlers/space-deleted-handler'
 import { spaceUserAddedHandler } from './handlers/space-user-added-handler'
+import { userDeletedHandler } from './handlers/user-deleted-handler'
 import { userNameUpdatedHandler } from './handlers/user-name-updated-handler'
 import { logPhase, logger } from './logger'
 
@@ -45,7 +46,11 @@ export const receiveEvent = async (request, response): Promise<void> => {
         break
       case EventType.SPACE_DELETED:
         await logPhase(messageId, 'spaceDeletedHandler')(() => spaceDeletedHandler(messageId, event))
-        response.sendStatus(200)
+        response.sendStatus(204)
+        break
+      case EventType.USER_DELETED:
+        await logPhase(messageId, 'userDeletedHandler')(() => userDeletedHandler(messageId, event))
+        response.sendStatus(204)
         break
       default:
         throw new Error(`Received unexpected event of type ${eventType}`)

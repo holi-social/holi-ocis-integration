@@ -2,11 +2,91 @@ import { SpaceMappingRepository, UserMappingRepository } from '../../db'
 import { logger } from '../../logger'
 import { findUserById, findUserByAccountName, createUser, findSpaceById, createSpace, updateUser } from '../../ocis-api'
 import { UserPayload, OcisUser, OcisUserType, OcisSpace } from '../../types'
-import { findOcisSpace, findOrCreateOcisSpace, findOrCreateOcisUser, updateOrCreateOcisUser } from '../helpers'
+import {
+  findOcisSpace,
+  findOcisUser,
+  findOrCreateOcisSpace,
+  findOrCreateOcisUser,
+  updateOrCreateOcisUser,
+} from '../helpers'
 
 jest.mock('../../db')
 jest.mock('../../logger')
 jest.mock('../../ocis-api')
+
+describe('findOcisUser', () => {
+  let user: UserPayload
+  let ocisUser: OcisUser
+  let userIdentity
+
+  let userMappingRepositoryfindByUserIdMock: jest.MockedFunction<typeof UserMappingRepository.prototype.findByUserId>
+  let userMappingRepositorycreateMock: jest.MockedFunction<typeof UserMappingRepository.prototype.create>
+
+  let findUserByIdMock: jest.MockedFunction<typeof findUserById>
+  let findUserByAccountNameMock: jest.MockedFunction<typeof findUserByAccountName>
+
+  beforeEach(() => {
+    user = {
+      id: 'user-id',
+      email: 'user-email@example.com',
+      name: 'Test User',
+    }
+    ocisUser = {
+      id: 'ocis-user-id',
+      accountEnabled: true,
+      displayName: 'Test User',
+      givenName: '',
+      mail: '',
+      onPremisesSamAccountName: 'holi_user-id',
+      surname: '',
+      userType: OcisUserType.MEMBER,
+    }
+    userIdentity = { id: 1, user_id: user.id, ocis_user_id: ocisUser.id }
+    userMappingRepositoryfindByUserIdMock = UserMappingRepository.prototype.findByUserId as jest.Mock
+    userMappingRepositorycreateMock = UserMappingRepository.prototype.create as jest.Mock
+
+    findUserByIdMock = findUserById as jest.MockedFunction<typeof findUserById>
+    findUserByAccountNameMock = findUserByAccountName as jest.MockedFunction<typeof findUserByAccountName>
+  })
+
+  afterEach(() => {
+    jest.resetAllMocks()
+  })
+
+  it('should return an existing user by ID', async () => {
+    userMappingRepositoryfindByUserIdMock.mockResolvedValueOnce(userIdentity)
+
+    findUserByIdMock.mockResolvedValueOnce(ocisUser)
+
+    const result = await findOcisUser(user)
+
+    expect(result).toEqual(ocisUser)
+    expect(userMappingRepositoryfindByUserIdMock).toHaveBeenCalledWith(user.id)
+    expect(findUserByIdMock).toHaveBeenCalledWith(userIdentity.ocis_user_id)
+    expect(findUserByAccountNameMock).not.toHaveBeenCalled()
+    expect(userMappingRepositorycreateMock).not.toHaveBeenCalled()
+  })
+
+  it('should return an existing user by account name', async () => {
+    findUserByAccountNameMock.mockResolvedValueOnce(ocisUser)
+
+    const result = await findOcisUser(user)
+
+    expect(result).toEqual(ocisUser)
+    expect(userMappingRepositoryfindByUserIdMock).toHaveBeenCalledWith(user.id)
+    expect(findUserByIdMock).not.toHaveBeenCalled()
+    expect(findUserByAccountNameMock).toHaveBeenCalledWith(user.id)
+  })
+
+  it('should return undefined if user does not exist', async () => {
+    userMappingRepositoryfindByUserIdMock.mockResolvedValueOnce(null)
+
+    const result = await findOcisUser(user)
+
+    expect(userMappingRepositoryfindByUserIdMock).toHaveBeenCalledWith(user.id)
+    expect(result).toBeUndefined()
+  })
+})
 
 describe('findOrCreateOcisUser', () => {
   let user: UserPayload
@@ -266,7 +346,7 @@ describe('findOcisSpace', () => {
 
     expect(spaceMappingFindBySpaceIdMock).toHaveBeenCalledWith(spacePayload.id)
     expect(findSpaceByIdMock).not.toHaveBeenCalled()
-    expect(result).toBe(undefined)
+    expect(result).toBeUndefined()
   })
 })
 

@@ -6,6 +6,7 @@ import {
   createUser,
   deleteSpaceById,
   disableSpaceById,
+  deleteUserById,
   findSpaceById,
   findUserByAccountName,
   findUserById,
@@ -82,7 +83,7 @@ describe('/users', () => {
       const user = await findUserById(id)
 
       expect(mockedAxios.get).toHaveBeenCalledWith(expect.stringContaining(id), expect.any(Object))
-      expect(user).toBeNull()
+      expect(user).toBeUndefined()
     })
 
     it('should throw an error when the request fails with a 500 status', async () => {
@@ -128,7 +129,7 @@ describe('/users', () => {
 
       const user = await findUserByAccountName(id)
 
-      expect(user).toBeNull()
+      expect(user).toBeUndefined()
     })
 
     it('should throw an error when the request fails with a 500 status', async () => {
@@ -283,6 +284,37 @@ describe('/users', () => {
       await expect(assignUserRole(userId, roleId)).rejects.toThrowError(
         `Failed to assign role ${roleId} to user ${userId}`
       )
+    })
+  })
+
+  describe('deleteUserById', () => {
+    afterEach(() => {
+      jest.resetAllMocks()
+    })
+
+    it('should delete a user', async () => {
+      const response: AxiosResponse = {
+        data: undefined,
+        status: 204,
+        statusText: 'No Content',
+        config: undefined,
+        headers: undefined,
+      }
+      mockedAxios.delete.mockResolvedValueOnce(response)
+
+      await deleteUserById(id)
+
+      expect(mockedAxios.delete).toHaveBeenCalledWith(expect.stringContaining(`${OcisLibreGraphRoute.USERS}/${id}`), {
+        auth: expect.any(Object),
+        httpsAgent: expect.any(Object),
+      })
+    })
+
+    it('should throw an error if user creation fails', async () => {
+      const error = new Error('User deletion failed')
+      mockedAxios.delete.mockRejectedValueOnce(error)
+
+      await expect(deleteUserById(id)).rejects.toThrowError(`Failed to delete user with ID ${id}`)
     })
   })
 })

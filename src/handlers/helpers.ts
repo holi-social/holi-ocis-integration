@@ -3,6 +3,18 @@ import { logger } from '../logger'
 import { createSpace, createUser, findSpaceById, findUserByAccountName, findUserById, updateUser } from '../ocis-api'
 import { OcisSpace, OcisUser, SpacePayload, UserPayload } from '../types'
 
+//Finds an existing OCIS user either by ID or by account name.
+export const findOcisUser = async (user: UserPayload): Promise<OcisUser> => {
+  const userMappingRepository = new UserMappingRepository()
+  const userIdentity = await userMappingRepository.findByUserId(user.id)
+
+  if (!userIdentity) {
+    return findUserByAccountName(user.id)
+  }
+
+  return await findUserById(userIdentity.ocis_user_id)
+}
+
 //Finds an existing OCIS user (i.e. either by ID or by account name) or creates a new one based on the given user payload.
 export const findOrCreateOcisUser = async (user: UserPayload): Promise<OcisUser> => {
   const userMappingRepository = new UserMappingRepository()
