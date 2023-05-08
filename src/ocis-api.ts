@@ -36,10 +36,10 @@ const auth: AxiosBasicCredentials = {
  * @async
  * @function
  * @param {string} id - The ID of the user to find.
- * @returns {Promise<OcisUser|null>} A Promise that resolves to the OcisUser found or null if not found.
+ * @returns {Promise<OcisUser>} A Promise that resolves to the OcisUser found.
  * @throws {Error} Throws an error if the request fails or if an unexpected response is received.
  */
-export const findUserById = async (id: string): Promise<OcisUser | null> => {
+export const findUserById = async (id: string): Promise<OcisUser> => {
   // Construct the URL to retrieve the user.
   const url = `${OWNCLOUD_BASE_URL}/${OcisApi.LIBRE_GRAPH_API_PATH}/${OcisLibreGraphRoute.USERS}/${id}`
 
@@ -57,7 +57,7 @@ export const findUserById = async (id: string): Promise<OcisUser | null> => {
     // Handle errors that occur during the request.
     const { response } = error
     if (response && response.status === 404) {
-      return null
+      return
     }
     logger.error({ error })
     throw new Error(`Failed to find an oCIS user with ID ${id}`)
@@ -69,10 +69,10 @@ export const findUserById = async (id: string): Promise<OcisUser | null> => {
  * @async
  * @function
  * @param {string} id - The ID of the user to find.
- * @returns {Promise<OcisUser|null>} A Promise that resolves to the OcisUser found or null if not found.
+ * @returns {Promise<OcisUser>} A Promise that resolves to the OcisUser found.
  * @throws {Error} Throws an error if the request fails or if an unexpected response is received.
  */
-export const findUserByAccountName = async (id: string): Promise<OcisUser | null> => {
+export const findUserByAccountName = async (id: string): Promise<OcisUser> => {
   // Construct the URL to retrieve the user.
   const url = `${OWNCLOUD_BASE_URL}/${OcisApi.LIBRE_GRAPH_API_PATH}/${OcisLibreGraphRoute.USERS}/${HOLI_PREFIX}_${id}`
 
@@ -90,7 +90,7 @@ export const findUserByAccountName = async (id: string): Promise<OcisUser | null
     // Handle errors that occur during the request.
     const { response } = error
     if (response && response.status === 404) {
-      return null
+      return
     }
     logger.error({ error })
     throw new Error(`Failed to find an oCIS user with account name ${HOLI_PREFIX}_${id}`)
@@ -213,6 +213,31 @@ export const assignUserRole = async (userId: string, roleId: string): Promise<vo
 }
 
 /**
+ * Deletes an oCIS user.
+ * @async
+ * @function
+ * @param {string} id - The ID of the user to delete.
+ * @returns {Promise<void>} A Promise that resolves when the user is successfully deleted.
+ * @throws {Error} Throws an error if the request fails or if an unexpected response is received.
+ */
+export const deleteUserById = async (id: string): Promise<void> => {
+  // Construct the URL to delete the user.
+  const url = `${OWNCLOUD_BASE_URL}/${OcisApi.LIBRE_GRAPH_API_PATH}/${OcisLibreGraphRoute.USERS}/${id}`
+
+  try {
+    // Send a DELETE request to remove the user.
+    await client.delete(url, {
+      auth,
+      httpsAgent,
+    })
+  } catch (error) {
+    // Handle errors that occur during the request.
+    logger.error({ error })
+    throw new Error(`Failed to delete user with ID ${id}`)
+  }
+}
+
+/**
  * Creates a new OcisSpace.
  * @async
  * @function
@@ -304,6 +329,11 @@ export const findSpaceById = async (id: string): Promise<OcisSpace> => {
     })
     return data
   } catch (error) {
+    // Handle errors that occur during the request.
+    const { response } = error
+    if (response && response.status === 404) {
+      return
+    }
     logger.error({ error })
     throw new Error(`Failed to find an oCIS space with ID ${id}`)
   }
