@@ -34,7 +34,7 @@ export const receiveEvent = async (request, response): Promise<void> => {
     switch (eventType) {
       case EventType.SPACE_CREATED:
         await logPhase(messageId, 'spaceCreatedHandler')(() => spaceCreatedHandler(messageId, event))
-        response.sendStatus(200)
+        response.sendStatus(201)
         break
       case EventType.SPACE_USER_ADDED:
         await logPhase(messageId, 'spaceUserAddedHandler')(() => spaceUserAddedHandler(messageId, event))
@@ -46,11 +46,11 @@ export const receiveEvent = async (request, response): Promise<void> => {
         break
       case EventType.SPACE_DELETED:
         await logPhase(messageId, 'spaceDeletedHandler')(() => spaceDeletedHandler(messageId, event))
-        response.sendStatus(200)
+        response.sendStatus(204)
         break
       case EventType.USER_DELETED:
         await logPhase(messageId, 'userDeletedHandler')(() => userDeletedHandler(messageId, event))
-        response.sendStatus(200)
+        response.sendStatus(204)
         break
       default:
         throw new Error(`Received unexpected event of type ${eventType}`)
