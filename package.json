@@ -2,7 +2,7 @@
   "name": "holi-ocis-integration",
   "version": "1.0.0",
   "main": "dist/index.js",
-  "repository": "https://gitlab.com/holisticfoundation/holi-ocis-integration.git",
+  "repository": "https://gitlab.holi.team/app/holi-ocis-integration.git",
   "scripts": {
     "build": "yarn clean && tsc && yarn copy-files",
     "test": "jest --collect-coverage",
