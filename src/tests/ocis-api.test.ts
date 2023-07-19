@@ -11,6 +11,7 @@ import {
   findUserByAccountName,
   findUserById,
   shareSpaceWithUser,
+  removeSpaceUser,
   updateUser,
 } from '../ocis-api'
 import {
@@ -606,6 +607,41 @@ describe('/drives', () => {
       mockedAxios.delete.mockRejectedValueOnce(deleteSpaceResponse)
 
       await expect(deleteSpaceById(id)).rejects.toThrowError(`Failed to delete oCIS space with ID ${id}`)
+    })
+  })
+
+  describe('removeSpaceUser', () => {
+    const spaceId = 'test-space-id'
+    const username = 'test-user-username'
+
+    afterEach(() => {
+      jest.resetAllMocks()
+    })
+
+    it('should remove user from space', async () => {
+      // Set up mock Axios response.
+      const response = 'success'
+
+      mockedAxios.delete.mockResolvedValueOnce(response)
+
+      await removeSpaceUser(spaceId, username)
+
+      expect(mockedAxios.delete).toHaveBeenCalledWith(
+        expect.stringContaining(`${OcisApi.SHARE_API_PATH}/${spaceId}?shareWith=${username}`),
+        {
+          auth: expect.any(Object),
+          httpsAgent: expect.any(Object),
+        }
+      )
+    })
+
+    it('should throw an error if user removal from space fails', async () => {
+      const error = new Error('User removal from space failed')
+      mockedAxios.delete.mockRejectedValueOnce(error)
+
+      await expect(removeSpaceUser(spaceId, username)).rejects.toThrowError(
+        `Failed to remove user ${username} from oCIS space with ID ${spaceId}`
+      )
     })
   })
 })

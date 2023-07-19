@@ -1,11 +1,13 @@
 import { receiveEvent } from '..'
 import { spaceCreatedHandler } from '../handlers/space-created-handler'
 import { spaceUserAddedHandler } from '../handlers/space-user-added-handler'
+import { spaceUserLeftHandler } from '../handlers/space-user-left-handler'
 import { userNameUpdatedHandler } from '../handlers/user-name-updated-handler'
 
 jest.mock('../handlers/space-created-handler')
 jest.mock('../handlers/space-user-added-handler')
 jest.mock('../handlers/user-name-updated-handler')
+jest.mock('../handlers/space-user-left-handler')
 
 const MESSAGE_ID = '42'
 
@@ -48,6 +50,19 @@ describe('receiveEvent', () => {
     },
   }
 
+  const spaceUserLeftEventPayload = {
+    user: {
+      id: 'test-user-id',
+      name: 'Test User',
+      email: 'test-email@example.com',
+    },
+    space: {
+      id: 'space-id',
+      name: 'Test Space',
+      slug: 'test-space',
+    },
+  }
+
   const unsupportedEventPayload = {
     user: {
       id: 'test-user-id',
@@ -59,11 +74,13 @@ describe('receiveEvent', () => {
   let spaceCreatedHandlerMock: jest.MockedFunction<typeof spaceCreatedHandler>
   let spaceUserAddedHandlerMock: jest.MockedFunction<typeof spaceUserAddedHandler>
   let userNameUpdatedHandlerMock: jest.MockedFunction<typeof userNameUpdatedHandler>
+  let spaceUserLeftHandlerMock: jest.MockedFunction<typeof spaceUserLeftHandler>
 
   beforeEach(() => {
     spaceCreatedHandlerMock = spaceCreatedHandler as jest.MockedFunction<typeof spaceCreatedHandler>
     spaceUserAddedHandlerMock = spaceUserAddedHandler as jest.MockedFunction<typeof spaceUserAddedHandler>
     userNameUpdatedHandlerMock = userNameUpdatedHandler as jest.MockedFunction<typeof userNameUpdatedHandler>
+    spaceUserLeftHandlerMock = spaceUserLeftHandler as jest.MockedFunction<typeof spaceUserLeftHandler>
     jest.resetModules()
   })
 
@@ -164,5 +181,28 @@ describe('receiveEvent', () => {
     expect(spaceCreatedHandlerMock).not.toHaveBeenCalled()
     expect(spaceUserAddedHandlerMock).not.toHaveBeenCalled()
     expect(userNameUpdatedHandlerMock).not.toHaveBeenCalled()
+  })
+
+  it('should call the spaceUserLeftHandler when the event type is SpaceUserLeft', async () => {
+    const requestMock = {
+      body: {
+        message: {
+          attributes: { eventType: 'SpaceUserLeft', eventVersion: '1.0.0' },
+          data: encodeBase64(spaceUserLeftEventPayload),
+          messageId: MESSAGE_ID,
+        },
+      },
+    }
+
+    const responseMock = {
+      sendStatus: jest.fn(),
+    }
+
+    spaceUserLeftHandlerMock.mockResolvedValue()
+
+    await receiveEvent(requestMock, responseMock)
+
+    expect(spaceUserLeftHandlerMock).toHaveBeenCalledWith(MESSAGE_ID, spaceUserLeftEventPayload)
+    expect(responseMock.sendStatus).toHaveBeenCalledWith(200)
   })
 })
