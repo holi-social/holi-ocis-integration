@@ -55,6 +55,7 @@ describe('spaceUserLeftHandler', () => {
 
     expect(findOrCreateOcisUser).toHaveBeenCalledWith(spaceUserLeftDataPayload.user)
     expect(findOrCreateOcisSpace).toHaveBeenCalledWith(spaceUserLeftDataPayload.space)
+    expect(removeSpaceUser).toHaveBeenCalledWith(ocisSpace.id, ocisUser.onPremisesSamAccountName)
     expect(logger.debug).toHaveBeenCalledWith('User removed from space successfully', { ocisUser, ocisSpace })
   })
 
