@@ -10,6 +10,7 @@ export enum EventType {
   USER_NAME_UPDATED = 'UserNameUpdated',
   SPACE_DELETED = 'SpaceDeleted',
   USER_DELETED = 'UserDeleted',
+  SPACE_USER_LEFT = 'SpaceUserLeft',
 }
 
 /**
@@ -93,6 +94,18 @@ export type SpaceDeletedDataPayload = {
  */
 export type UserDeletedDataPayload = {
   user: UserPayload
+}
+
+/**
+ * Payload for data created when a user leaves a space
+ *
+ * @typedef {Object} SpaceUserLeftDataPayload
+ * @property {UserPayload} user - The user that left the space
+ * @property {SpacePayload} space - The space that has been left
+ */
+export type SpaceUserLeftDataPayload = {
+  user: UserPayload
+  space: SpacePayload
 }
 
 /**
