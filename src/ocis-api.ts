@@ -395,3 +395,28 @@ export const deleteSpaceById = async (id: string): Promise<void> => {
     throw new Error(`Failed to delete oCIS space with ID ${id}`)
   }
 }
+
+/**
+ * Removes a user from a space
+ * @async
+ * @function
+ * @param {string} spaceId - The UUID of the space.
+ * @param {string} username - The username of the user to remove from the space.
+ * @throws {Error} Throws an error if the request fails or if an unexpected response is received.
+ */
+export const removeSpaceUser = async (spaceId: string, username: string): Promise<void> => {
+  // Construct the URL to remove the user from the space
+  const url = `${OWNCLOUD_BASE_URL}/${OcisApi.SHARE_API_PATH}/${spaceId}?shareWith=${username}`
+
+  try {
+    // Send a DELETE request to remove the user from the space.
+    await client.delete(url, {
+      auth,
+      httpsAgent,
+    })
+  } catch (error) {
+    // Handle errors that occur during the request.
+    logger.error({ error })
+    throw new Error(`Failed to remove user ${username} from oCIS space with ID ${spaceId}`)
+  }
+}
