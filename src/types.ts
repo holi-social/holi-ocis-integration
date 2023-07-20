@@ -11,6 +11,7 @@ export enum EventType {
   SPACE_DELETED = 'SpaceDeleted',
   USER_DELETED = 'UserDeleted',
   SPACE_USER_LEFT = 'SpaceUserLeft',
+  SPACE_USER_REMOVED = 'SpaceUserRemoved',
 }
 
 /**
@@ -104,6 +105,18 @@ export type UserDeletedDataPayload = {
  * @property {SpacePayload} space - The space that has been left
  */
 export type SpaceUserLeftDataPayload = {
+  user: UserPayload
+  space: SpacePayload
+}
+
+/**
+ * Payload for data created when a user is removed from a space
+ *
+ * @typedef {Object} SpaceUserRemovedDataPayload
+ * @property {UserPayload} user - The user that has been removed from the space
+ * @property {SpacePayload} space - The space that the user has been removed from
+ */
+export type SpaceUserRemovedDataPayload = {
   user: UserPayload
   space: SpacePayload
 }
