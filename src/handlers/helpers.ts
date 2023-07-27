@@ -1,7 +1,15 @@
 import { SpaceMappingRepository, UserMappingRepository } from '../db'
 import { logger } from '../logger'
-import { createSpace, createUser, findSpaceById, findUserByAccountName, findUserById, updateUser } from '../ocis-api'
-import { OcisSpace, OcisUser, SpacePayload, UserPayload } from '../types'
+import {
+  assignUserRole,
+  createSpace,
+  createUser,
+  findSpaceById,
+  findUserByAccountName,
+  findUserById,
+  updateUser,
+} from '../ocis-api'
+import { OcisDefaultUUIDRole, OcisSpace, OcisUser, SpacePayload, UserPayload } from '../types'
 
 //Finds an existing OCIS user either by ID or by account name.
 export const findOcisUser = async (user: UserPayload): Promise<OcisUser> => {
@@ -28,6 +36,7 @@ export const findOrCreateOcisUser = async (user: UserPayload): Promise<OcisUser>
 
   if (!ocisUser) {
     ocisUser = await createUser(user)
+    await assignUserRole(ocisUser.id, OcisDefaultUUIDRole.LIGHTWEIGHT_USER)
   }
 
   await userMappingRepository.create(user.id, ocisUser.id)

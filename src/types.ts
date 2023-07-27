@@ -172,10 +172,10 @@ export enum OcisUserType {
  *
  * @readonly
  * @enum {string}
- * @property {string} SPACE_ADMIN - The UUID for the Space Admin role.
+ * @property {string} LIGHTWEIGHT_USER - The UUID for the Lightweight User role (i.e. a user without a personal space).
  */
 export enum OcisDefaultUUIDRole {
-  SPACE_ADMIN = '2aadd357-682c-406b-8874-293091995fdd',
+  LIGHTWEIGHT_USER = '38071a68-456a-4553-846a-fa67bf5596cc',
 }
 
 /**

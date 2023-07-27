@@ -1,7 +1,15 @@
 import { SpaceMappingRepository, UserMappingRepository } from '../../db'
 import { logger } from '../../logger'
-import { findUserById, findUserByAccountName, createUser, findSpaceById, createSpace, updateUser } from '../../ocis-api'
-import { UserPayload, OcisUser, OcisUserType, OcisSpace } from '../../types'
+import {
+  findUserById,
+  findUserByAccountName,
+  createUser,
+  findSpaceById,
+  createSpace,
+  updateUser,
+  assignUserRole,
+} from '../../ocis-api'
+import { UserPayload, OcisUser, OcisUserType, OcisSpace, OcisDefaultUUIDRole } from '../../types'
 import {
   findOcisSpace,
   findOcisUser,
@@ -99,6 +107,7 @@ describe('findOrCreateOcisUser', () => {
   let findUserByIdMock: jest.MockedFunction<typeof findUserById>
   let findUserByAccountNameMock: jest.MockedFunction<typeof findUserByAccountName>
   let createUserMock: jest.MockedFunction<typeof createUser>
+  let assignUserRoleMock: jest.MockedFunction<typeof assignUserRole>
   let loggerDebugMock: jest.MockedFunction<typeof logger.debug>
 
   beforeEach(() => {
@@ -124,6 +133,7 @@ describe('findOrCreateOcisUser', () => {
     findUserByIdMock = findUserById as jest.MockedFunction<typeof findUserById>
     findUserByAccountNameMock = findUserByAccountName as jest.MockedFunction<typeof findUserByAccountName>
     createUserMock = createUser as jest.MockedFunction<typeof createUser>
+    assignUserRoleMock = assignUserRole as jest.MockedFunction<typeof assignUserRole>
     loggerDebugMock = logger.debug as jest.MockedFunction<typeof logger.debug>
   })
 
@@ -143,6 +153,7 @@ describe('findOrCreateOcisUser', () => {
     expect(findUserByIdMock).toHaveBeenCalledWith(userIdentity.ocis_user_id)
     expect(findUserByAccountNameMock).not.toHaveBeenCalled()
     expect(createUserMock).not.toHaveBeenCalled()
+    expect(assignUserRoleMock).not.toHaveBeenCalled()
     expect(userMappingRepositorycreateMock).not.toHaveBeenCalled()
   })
 
@@ -156,6 +167,7 @@ describe('findOrCreateOcisUser', () => {
     expect(findUserByIdMock).not.toHaveBeenCalled()
     expect(findUserByAccountNameMock).toHaveBeenCalledWith(user.id)
     expect(createUserMock).not.toHaveBeenCalled()
+    expect(assignUserRoleMock).not.toHaveBeenCalled()
     expect(userMappingRepositorycreateMock).toHaveBeenCalled()
   })
 
@@ -169,6 +181,7 @@ describe('findOrCreateOcisUser', () => {
     expect(findUserByIdMock).not.toHaveBeenCalled()
     expect(findUserByAccountNameMock).toHaveBeenCalledWith(user.id)
     expect(createUserMock).toHaveBeenCalledWith(user)
+    expect(assignUserRoleMock).toHaveBeenCalledWith(ocisUser.id, OcisDefaultUUIDRole.LIGHTWEIGHT_USER)
     expect(userMappingRepositorycreateMock).toHaveBeenCalledWith(user.id, ocisUser.id)
     expect(loggerDebugMock).toHaveBeenCalledWith('User created successfully', { ocisUser })
   })
