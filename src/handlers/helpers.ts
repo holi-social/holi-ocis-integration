@@ -73,6 +73,7 @@ export const updateOrCreateOcisUser = async (user: UserPayload): Promise<OcisUse
     })
     // If neither a user mapping record nor an oCIS user with the same account name exists, create a new OCIS user.
     const newOcisUser = await createUser(user)
+    await assignUserRole(newOcisUser.id, OcisDefaultUUIDRole.LIGHTWEIGHT_USER)
     await userMappingRepository.create(user.id, newOcisUser.id)
     logger.debug('User created successfully', { ocisUser: newOcisUser })
     return newOcisUser

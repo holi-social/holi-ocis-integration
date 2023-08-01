@@ -1,15 +1,15 @@
 import { SpaceMappingRepository, UserMappingRepository } from '../../db'
 import { logger } from '../../logger'
 import {
-  findUserById,
-  findUserByAccountName,
+  assignUserRole,
+  createSpace,
   createUser,
   findSpaceById,
-  createSpace,
+  findUserByAccountName,
+  findUserById,
   updateUser,
-  assignUserRole,
 } from '../../ocis-api'
-import { UserPayload, OcisUser, OcisUserType, OcisSpace, OcisDefaultUUIDRole } from '../../types'
+import { OcisDefaultUUIDRole, OcisSpace, OcisUser, OcisUserType, UserPayload } from '../../types'
 import {
   findOcisSpace,
   findOcisUser,
@@ -197,6 +197,7 @@ describe('updateOrCreateOcisUser', () => {
   let findUserByAccountNameMock: jest.MockedFunction<typeof findUserByAccountName>
 
   let createUserMock: jest.MockedFunction<typeof createUser>
+  let assignUserRoleMock: jest.MockedFunction<typeof assignUserRole>
   let updateUserMock: jest.MockedFunction<typeof updateUser>
   let loggerDebugMock: jest.MockedFunction<typeof logger.debug>
   let loggerWarningMock: jest.MockedFunction<typeof logger.warn>
@@ -223,6 +224,7 @@ describe('updateOrCreateOcisUser', () => {
     findUserByAccountNameMock = findUserByAccountName as jest.MockedFunction<typeof findUserByAccountName>
 
     createUserMock = createUser as jest.MockedFunction<typeof createUser>
+    assignUserRoleMock = assignUserRole as jest.MockedFunction<typeof assignUserRole>
     updateUserMock = updateUser as jest.MockedFunction<typeof updateUser>
     loggerDebugMock = logger.debug as jest.MockedFunction<typeof logger.debug>
     loggerWarningMock = logger.warn as jest.MockedFunction<typeof logger.warn>
@@ -246,6 +248,7 @@ describe('updateOrCreateOcisUser', () => {
 
     expect(userMappingRepositorycreateMock).not.toHaveBeenCalled()
     expect(createUserMock).not.toHaveBeenCalled()
+    expect(assignUserRoleMock).not.toHaveBeenCalled()
   })
 
   it('should update an existing user if user exists on oCIS', async () => {
@@ -261,6 +264,7 @@ describe('updateOrCreateOcisUser', () => {
 
     expect(userMappingRepositorycreateMock).not.toHaveBeenCalled()
     expect(createUserMock).not.toHaveBeenCalled()
+    expect(assignUserRoleMock).not.toHaveBeenCalled()
   })
 
   it('should create a new user if none is found', async () => {
@@ -278,6 +282,7 @@ describe('updateOrCreateOcisUser', () => {
       }
     )
     expect(createUserMock).toHaveBeenCalledWith(user)
+    expect(assignUserRoleMock).toHaveBeenCalledWith(ocisUser.id, OcisDefaultUUIDRole.LIGHTWEIGHT_USER)
     expect(userMappingRepositorycreateMock).toHaveBeenCalledWith(user.id, ocisUser.id)
     expect(loggerDebugMock).toHaveBeenCalledWith('User created successfully', { ocisUser })
 
