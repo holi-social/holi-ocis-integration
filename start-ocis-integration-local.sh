@@ -1,8 +1,14 @@
 #!/bin/bash
 
-# This script checks if the docker container ocis-integration-local exists.
-# If it is running do nothing, if it's stopped start it, otherwise create a new container with the same name.
+# This script checks if the docker container $DB_CONTAINER_NAME exists
+# If it is running: do nothing, if it's stopped: start it, otherwise create a new container with the same name.
+
 CONTAINER_NAME=$DB_CONTAINER_NAME
+
+if [ -z "$CONTAINER_NAME" ]; then
+  echo "No DB_CONTAINER_NAME is set. Doing nothing."
+  exit 0
+fi
 
 if docker ps -a --format '{{.Names}}' | grep -q "^$CONTAINER_NAME$"; then
   if docker ps -a --filter "name=$CONTAINER_NAME" --filter "status=running" --format '{{.Names}}' | grep -q "^$CONTAINER_NAME$"; then
