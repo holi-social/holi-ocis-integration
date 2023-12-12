@@ -213,7 +213,7 @@ describe('receiveEvent', () => {
     expect(responseMock.sendStatus).toHaveBeenCalledWith(200)
   })
 
-  it('should log a warning when the event type is unexpected', async () => {
+  it('should throw an error when the event type is unexpected', async () => {
     const unsupportedEvent = 'UnsupportedEvent'
 
     const requestMock = {
@@ -230,10 +230,12 @@ describe('receiveEvent', () => {
       sendStatus: jest.fn(),
     }
 
-    await receiveEvent(requestMock, responseMock)
-
-    expect(responseMock.sendStatus).toHaveBeenCalledWith(200)
+    await expect(receiveEvent(requestMock, responseMock)).rejects.toThrow(
+      `Received unexpected event of type ${unsupportedEvent}`
+    )
+    expect(responseMock.sendStatus).toHaveBeenCalledWith(500)
   })
+
 
   it('should call the spaceUserLeftHandler when the event type is SpaceUserLeft', async () => {
     const requestMock = {

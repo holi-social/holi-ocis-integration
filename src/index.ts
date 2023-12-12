@@ -68,8 +68,7 @@ export const receiveEvent = async (request, response): Promise<void> => {
         response.sendStatus(200)
         break
       default:
-        logger.warn(`Received unexpected event of type ${eventType}. The event will be disregarded`)
-        response.sendStatus(200)
+        throw new Error(`Received unexpected event of type ${eventType}`)
     }
   } catch (e) {
     logger.error('[' + messageId + '] Error while processing message:', e)
