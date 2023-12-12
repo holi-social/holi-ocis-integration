@@ -13,6 +13,7 @@ import {
   shareSpaceWithUser,
   removeSpaceUser,
   updateUser,
+  updateSpace
 } from '../ocis-api'
 import {
   OcisApi,
@@ -320,51 +321,54 @@ describe('/users', () => {
   })
 })
 describe('/drives', () => {
-  describe('createSpace', () => {
-    const spacePayload: SpacePayload = {
-      id: 'test-space-id',
-      name: 'Test Space',
-      slug: 'test-space',
-    }
+  const id = 'test-space-id'
 
-    const data: OcisSpace = {
-      driveAlias: 'test-space-id',
-      driveType: 'project',
-      id: 'test-drive-id',
-      lastModifiedDateTime: '',
-      name: 'Test Space',
-      owner: {
-        user: {
-          displayName: 'Test User',
-          id: 'test-user-id',
-        },
+  const data: OcisSpace = {
+    driveAlias: 'test-space-id',
+    driveType: 'project',
+    id: 'test-drive-id',
+    lastModifiedDateTime: '',
+    name: 'Test Space',
+    owner: {
+      user: {
+        displayName: 'Test User',
+        id: 'test-user-id',
       },
-      quota: {
-        remaining: MAX_SPACE_QUOTA,
-        state: 'normal',
-        total: MAX_SPACE_QUOTA,
-        used: 0,
-      },
-      root: {
-        eTag: 'test-space-root-etag',
-        id: 'test-space-root-id',
-        permissions: [
-          {
-            grantedTo: [
-              {
-                user: {
-                  displayName: 'Test User',
-                  id: 'test-user-id',
-                },
+    },
+    quota: {
+      remaining: MAX_SPACE_QUOTA,
+      state: 'normal',
+      total: MAX_SPACE_QUOTA,
+      used: 0,
+    },
+    root: {
+      eTag: 'test-space-root-etag',
+      id: 'test-space-root-id',
+      permissions: [
+        {
+          grantedTo: [
+            {
+              user: {
+                displayName: 'Test User',
+                id: 'test-user-id',
               },
-            ],
-            roles: ['manager'],
-          },
-        ],
-        webDavUrl: 'test-web-dav-url',
-      },
-      webUrl: 'test-web-url',
-    }
+            },
+          ],
+          roles: ['manager'],
+        },
+      ],
+      webDavUrl: 'test-web-dav-url',
+    },
+    webUrl: 'test-web-url',
+  }
+
+  const spacePayload: SpacePayload = {
+    id: 'test-space-id',
+    name: 'Test Space',
+    slug: 'test-space',
+  }
+
+  describe('createSpace', () => {
     afterEach(() => {
       jest.resetAllMocks()
     })
@@ -447,46 +451,7 @@ describe('/drives', () => {
   })
 
   describe('findSpaceById', () => {
-    const id = 'test-space-id'
 
-    const data: OcisSpace = {
-      driveAlias: 'test-space-id',
-      driveType: 'project',
-      id: 'test-drive-id',
-      lastModifiedDateTime: '',
-      name: 'Test Space',
-      owner: {
-        user: {
-          displayName: 'Test User',
-          id: 'test-user-id',
-        },
-      },
-      quota: {
-        remaining: MAX_SPACE_QUOTA,
-        state: 'normal',
-        total: MAX_SPACE_QUOTA,
-        used: 0,
-      },
-      root: {
-        eTag: 'test-space-root-etag',
-        id: 'test-space-root-id',
-        permissions: [
-          {
-            grantedTo: [
-              {
-                user: {
-                  displayName: 'Test User',
-                  id: 'test-user-id',
-                },
-              },
-            ],
-            roles: ['manager'],
-          },
-        ],
-        webDavUrl: 'test-web-dav-url',
-      },
-      webUrl: 'test-web-url',
-    }
     afterEach(() => {
       jest.resetAllMocks()
     })
@@ -641,6 +606,57 @@ describe('/drives', () => {
 
       await expect(removeSpaceUser(spaceId, username)).rejects.toThrowError(
         `Failed to remove user ${username} from oCIS space with ID ${spaceId}`
+      )
+    })
+  })
+
+  describe('updateSpace', () => {
+    const spacePaylaod: SpacePayload = {
+      id: 'test-space-id',
+      name: 'Updated Test Space',
+      slug: 'updated-test-space',
+    }
+
+    const ocisSpaceId = 'ocis-space-id'
+
+    afterEach(() => {
+      jest.resetAllMocks()
+    })
+
+    it('should update a space and return the updated space data', async () => {
+      const response: AxiosResponse<OcisSpace> = {
+        data,
+        status: 201,
+        statusText: 'Created',
+        headers: { 'Content-Type': 'application/json' },
+        config: undefined,
+      }
+
+      mockedAxios.patch.mockResolvedValueOnce(response)
+
+      const space = await updateSpace(ocisSpaceId, spacePaylaod)
+
+      expect(mockedAxios.patch).toHaveBeenCalledWith(
+        expect.stringContaining(`${OcisLibreGraphRoute.DRIVES}/${ocisSpaceId}`),
+        {
+          name: 'Updated Test Space',
+          driveAlias: 'updated-test-space',
+        },
+        {
+          headers: { 'Content-Type': 'application/json' },
+          auth: expect.any(Object),
+          httpsAgent: expect.any(Object),
+        }
+      )
+      expect(space).toEqual(data)
+    })
+
+    it('should throw an error if space update fails', async () => {
+      const error = new Error('Space update failed')
+      mockedAxios.patch.mockRejectedValueOnce(error)
+
+      await expect(updateSpace(ocisSpaceId, spacePaylaod)).rejects.toThrowError(
+        `Failed to update oCIS space for space with ID ${spacePaylaod.id}`
       )
     })
   })

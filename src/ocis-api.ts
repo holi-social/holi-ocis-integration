@@ -420,3 +420,39 @@ export const removeSpaceUser = async (spaceId: string, username: string): Promis
     throw new Error(`Failed to remove user ${username} from oCIS space with ID ${spaceId}`)
   }
 }
+
+/**
+ * Updates an existing OcisSpace.
+ * @async
+ * @function
+ * @param {SpacePayload} space - The payload representing the space to be updated.
+ * @returns {Promise<OcisSpace>} A Promise that resolves to the updated OcisSpace.
+ * @throws {Error} Throws an error if the request fails or if an unexpected response is received.
+ */
+export const updateSpace = async (id: string, space: SpacePayload): Promise<OcisSpace> => {
+  // Construct the URL to update the space.
+  const url = `${OWNCLOUD_BASE_URL}/${OcisApi.LIBRE_GRAPH_API_PATH}/${OcisLibreGraphRoute.DRIVES}/${id}`
+
+  try {
+    // Send a PATCH request to update the space.
+    const { data }: AxiosResponse<OcisSpace> = await client.patch(
+      url,
+      {
+        name: sanitizeSpaceName(space.name),
+        driveAlias: space.slug,
+      },
+      {
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        auth,
+        httpsAgent,
+      }
+    )
+    return data
+  } catch (error) {
+    // Handle errors that occur during the request.
+    logger.error({ error })
+    throw new Error(`Failed to update oCIS space for space with ID ${space.id}`)
+  }
+}
