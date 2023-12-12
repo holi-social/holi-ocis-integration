@@ -41,6 +41,8 @@ describe('/users', () => {
     id,
     name: 'Test User',
     email: 'test-email@example.com',
+    avatar: 'avatar.png',
+    identity: 'user-identity',
   }
   const data: OcisUser = {
     id,
@@ -198,6 +200,8 @@ describe('/users', () => {
       id: 'test-user-id',
       name: 'New Test User',
       email: 'test-email@example.com',
+      avatar: 'avatar.png',
+      identity: 'user-identity',
     }
 
     const ocisUserId = 'ocis-user-id'
@@ -366,6 +370,8 @@ describe('/drives', () => {
     id: 'test-space-id',
     name: 'Test Space',
     slug: 'test-space',
+    avatar: 'avatar.png',
+    avatarDefaultColor: '#FFFFFF',
   }
 
   describe('createSpace', () => {
@@ -614,6 +620,8 @@ describe('/drives', () => {
       id: 'test-space-id',
       name: 'Updated Test Space',
       slug: 'updated-test-space',
+      avatar: 'avatar.png',
+      avatarDefaultColor: '#FFFFFF',
     }
 
     const ocisSpaceId = 'ocis-space-id'

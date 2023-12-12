@@ -15,11 +15,15 @@ describe('spaceUpdatedHandler', () => {
       id: 'user-id',
       email: 'user-email@example.com',
       name: 'Test User',
+      avatar: 'avatar.png',
+      identity: 'user-identity',
     },
     space: {
       id: 'space-id',
       name: 'Updated Test Space',
       slug: 'updated-test-space',
+      avatar: 'avatar.png',
+      avatarDefaultColor: '#FFFFFF',
     },
   }
 

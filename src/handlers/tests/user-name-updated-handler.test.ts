@@ -15,6 +15,8 @@ describe('spaceUserAddedHandler', () => {
       id: 'user-id',
       email: 'user-email@example.com',
       name: 'New Test User',
+      avatar: 'avatar.png',
+      identity: 'user-identity',
     },
   }
 

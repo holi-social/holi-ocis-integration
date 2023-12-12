@@ -26,11 +26,15 @@ describe('spaceCreatedHandler', () => {
       id: 'creator-id',
       email: 'creator-email@example.com',
       name: 'Test Creator',
+      avatar: 'avatar.png',
+      identity: 'user-identity',
     },
     space: {
       id: 'space-id',
       name: 'Test Space',
       slug: 'test-space',
+      avatar: 'avatar.png',
+      avatarDefaultColor: '#FFFFFF',
     },
   }
 
