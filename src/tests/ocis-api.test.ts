@@ -13,7 +13,7 @@ import {
   shareSpaceWithUser,
   removeSpaceUser,
   updateUser,
-  updateSpace
+  updateSpace,
 } from '../ocis-api'
 import {
   OcisApi,
@@ -451,7 +451,6 @@ describe('/drives', () => {
   })
 
   describe('findSpaceById', () => {
-
     afterEach(() => {
       jest.resetAllMocks()
     })

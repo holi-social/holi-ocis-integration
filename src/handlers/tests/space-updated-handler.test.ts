@@ -20,7 +20,7 @@ describe('spaceUpdatedHandler', () => {
       id: 'space-id',
       name: 'Updated Test Space',
       slug: 'updated-test-space',
-    }
+    },
   }
 
   let updateOrCreateOcisSpaceMock: jest.MockedFunction<typeof updateOrCreateOcisSpace>
@@ -38,7 +38,7 @@ describe('spaceUpdatedHandler', () => {
       id: 'ocis-space-id',
       name: 'Updated Test Space',
       slug: 'updated-test-space',
-      }
+    }
 
     ;(updateOrCreateOcisSpaceMock as jest.Mock).mockResolvedValue(updatedOcisSpace)
 
