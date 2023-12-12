@@ -10,7 +10,7 @@ In this guide you will get an overview of the contribution workflow from opening
 
 ## New Contributor guide
 
-There's many ways you could contribute to holi. For all of them, you first need an account on our gitlab. Set one up [here](https://app.gitlab-pages.holi.team/users/sign_up), after which we will approve your account. You will get confirmation via E-Mail and can proceed with setting up your account by following the instructions in the E-Mail and in GitLab itself. 
+There's many ways you could contribute to holi. For all of them, you first need an account on our gitlab. Set one up [here](https://app.gitlab-pages.holi.team/users/sign_up), after which we will approve your account. You will get confirmation via E-Mail and can proceed with setting up your account by following the instructions in the E-Mail and in GitLab itself.
 
 ### Finding and reporting bugs
 
@@ -24,8 +24,8 @@ Help with translations to any language is highly appreciated. If you would like 
 
 We welcome suggestions for new features! To request a feature:
 
-* Search the [issue tracker](https://gitlab.holi.team/app/holi-frontends/-/issues) to ensure it hasn't been requested before.
-* If not found, open a new issue detailing the feature you'd like to see. Explain its purpose and potential benefits.
+- Search the [issue tracker](https://gitlab.holi.team/app/holi-frontends/-/issues) to ensure it hasn't been requested before.
+- If not found, open a new issue detailing the feature you'd like to see. Explain its purpose and potential benefits.
 
 ### Developing/Coding
 
