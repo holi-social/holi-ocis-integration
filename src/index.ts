@@ -8,6 +8,7 @@ import { userNameUpdatedHandler } from './handlers/user-name-updated-handler'
 import { logPhase, logger } from './logger'
 
 import { EventType } from './types'
+import { spaceUpdatedHandler } from './handlers/space-updated-handler'
 
 //Processes events received from both the Google Pub/Sub Emulator and Cloud Pub/Sub, which have different body structures.
 const extractEventDetails = (request) => {
@@ -60,6 +61,10 @@ export const receiveEvent = async (request, response): Promise<void> => {
         break
       case EventType.SPACE_USER_REMOVED:
         await logPhase(messageId, 'spaceUserRemovedHandler')(() => spaceUserRemovedHandler(messageId, event))
+        response.sendStatus(200)
+        break
+      case EventType.SPACE_UPDATED:
+        await logPhase(messageId, 'spaceUpdatedHandler')(() => spaceUpdatedHandler(messageId, event))
         response.sendStatus(200)
         break
       default:

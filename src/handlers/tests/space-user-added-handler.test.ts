@@ -29,11 +29,15 @@ describe('spaceUserAddedHandler', () => {
       id: 'user-id',
       email: 'user-email@example.com',
       name: 'Test User',
+      avatar: 'avatar.png',
+      identity: 'user-identity',
     },
     space: {
       id: 'space-id',
       name: 'Test Space',
       slug: 'test-space',
+      avatar: 'avatar.png',
+      avatarDefaultColor: '#FFFFFF',
     },
   }
 
@@ -45,11 +49,6 @@ describe('spaceUserAddedHandler', () => {
 
     const ocisSpace = {
       id: 'ocis-space-id',
-    }
-
-    const spaceIdentity = {
-      space_id: 'space-id',
-      ocis_space_id: 'ocis-space-id',
     }
 
     ;(findOrCreateOcisUser as jest.Mock).mockResolvedValue(ocisUser)

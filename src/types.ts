@@ -12,6 +12,7 @@ export enum EventType {
   USER_DELETED = 'UserDeleted',
   SPACE_USER_LEFT = 'SpaceUserLeft',
   SPACE_USER_REMOVED = 'SpaceUserRemoved',
+  SPACE_UPDATED = 'SpaceUpdated',
 }
 
 /**
@@ -21,11 +22,15 @@ export enum EventType {
  * @property {string} id - The unique identifier of the user
  * @property {string} email - The email address of the user
  * @property {string} name - The name of the user
+ * @property {string} identity - The identity of the user
+ * @property {string} avatar - The avatar of the user
  */
 export type UserPayload = {
   id: string
   email: string
   name: string
+  identity: string
+  avatar: string
 }
 
 /**
@@ -35,12 +40,15 @@ export type UserPayload = {
  * @property {string} id - The unique identifier of the space
  * @property {string} name - The name of the space
  * @property {string} slug - The slug of the space
- * @property {string} description - The description of the space
+ * @property {string} avatar - The avatar of the space
+ * @property {string} avatarDefaultColor - The default color of the avatar of the space
  */
 export type SpacePayload = {
   id: string
   name: string
   slug: string
+  avatar: string
+  avatarDefaultColor: string
 }
 
 /**
@@ -56,9 +64,21 @@ export type SpaceCreatedDataPayload = {
 }
 
 /**
+ * Payload for data created when a space is updated
+ *
+ * @typedef {Object} SpaceUpdatedDataPayload
+ * @property {UserPayload} creator - The user who updated the space
+ * @property {SpacePayload} space - The updated space
+ */
+export type SpaceUpdatedDataPayload = {
+  creator: UserPayload
+  space: SpacePayload
+}
+
+/**
  * Payload for data created when a user is added to a space
  *
- * @typedef {Object} SpaceCreatedDataPayload
+ * @typedef {Object} SpaceUserAddedDataPayload
  * @property {UserPayload} user - The user who has been added to the space
  * @property {SpacePayload} space - The created space
  */

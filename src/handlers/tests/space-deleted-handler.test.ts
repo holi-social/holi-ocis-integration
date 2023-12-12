@@ -34,6 +34,8 @@ describe('spaceDeletedHandler', () => {
       id: 'space-id',
       name: 'Test Space',
       slug: 'test-space',
+      avatar: 'avatar.png',
+      avatarDefaultColor: '#FFFFFF',
     },
   }
 

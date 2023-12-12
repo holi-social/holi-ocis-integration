@@ -7,6 +7,7 @@ import {
   findSpaceById,
   findUserByAccountName,
   findUserById,
+  updateSpace,
   updateUser,
 } from '../ocis-api'
 import { OcisDefaultUUIDRole, OcisSpace, OcisUser, SpacePayload, UserPayload } from '../types'
@@ -104,4 +105,25 @@ export const findOrCreateOcisSpace = async (space: SpacePayload): Promise<OcisSp
   logger.debug('Space created successfully', { ocisSpace })
 
   return ocisSpace
+}
+
+export const updateOrCreateOcisSpace = async (space: SpacePayload): Promise<OcisSpace> => {
+  const spaceMappingRepository = new SpaceMappingRepository()
+  const spaceMapping = await spaceMappingRepository.findBySpaceId(space.id)
+
+  if (spaceMapping) {
+    // If a space mapping record exists, update the corresponding oCIS space
+    const updatedOcisSpace = await updateSpace(spaceMapping.ocis_space_id, space)
+    logger.debug('Space updated successfully', { ocisSpace: updatedOcisSpace })
+    return updatedOcisSpace
+  } else {
+    logger.warn(`Space with ID ${space.id} was not found. A new space will be created.`, {
+      space,
+    })
+    const ocisSpace = await createSpace(space)
+    await spaceMappingRepository.create(space.id, ocisSpace.id)
+    logger.debug('Space created successfully', { ocisSpace })
+
+    return ocisSpace
+  }
 }

@@ -9,7 +9,7 @@ import {
   findUserById,
   updateUser,
 } from '../../ocis-api'
-import { OcisDefaultUUIDRole, OcisSpace, OcisUser, OcisUserType, UserPayload } from '../../types'
+import { OcisDefaultUUIDRole, OcisSpace, OcisUser, OcisUserType, SpacePayload, UserPayload } from '../../types'
 import {
   findOcisSpace,
   findOcisUser,
@@ -38,6 +38,8 @@ describe('findOcisUser', () => {
       id: 'user-id',
       email: 'user-email@example.com',
       name: 'Test User',
+      avatar: 'User Avatar',
+      identity: 'user-identity',
     }
     ocisUser = {
       id: 'ocis-user-id',
@@ -115,6 +117,8 @@ describe('findOrCreateOcisUser', () => {
       id: 'user-id',
       email: 'user-email@example.com',
       name: 'Test User',
+      avatar: 'avatar.png',
+      identity: 'test-user-identity',
     }
     ocisUser = {
       id: 'ocis-user-id',
@@ -207,6 +211,8 @@ describe('updateOrCreateOcisUser', () => {
       id: 'user-id',
       email: 'user-email@example.com',
       name: 'Test User',
+      avatar: 'avatar.png',
+      identity: 'test-user-identity',
     }
     ocisUser = {
       id: 'ocis-user-id',
@@ -329,10 +335,12 @@ describe('findOcisSpace', () => {
     },
     webUrl: '',
   }
-  const spacePayload = {
+  const spacePayload: SpacePayload = {
     id: 'space-id',
     name: 'Test Space',
     slug: 'test-space',
+    avatar: 'avatar.png',
+    avatarDefaultColor: '#FFFFFF',
   }
   const spaceMapping = { id: 1, space_id: spacePayload.id, ocis_space_id: ocisSpace.id }
   let spaceMappingFindBySpaceIdMock: jest.MockedFunction<typeof SpaceMappingRepository.prototype.findBySpaceId>
@@ -407,10 +415,12 @@ describe('findOrCreateOcisSpace', () => {
     },
     webUrl: '',
   }
-  const spacePayload = {
+  const spacePayload: SpacePayload = {
     id: 'space-id',
     name: 'Test Space',
     slug: 'test-space',
+    avatar: 'avatar.png',
+    avatarDefaultColor: '#FFFFFF',
   }
   const spaceMapping = { id: 1, space_id: spacePayload.id, ocis_space_id: ocisSpace.id }
   let spaceMappingFindBySpaceIdMock: jest.MockedFunction<typeof SpaceMappingRepository.prototype.findBySpaceId>

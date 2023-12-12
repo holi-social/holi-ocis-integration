@@ -29,11 +29,15 @@ describe('spaceUserLeftHandler', () => {
       id: 'user-id',
       email: 'user-email@example.com',
       name: 'Test User',
+      avatar: 'avatar.png',
+      identity: 'user-identity',
     },
     space: {
       id: 'space-id',
       name: 'Test Space',
       slug: 'test-space',
+      avatar: 'avatar.png',
+      avatarDefaultColor: '#FFFFFF',
     },
   }
 
