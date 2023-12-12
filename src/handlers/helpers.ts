@@ -114,7 +114,7 @@ export const updateOrCreateOcisSpace = async (space: SpacePayload): Promise<Ocis
   if (spaceMapping) {
     // If a space mapping record exists, update the corresponding oCIS space
     const updatedOcisSpace = await updateSpace(spaceMapping.ocis_space_id, space)
-    logger.debug('Space updated successfully', { ociSpace: updatedOcisSpace })
+    logger.debug('Space updated successfully', { ocisSpace: updatedOcisSpace })
     return updatedOcisSpace
   } else {
     logger.warn(`Space with ID ${space.id} was not found. A new space will be created.`, {
