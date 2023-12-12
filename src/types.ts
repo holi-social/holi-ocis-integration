@@ -59,7 +59,7 @@ export type SpaceCreatedDataPayload = {
 /**
  * Payload for data created when a space is updated
  *
- * @typedef {Object} SpaceCreatedDataPayload
+ * @typedef {Object} SpaceUpdatedDataPayload
  * @property {UserPayload} creator - The user who updated the space
  * @property {SpacePayload} space - The updated space
  */
@@ -71,7 +71,7 @@ export type SpaceUpdatedDataPayload = {
 /**
  * Payload for data created when a user is added to a space
  *
- * @typedef {Object} SpaceCreatedDataPayload
+ * @typedef {Object} SpaceUserAddedDataPayload
  * @property {UserPayload} user - The user who has been added to the space
  * @property {SpacePayload} space - The created space
  */
