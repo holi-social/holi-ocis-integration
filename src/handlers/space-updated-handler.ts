@@ -8,6 +8,6 @@ export const spaceUpdatedHandler = async (messageId: string, payload: SpaceUpdat
     const { space } = payload
     await logPhase(messageId, 'spaceUpdatedHandler.updateOrCreateOcisSpace')(() => updateOrCreateOcisSpace(space))
   } catch (error) {
-    throw new Error(`Failed to update space ${error}`)
+    throw new Error(`Failed to update space ${error.message}`)
   }
 }
