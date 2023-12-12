@@ -236,7 +236,6 @@ describe('receiveEvent', () => {
     expect(responseMock.sendStatus).toHaveBeenCalledWith(500)
   })
 
-
   it('should call the spaceUserLeftHandler when the event type is SpaceUserLeft', async () => {
     const requestMock = {
       body: {
