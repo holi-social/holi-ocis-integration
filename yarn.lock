@@ -506,14 +506,14 @@
   resolved "https://registry.npmjs.org/@databases/validate-unicode/-/validate-unicode-1.0.0.tgz"
   integrity sha512-dLKqxGcymeVwEb/6c44KjOnzaAafFf0Wxa8xcfEjx/qOl3rdijsKYBAtIGhtVtOlpPf/PFKfgTuFurSPn/3B/g==
 
-"@google-cloud/functions-framework@^3.1.3":
-  version "3.1.3"
-  resolved "https://registry.npmjs.org/@google-cloud/functions-framework/-/functions-framework-3.1.3.tgz"
-  integrity sha512-gNKEkbud/+QkS5+vn+UEvBX6L522OpyTOjM83/cR1JRhSsBTNn3kPe4L17ZQMjJHFvO9xIxF3FaPDTfOx1Umpw==
+"@google-cloud/functions-framework@^3.3.0":
+  version "3.3.0"
+  resolved "https://registry.yarnpkg.com/@google-cloud/functions-framework/-/functions-framework-3.3.0.tgz#9e4563e36ad8644aee1bb5dceaa715bd1ca6759d"
+  integrity sha512-+4O1dX5VNRK1W1NyAia7zy5jLf88ytuz39/1kVUUaNiOf76YbMZKV0YjZwfk7uEwRrC6l2wynK1G+q8Gb5DeVw==
   dependencies:
-    "@types/express" "4.17.13"
+    "@types/express" "4.17.17"
     body-parser "^1.18.3"
-    cloudevents "^6.0.0"
+    cloudevents "^7.0.0"
     express "^4.16.4"
     minimist "^1.2.7"
     on-finished "^2.3.0"
@@ -865,22 +865,23 @@
   resolved "https://registry.npmjs.org/@types/cuid/-/cuid-1.3.1.tgz"
   integrity sha512-LwQOxZtpN3aEGElEicpHx1I6exi+mLBecAdLMWNRjGaYByD2CqGjSH1oVEQGeNSqgYBhLC1pIJQMDgcpxk0t8Q==
 
-"@types/express-serve-static-core@^4.17.18":
-  version "4.17.33"
-  resolved "https://registry.npmjs.org/@types/express-serve-static-core/-/express-serve-static-core-4.17.33.tgz"
-  integrity sha512-TPBqmR/HRYI3eC2E5hmiivIzv+bidAfXofM+sbonAGvyDhySGw9/PQZFt2BLOrjUUR++4eJVpx6KnLQK1Fk9tA==
+"@types/express-serve-static-core@^4.17.33":
+  version "4.17.42"
+  resolved "https://registry.yarnpkg.com/@types/express-serve-static-core/-/express-serve-static-core-4.17.42.tgz#2a276952acc73d1b8dc63fd4210647abbc553a71"
+  integrity sha512-ckM3jm2bf/MfB3+spLPWYPUH573plBFwpOhqQ2WottxYV85j1HQFlxmnTq57X1yHY9awZPig06hL/cLMgNWHIQ==
   dependencies:
     "@types/node" "*"
     "@types/qs" "*"
     "@types/range-parser" "*"
+    "@types/send" "*"
 
-"@types/express@4.17.13":
-  version "4.17.13"
-  resolved "https://registry.npmjs.org/@types/express/-/express-4.17.13.tgz"
-  integrity sha512-6bSZTPaTIACxn48l50SR+axgrqm6qXFIxrdAKaG6PaJk3+zuUr35hBlgT7vOmJcum+OEaIBLtHV/qloEAFITeA==
+"@types/express@4.17.17":
+  version "4.17.17"
+  resolved "https://registry.yarnpkg.com/@types/express/-/express-4.17.17.tgz#01d5437f6ef9cfa8668e616e13c2f2ac9a491ae4"
+  integrity sha512-Q4FmmuLGBG58btUnfS1c1r/NQdlp3DMfGDGig8WhfpA2YRUtEkxAjkZb0yvplJGYdF1fsQ81iMDcH24sSCNC/Q==
   dependencies:
     "@types/body-parser" "*"
-    "@types/express-serve-static-core" "^4.17.18"
+    "@types/express-serve-static-core" "^4.17.33"
     "@types/qs" "*"
     "@types/serve-static" "*"
 
@@ -923,6 +924,11 @@
   resolved "https://registry.npmjs.org/@types/mime/-/mime-3.0.1.tgz"
   integrity sha512-Y4XFY5VJAuw0FgAqPNd6NNoV44jbq9Bz2L7Rh/J6jLTiHBSBJa9fxqQIvkIld4GsoDOcCbvzOUAbLPsSKKg+uA==
 
+"@types/mime@^1":
+  version "1.3.5"
+  resolved "https://registry.yarnpkg.com/@types/mime/-/mime-1.3.5.tgz#1ef302e01cf7d2b5a0fa526790c9123bf1d06690"
+  integrity sha512-/pyBZWSLD2n0dcHE3hq8s8ZvcETHtEuF+3E7XVt0Ig2nvsVQXdghHVcEkIWjy9A0wKfTn97a/PSDYohKIlnP/w==
+
 "@types/node@*", "@types/node@^16.11.10":
   version "16.18.24"
   resolved "https://registry.npmjs.org/@types/node/-/node-16.18.24.tgz"
@@ -947,6 +953,14 @@
   version "1.2.4"
   resolved "https://registry.npmjs.org/@types/range-parser/-/range-parser-1.2.4.tgz"
   integrity sha512-EEhsLsD6UsDM1yFhAvy0Cjr6VwmpMWqFBCb9w07wVugF7w9nfajxLuVmngTIpgS6svCnm6Vaw+MZhoDCKnOfsw==
+
+"@types/send@*":
+  version "0.17.4"
+  resolved "https://registry.yarnpkg.com/@types/send/-/send-0.17.4.tgz#6619cd24e7270793702e4e6a4b958a9010cfc57a"
+  integrity sha512-x2EM6TJOybec7c52BX0ZspPodMsQUd5L6PRwOunVyVUhXiBSKf3AezDL8Dgvgt5o0UfKNfuA0eMLr2wLT4AiBA==
+  dependencies:
+    "@types/mime" "^1"
+    "@types/node" "*"
 
 "@types/serve-static@*":
   version "1.15.1"
@@ -1202,6 +1216,11 @@ base64-js@^1.3.1:
   resolved "https://registry.npmjs.org/base64-js/-/base64-js-1.5.1.tgz"
   integrity sha512-AKpaYlHn8t4SVbOHCy+b5+KKgvR4vrsD8vbvrbiQJps7fKDTkjkDry6ji0rUJjC0kzbNePLwzxq8iypo41qeWA==
 
+bignumber.js@^9.0.0:
+  version "9.1.2"
+  resolved "https://registry.yarnpkg.com/bignumber.js/-/bignumber.js-9.1.2.tgz#b7c4242259c008903b13707983b5f4bbd31eda0c"
+  integrity sha512-2/mKyZH9K85bzOEfhXDBFZTGd1CTs+5IHpeFQo9luiBG7hghdC851Pj2WAhb6E3R6b9tZj/XKhbg4fum+Kepug==
+
 bl@^5.0.0:
   version "5.1.0"
   resolved "https://registry.npmjs.org/bl/-/bl-5.1.0.tgz"
@@ -1431,13 +1450,14 @@ clone@^1.0.2:
   resolved "https://registry.npmjs.org/clone/-/clone-1.0.4.tgz"
   integrity sha512-JQHZ2QMW6l3aH/j6xCqQThY/9OH4D/9ls34cgkUBiEeocRTU04tHfKPBsUK1PqZCUQM7GiA0IIXJSuXHI64Kbg==
 
-cloudevents@^6.0.0:
-  version "6.0.4"
-  resolved "https://registry.npmjs.org/cloudevents/-/cloudevents-6.0.4.tgz"
-  integrity sha512-Vay81bTsutFkZxHnM2K0rev95d0x7aTZ3G+Bmm8/GnIzsVtGfeBkLcXFD4czZ08RoOn6POKl+rIXaBS+Xn+jIA==
+cloudevents@^7.0.0:
+  version "7.0.2"
+  resolved "https://registry.yarnpkg.com/cloudevents/-/cloudevents-7.0.2.tgz#367b22bb6399ab15a6b18347e6ce5ccecdc87849"
+  integrity sha512-WiOqWsNkMZmMMZ6xa3kzx/MA+8+V+c5eGkStZIcik+Px2xCobmzcacw1EOGyfhODaQKkIv8TxXOOLzV69oXFqA==
   dependencies:
     ajv "^8.11.0"
     ajv-formats "^2.1.1"
+    json-bigint "^1.0.0"
     process "^0.11.10"
     util "^0.12.4"
     uuid "^8.3.2"
@@ -2846,6 +2866,13 @@ jsesc@^2.5.1:
   version "2.5.2"
   resolved "https://registry.npmjs.org/jsesc/-/jsesc-2.5.2.tgz"
   integrity sha512-OYu7XEzjkCQ3C5Ps3QIZsQfNpqoJyZZA99wd9aWd05NCtC5pWOkShK2mkL6HXQR6/Cy2lbNdPlZBpuQHXE63gA==
+
+json-bigint@^1.0.0:
+  version "1.0.0"
+  resolved "https://registry.yarnpkg.com/json-bigint/-/json-bigint-1.0.0.tgz#ae547823ac0cad8398667f8cd9ef4730f5b01ff1"
+  integrity sha512-SiPv/8VpZuWbvLSMtTDU8hEfrZWg/mH/nV/b4o0CYbSxu1UIQPLdwKOCIyLQX+VIPO5vrLX3i8qtqFyhdPSUSQ==
+  dependencies:
+    bignumber.js "^9.0.0"
 
 json-parse-even-better-errors@^2.3.0:
   version "2.3.1"
