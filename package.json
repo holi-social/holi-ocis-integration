@@ -13,7 +13,7 @@
     "format": "prettier --write .",
     "clean": "rimraf dist",
     "clean:all": "yarn clean && rimraf node_modules",
-    "copy-files": "copyfiles -u 1 src/**/*.json dist/"
+    "copy-files": "copyfiles -u 1 'src/**/*.json' dist/"
   },
   "devDependencies": {
     "@databases/pg-migrations": "^5.0.2",
@@ -37,5 +37,6 @@
     "https": "^1.0.0",
     "pg": "^8.4.0",
     "winston": "^3.8.2"
-  }
+  },
+  "packageManager": "yarn@4.1.0"
 }
