@@ -11,8 +11,9 @@ dist
 coverage/
 *.zip
 
+# yarn default ignores
+.pnp.*
 .yarn/*
-!.yarn/cache
 !.yarn/patches
 !.yarn/plugins
 !.yarn/releases
