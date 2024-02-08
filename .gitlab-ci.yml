@@ -1,7 +1,8 @@
 cache:
   key: $CI_COMMIT_REF_SLUG
   paths:
-    - node_modules/
+    - node_modules
+    - .yarn/
 
 default:
   tags:
@@ -20,19 +21,21 @@ install_dependencies:
   cache:
     key: $CI_COMMIT_REF_SLUG
     paths:
-      - node_modules/
+      - node_modules
+      - .yarn/
   script:
     - yarn install --immutable --check-cache
-  only:
-    changes:
-      - yarn.lock
+  # only:
+  #   changes:
+  #     - yarn.lock
 
 test:
   stage: 'test'
   cache:
     key: $CI_COMMIT_REF_SLUG
     paths:
-      - node_modules/
+      - node_modules
+      - .yarn/
     policy: pull
   image:
     name: 'node:18.16.0'
@@ -44,7 +47,8 @@ build:
   cache:
     key: $CI_COMMIT_REF_SLUG
     paths:
-      - node_modules/
+      - node_modules
+      - .yarn/
     policy: pull
   image:
     name: 'node:18.16.0'
@@ -62,7 +66,7 @@ deploy:
     entrypoint: ['/bin/sh', '-c']
   script:
     - apk add zip
-    - zip -r receiveEvent.zip dist package.json yarn.lock
+    - zip -r receiveEvent.zip dist package.json yarn.lock .yarn/ .yarnrc*
     - cd terraform/common/
     - export GOOGLE_APPLICATION_CREDENTIALS=${GOOGLE_CLOUD_SERVICE_ACCOUNT}
     - terraform init
