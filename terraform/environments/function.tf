@@ -28,10 +28,38 @@ data "google_secret_manager_secret" "ocis_admin_password" {
   project   = data.terraform_remote_state.holi_infra_state.outputs.shared_project_id
 }
 
+# START CMEK encryption for functions
+resource "google_kms_crypto_key" "holi_ocis_integration" {
+  name            = random_id.main.hex
+  key_ring        = data.terraform_remote_state.holi_infra_state.outputs.kms_shared_key_ring_id
+  rotation_period = "100000s" # must be greater than a day
+
+
+  lifecycle {
+    prevent_destroy = true # if destroyed, data is inaccessible forever
+  }
+}
+
+resource "google_kms_crypto_key_iam_binding" "holi_ocis_integration" {
+  crypto_key_id = google_kms_crypto_key.holi_ocis_integration.id
+  role          = "roles/cloudkms.cryptoKeyEncrypterDecrypter"
+
+  # https://cloud.google.com/functions/docs/securing/cmek?hl=de#granting_service_accounts_access_to_the_key
+  members = [
+    "serviceAccount:service-${google_project.shared.number}@gcf-admin-robot.iam.gserviceaccount.com",
+    "serviceAccount:service-${google_project.shared.number}@gcp-sa-artifactregistry.iam.gserviceaccount.com",
+    "serviceAccount:service-${google_project.shared.number}@gs-project-accounts.iam.gserviceaccount.com",
+    "serviceAccount:service-${google_project.shared.number}@serverless-robot-prod.iam.gserviceaccount.com",
+    "serviceAccount:service-${google_project.shared.number}@gcp-sa-eventarc.iam.gserviceaccount.com",
+  ]
+}
+# END CMEK encryption for functions
+
 resource "google_cloudfunctions2_function" "holi_ocis_integration" {
-  project  = data.terraform_remote_state.holi_infra_state.outputs.shared_project_id
-  name     = random_id.main.hex
-  location = local.default_location
+  project      = data.terraform_remote_state.holi_infra_state.outputs.shared_project_id
+  name         = random_id.main.hex
+  location     = local.default_location
+  kms_key_name = google_kms_crypto_key.holi_ocis_integration.id
 
   build_config {
     runtime     = "nodejs18"
