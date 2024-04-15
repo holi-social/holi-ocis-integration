@@ -93,7 +93,7 @@ export const findUserByAccountName = async (id: string): Promise<OcisUser> => {
       return
     }
     logger.error({ error })
-    throw new Error(`Failed to find an oCIS user with account name ${HOLI_PREFIX}_${id}`)
+    throw new Error(`Failed to find an oCIS user with account name ${HOLI_PREFIX}_${id}`, {cause: error})
   }
 }
 
