@@ -57,7 +57,9 @@ resource "google_cloudfunctions2_function" "holi_ocis_integration" {
       OCIS_INTEGRATION_DB_PORT = local.ocis_integration_database_port
       OCIS_INTEGRATION_DB_NAME = google_sql_database.ocis_integration.name
       INSTANCE_CONNECTION_NAME = local.environment_name == "production" ? data.terraform_remote_state.holi_infra_state.outputs.database_name_production : data.terraform_remote_state.holi_infra_state.outputs.database_name_development
+      LOG_EXECUTION_ID         = local.environment_name == "production" ? false : true
     }
+
     secret_environment_variables {
       key        = "OCIS_ADMIN_USERNAME"
       project_id = data.terraform_remote_state.holi_infra_state.outputs.shared_project_id
