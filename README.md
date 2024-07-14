@@ -1,6 +1,6 @@
 # holi-ocis-integration
 
-This repository contains Google Cloud Functions implementation for the integration of OwnCloud Infinite Storage (OCIS) into holi. The cloud function
+This repository contains Google Cloud Function implementation for the integration of OwnCloud Infinite Storage (OCIS) into holi. The cloud function
 
 - can be found in the `src/index.ts`.
 - and is triggered by events on Google Cloud Pub/Sub, emitted by Okuna on the `okuna_staging` and `okuna_production` topics, respectively

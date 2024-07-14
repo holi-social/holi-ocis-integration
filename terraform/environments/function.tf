@@ -5,16 +5,9 @@ resource "random_id" "main" {
   prefix      = "ocis-integration-${local.environment_name}-"
 }
 
-resource "google_storage_bucket" "sources" {
-  project                     = data.terraform_remote_state.holi_infra_state.outputs.shared_project_id
-  name                        = random_id.main.hex
-  location                    = local.default_location
-  uniform_bucket_level_access = true
-}
-
 resource "google_storage_bucket_object" "function_source" {
-  name   = "receiveEvent.zip"
-  bucket = google_storage_bucket.sources.name
+  name   = "${random_id.main.hex}/receiveEvent.zip"
+  bucket = data.terraform_remote_state.holi_infra_state.outputs.gcf_sources_upload_bucket_name
   source = "../../receiveEvent.zip"
 }
 
@@ -31,7 +24,7 @@ data "google_secret_manager_secret" "ocis_admin_password" {
 resource "google_cloudfunctions2_function" "holi_ocis_integration" {
   project  = data.terraform_remote_state.holi_infra_state.outputs.shared_project_id
   name     = random_id.main.hex
-  location = local.default_location
+  location = local.default_region
 
   build_config {
     runtime     = "nodejs18"
@@ -45,7 +38,7 @@ resource "google_cloudfunctions2_function" "holi_ocis_integration" {
 
     source {
       storage_source {
-        bucket = google_storage_bucket.sources.name
+        bucket = data.terraform_remote_state.holi_infra_state.outputs.gcf_sources_upload_bucket_name
         object = google_storage_bucket_object.function_source.name
       }
     }
@@ -64,7 +57,9 @@ resource "google_cloudfunctions2_function" "holi_ocis_integration" {
       OCIS_INTEGRATION_DB_PORT = local.ocis_integration_database_port
       OCIS_INTEGRATION_DB_NAME = google_sql_database.ocis_integration.name
       INSTANCE_CONNECTION_NAME = local.environment_name == "production" ? data.terraform_remote_state.holi_infra_state.outputs.database_name_production : data.terraform_remote_state.holi_infra_state.outputs.database_name_development
+      LOG_EXECUTION_ID         = local.environment_name == "production" ? false : true
     }
+
     secret_environment_variables {
       key        = "OCIS_ADMIN_USERNAME"
       project_id = data.terraform_remote_state.holi_infra_state.outputs.shared_project_id
