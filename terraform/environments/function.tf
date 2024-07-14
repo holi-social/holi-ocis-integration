@@ -27,7 +27,7 @@ resource "google_cloudfunctions2_function" "holi_ocis_integration" {
   location = local.default_region
 
   build_config {
-    runtime     = "nodejs18"
+    runtime     = "nodejs20"
     entry_point = "receiveEvent"
 
     # https://github.com/hashicorp/terraform-provider-google/issues/1938#issuecomment-1576849526
