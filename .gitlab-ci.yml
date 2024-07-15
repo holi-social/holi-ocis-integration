@@ -17,7 +17,7 @@ stages:
 install_dependencies:
   stage: install_dependencies
   image:
-    name: 'node:18.16.0'
+    name: 'node:20.15.1'
   cache:
     key: $CI_COMMIT_REF_SLUG
     paths:
@@ -38,7 +38,7 @@ test:
       - .yarn/
     policy: pull
   image:
-    name: 'node:18.16.0'
+    name: 'node:20.15.1'
   script:
     - yarn test
 
@@ -51,7 +51,7 @@ build:
       - .yarn/
     policy: pull
   image:
-    name: 'node:18.16.0'
+    name: 'node:20.15.1'
   script:
     - yarn build
   artifacts:
