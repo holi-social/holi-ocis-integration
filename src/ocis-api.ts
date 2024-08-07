@@ -60,7 +60,7 @@ export const findUserById = async (id: string): Promise<OcisUser> => {
       return
     }
     logger.error({ error: error.message })
-    throw new Error(`Failed to find an oCIS user with ID ${id}`)
+    throw new Error(`Failed to find an oCIS user with ID ${id}`, {cause: error})
   }
 }
 
@@ -93,7 +93,7 @@ export const findUserByAccountName = async (id: string): Promise<OcisUser> => {
       return
     }
     logger.error({ error: error.message })
-    throw new Error(`Failed to find an oCIS user with account name ${HOLI_PREFIX}_${id}`)
+    throw new Error(`Failed to find an oCIS user with account name ${HOLI_PREFIX}_${id}`, {cause: error})
   }
 }
 
@@ -137,7 +137,7 @@ export const createUser = async (user: UserPayload): Promise<OcisUser> => {
   } catch (error) {
     // Handle errors that occur during the request.
     logger.error({ error: error.message })
-    throw new Error(`Failed to create an oCIS account for user with ID ${user.id}`)
+    throw new Error(`Failed to create an oCIS account for user with ID ${user.id}`, {cause: error})
   }
 }
 
@@ -172,7 +172,7 @@ export const updateUser = async (id: string, user: UserPayload): Promise<OcisUse
   } catch (error) {
     // Handle errors that occur during the request.
     logger.error({ error: error.message })
-    throw new Error(`Failed to update oCIS account for user with ID ${user.id}`)
+    throw new Error(`Failed to update oCIS account for user with ID ${user.id}`, {cause: error})
   }
 }
 
@@ -208,7 +208,7 @@ export const assignUserRole = async (userId: string, roleId: string): Promise<vo
   } catch (error) {
     // Handle errors that occur during the request.
     logger.error({ error: error.message })
-    throw new Error(`Failed to assign role ${roleId} to user ${userId}`)
+    throw new Error(`Failed to assign role ${roleId} to user ${userId}`, {cause: error})
   }
 }
 
@@ -233,7 +233,7 @@ export const deleteUserById = async (id: string): Promise<void> => {
   } catch (error) {
     // Handle errors that occur during the request.
     logger.error({ error: error.message })
-    throw new Error(`Failed to delete user with ID ${id}`)
+    throw new Error(`Failed to delete user with ID ${id}`, {cause: error})
   }
 }
 
@@ -272,7 +272,7 @@ export const createSpace = async (space: SpacePayload): Promise<OcisSpace> => {
   } catch (error) {
     // Handle errors that occur during the request.
     logger.error({ error: error.message })
-    throw new Error(`Failed to create an oCIS drive for space ${space.id}`)
+    throw new Error(`Failed to create an oCIS drive for space ${space.id}`, {cause: error})
   }
 }
 
@@ -302,7 +302,7 @@ export const shareSpaceWithUser = async (spaceId: string, username: string, role
   } catch (error) {
     // Handle errors that occur during the request.
     logger.error({ error: error.message })
-    throw new Error(`Failed to share the oCIS space ${spaceId} with user ${username}`)
+    throw new Error(`Failed to share the oCIS space ${spaceId} with user ${username}`, {cause: error})
   }
 }
 
@@ -335,7 +335,7 @@ export const findSpaceById = async (id: string): Promise<OcisSpace> => {
       return
     }
     logger.error({ error: error.message })
-    throw new Error(`Failed to find an oCIS space with ID ${id}`)
+    throw new Error(`Failed to find an oCIS space with ID ${id}`, {cause: error})
   }
 }
 /**
@@ -360,7 +360,7 @@ export const disableSpaceById = async (id: string): Promise<void> => {
     })
   } catch (error) {
     logger.error({ error: error.message })
-    throw new Error(`Failed to disable oCIS space with ID ${id}`)
+    throw new Error(`Failed to disable oCIS space with ID ${id}`, {cause: error})
   }
 }
 
@@ -392,7 +392,7 @@ export const deleteSpaceById = async (id: string): Promise<void> => {
     })
   } catch (error) {
     logger.error({ error: error.message })
-    throw new Error(`Failed to delete oCIS space with ID ${id}`)
+    throw new Error(`Failed to delete oCIS space with ID ${id}`, {cause: error})
   }
 }
 
@@ -417,7 +417,7 @@ export const removeSpaceUser = async (spaceId: string, username: string): Promis
   } catch (error) {
     // Handle errors that occur during the request.
     logger.error({ error: error.message })
-    throw new Error(`Failed to remove user ${username} from oCIS space with ID ${spaceId}`)
+    throw new Error(`Failed to remove user ${username} from oCIS space with ID ${spaceId}`, {cause: error})
   }
 }
 
@@ -453,6 +453,6 @@ export const updateSpace = async (id: string, space: SpacePayload): Promise<Ocis
   } catch (error) {
     // Handle errors that occur during the request.
     logger.error({ error: error.message })
-    throw new Error(`Failed to update oCIS space for space with ID ${space.id}`)
+    throw new Error(`Failed to update oCIS space for space with ID ${space.id}`, {cause: error})
   }
 }

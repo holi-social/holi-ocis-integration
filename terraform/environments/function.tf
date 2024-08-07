@@ -22,13 +22,15 @@ data "google_secret_manager_secret" "ocis_admin_password" {
 }
 
 resource "google_cloudfunctions2_function" "holi_ocis_integration" {
-  project  = data.terraform_remote_state.holi_infra_state.outputs.shared_project_id
-  name     = random_id.main.hex
-  location = local.default_region
+  project      = data.terraform_remote_state.holi_infra_state.outputs.shared_project_id
+  name         = random_id.main.hex
+  location     = local.default_region
+  kms_key_name = data.terraform_remote_state.holi_infra_state.outputs.artifact_registry_cloudfunctions_key_id
 
   build_config {
-    runtime     = "nodejs18"
-    entry_point = "receiveEvent"
+    runtime           = "nodejs20"
+    entry_point       = "receiveEvent"
+    docker_repository = data.terraform_remote_state.holi_infra_state.outputs.cloudfunctions_repository_id
 
     # https://github.com/hashicorp/terraform-provider-google/issues/1938#issuecomment-1576849526
     environment_variables = {
