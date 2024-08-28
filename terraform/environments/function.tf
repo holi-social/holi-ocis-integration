@@ -101,4 +101,9 @@ resource "google_cloudfunctions2_function" "holi_ocis_integration" {
     #    ]
     #  }
   }
+
+  labels = {
+    "environment_type" = local.environment_type
+    "holi_service"     = "ocis-integration"
+  }
 }
