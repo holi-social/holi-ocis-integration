@@ -514,7 +514,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@databases/pg-config@npm:^3.1.0, @databases/pg-config@npm:^3.1.1":
+"@databases/pg-config@npm:^3.1.0, @databases/pg-config@npm:^3.1.1, @databases/pg-config@npm:^3.2.0":
   version: 3.2.0
   resolution: "@databases/pg-config@npm:3.2.0"
   dependencies:
@@ -546,12 +546,12 @@ __metadata:
   linkType: hard
 
 "@databases/pg-migrations@npm:^5.0.2":
-  version: 5.0.2
-  resolution: "@databases/pg-migrations@npm:5.0.2"
+  version: 5.0.3
+  resolution: "@databases/pg-migrations@npm:5.0.3"
   dependencies:
     "@databases/migrations-base": "npm:^3.0.1"
-    "@databases/pg": "npm:^5.4.1"
-    "@databases/pg-config": "npm:^3.1.1"
+    "@databases/pg": "npm:^5.5.0"
+    "@databases/pg-config": "npm:^3.2.0"
     assert-never: "npm:^1.2.1"
     chalk: "npm:^4.1.0"
     interrogator: "npm:^2.0.0"
@@ -561,7 +561,7 @@ __metadata:
     sucrase: "npm:^3.16.0"
   bin:
     pg-migrations: lib/cli.js
-  checksum: 10c0/9d1fb030249ff47f86ecf0eb1a1cb42f42356174411f2e9dffd8a69698d65cd4e6929a98a8d1da5e6d70404846cd4d161b32cd51a6748068de717696c1423c93
+  checksum: 10c0/77ad44a69790e4119f469cc88238afd39fc510ba60c3f7fa20c1a060aad1846cdfd18163449a21a2c5fc101a7bf3098697e95671e13b90e33467d5d9c35abe55
   languageName: node
   linkType: hard
 
@@ -639,6 +639,27 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@databases/pg@npm:^5.5.0":
+  version: 5.5.0
+  resolution: "@databases/pg@npm:5.5.0"
+  dependencies:
+    "@babel/code-frame": "npm:^7.0.0"
+    "@databases/escape-identifier": "npm:^1.0.3"
+    "@databases/pg-config": "npm:^3.2.0"
+    "@databases/pg-connection-string": "npm:^1.0.0"
+    "@databases/pg-data-type-id": "npm:^3.0.0"
+    "@databases/pg-errors": "npm:^1.0.0"
+    "@databases/push-to-async-iterable": "npm:^3.0.0"
+    "@databases/shared": "npm:^3.1.0"
+    "@databases/split-sql-query": "npm:^1.0.4"
+    "@databases/sql": "npm:^3.3.0"
+    assert-never: "npm:^1.2.1"
+    pg: "npm:^8.4.2"
+    pg-cursor: "npm:^2.4.2"
+  checksum: 10c0/a960f9701d04e3e2495a37f5db50d568b9096b40e3f133fcfcf083a37e583c8324932d84d078fb344e9d36b3b19a3b582d5b0eb905b099c236b037cb847ed903
+  languageName: node
+  linkType: hard
+
 "@databases/push-to-async-iterable@npm:^3.0.0":
   version: 3.0.0
   resolution: "@databases/push-to-async-iterable@npm:3.0.0"
@@ -681,12 +702,34 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@databases/shared@npm:^3.1.0":
+  version: 3.1.0
+  resolution: "@databases/shared@npm:3.1.0"
+  dependencies:
+    "@databases/connection-pool": "npm:^1.1.0"
+    "@databases/lock": "npm:^2.1.0"
+    "@databases/queue": "npm:^1.0.1"
+    "@databases/split-sql-query": "npm:^1.0.4"
+    "@databases/sql": "npm:^3.3.0"
+  checksum: 10c0/56f197609c0c9165a92dde79d800ace096a885cfc6792221af7af92c5fbae7f53c9e99e203e985bef9ab630ee2b651b73fe6c2d64579468e3f9633aad21d0c9f
+  languageName: node
+  linkType: hard
+
 "@databases/split-sql-query@npm:^1.0.3":
   version: 1.0.3
   resolution: "@databases/split-sql-query@npm:1.0.3"
   peerDependencies:
     "@databases/sql": "*"
   checksum: 10c0/950087e6f68254e3374566fdf08e6f22290c565572519c4f17b7cbd2d8449bbd92cf98bc653eb857c77c31abbc700b46084c26e82bc70e0434e461faf0d4037c
+  languageName: node
+  linkType: hard
+
+"@databases/split-sql-query@npm:^1.0.4":
+  version: 1.0.4
+  resolution: "@databases/split-sql-query@npm:1.0.4"
+  peerDependencies:
+    "@databases/sql": "*"
+  checksum: 10c0/bf5697d5f17432aeaf8e195e673167de0b9acb5337f316eaaecb1c91bebf1c2074c488c104ca5ce5168768f5af1cfeca80ee1ee874644a605213d1aaa4322bf3
   languageName: node
   linkType: hard
 
