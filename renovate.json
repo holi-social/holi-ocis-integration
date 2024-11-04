@@ -17,5 +17,8 @@
       ],
       "groupName": "terraform"
     }
+  ],
+  "reviewers": [
+    "alexander.timmermann"
   ]
 }
