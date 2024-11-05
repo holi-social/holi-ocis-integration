@@ -682,7 +682,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@databases/pg-config@npm:^3.1.0, @databases/pg-config@npm:^3.1.1, @databases/pg-config@npm:^3.2.0":
+"@databases/pg-config@npm:^3.1.1, @databases/pg-config@npm:^3.2.0":
   version: 3.2.0
   resolution: "@databases/pg-config@npm:3.2.0"
   dependencies:
@@ -784,30 +784,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@databases/pg@npm:^5.0.0, @databases/pg@npm:^5.4.1":
-  version: 5.4.1
-  resolution: "@databases/pg@npm:5.4.1"
-  dependencies:
-    "@babel/code-frame": "npm:^7.0.0"
-    "@databases/escape-identifier": "npm:^1.0.3"
-    "@databases/pg-config": "npm:^3.1.0"
-    "@databases/pg-connection-string": "npm:^1.0.0"
-    "@databases/pg-data-type-id": "npm:^3.0.0"
-    "@databases/pg-errors": "npm:^1.0.0"
-    "@databases/push-to-async-iterable": "npm:^3.0.0"
-    "@databases/shared": "npm:^3.0.0"
-    "@databases/split-sql-query": "npm:^1.0.3"
-    "@databases/sql": "npm:^3.2.0"
-    "@types/cuid": "npm:^1.3.1"
-    assert-never: "npm:^1.2.1"
-    cuid: "npm:^2.1.8"
-    pg: "npm:^8.4.2"
-    pg-cursor: "npm:^2.4.2"
-  checksum: 10c0/7e399f4ce88517c45144954cde576bbeaa31c4e97c8a9324c6f6b1b4417dceb75bab01e47338a1bb4631efc41f0afa676e04c30282355300d135ef282b7af45f
-  languageName: node
-  linkType: hard
-
-"@databases/pg@npm:^5.5.0":
+"@databases/pg@npm:^5.0.0, @databases/pg@npm:^5.4.1, @databases/pg@npm:^5.5.0":
   version: 5.5.0
   resolution: "@databases/pg@npm:5.5.0"
   dependencies:
@@ -856,20 +833,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@databases/shared@npm:^3.0.0":
-  version: 3.0.2
-  resolution: "@databases/shared@npm:3.0.2"
-  dependencies:
-    "@databases/connection-pool": "npm:^1.1.0"
-    "@databases/lock": "npm:^2.1.0"
-    "@databases/queue": "npm:^1.0.1"
-    "@databases/split-sql-query": "npm:^1.0.3"
-    "@databases/sql": "npm:^3.3.0"
-    cuid: "npm:^2.1.8"
-  checksum: 10c0/ba6cc39182760e5d2cf80e2e4e154242c9020cc02f8f6f5cdc869fbd9ec854f9ed28b59dda343d5ba28e8c1b8c4308bead4ba5d805e2c20f54b50e6dd06cc961
-  languageName: node
-  linkType: hard
-
 "@databases/shared@npm:^3.1.0":
   version: 3.1.0
   resolution: "@databases/shared@npm:3.1.0"
@@ -883,15 +846,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@databases/split-sql-query@npm:^1.0.3":
-  version: 1.0.3
-  resolution: "@databases/split-sql-query@npm:1.0.3"
-  peerDependencies:
-    "@databases/sql": "*"
-  checksum: 10c0/950087e6f68254e3374566fdf08e6f22290c565572519c4f17b7cbd2d8449bbd92cf98bc653eb857c77c31abbc700b46084c26e82bc70e0434e461faf0d4037c
-  languageName: node
-  linkType: hard
-
 "@databases/split-sql-query@npm:^1.0.4":
   version: 1.0.4
   resolution: "@databases/split-sql-query@npm:1.0.4"
@@ -901,7 +855,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@databases/sql@npm:^3.2.0, @databases/sql@npm:^3.3.0":
+"@databases/sql@npm:^3.3.0":
   version: 3.3.0
   resolution: "@databases/sql@npm:3.3.0"
   checksum: 10c0/e11af2f5af149561b966a49a7ac769a19dd8b6bdcc9195780c22a9049c40575004729c53fcb48efae6fed8d5c6fb08aeaaff6dec7b67d9fff5502de7fd861470
@@ -1477,13 +1431,6 @@ __metadata:
   dependencies:
     "@types/node": "npm:*"
   checksum: 10c0/f11a1ccfed540723dddd7cb496543ad40a2f663f22ff825e9b220f0bae86db8b1ced2184ee41d3fb358b019ad6519e39481b06386db91ebb859003ad1d54fe6a
-  languageName: node
-  linkType: hard
-
-"@types/cuid@npm:^1.3.1":
-  version: 1.3.1
-  resolution: "@types/cuid@npm:1.3.1"
-  checksum: 10c0/047ea64276773ee2b23a1157a11447375a8c5a47faa0c2ea9e9d65d75881e719da86b5436cc560e0cea8ac54850bdac029ccc7bbc60d48436936f72733a2d176
   languageName: node
   linkType: hard
 
@@ -2568,13 +2515,6 @@ __metadata:
     shebang-command: "npm:^2.0.0"
     which: "npm:^2.0.1"
   checksum: 10c0/5738c312387081c98d69c98e105b6327b069197f864a60593245d64c8089c8a0a744e16349281210d56835bb9274130d825a78b2ad6853ca13cfbeffc0c31750
-  languageName: node
-  linkType: hard
-
-"cuid@npm:^2.1.8":
-  version: 2.1.8
-  resolution: "cuid@npm:2.1.8"
-  checksum: 10c0/6514d247c6de3e5cd32f485821365f4816ee14b777841fa717d37b7a8f791f3cb268be9e37ca54b110f6f5f625e4f0af581c3226aa14f259790539ba20fdaf61
   languageName: node
   linkType: hard
 
