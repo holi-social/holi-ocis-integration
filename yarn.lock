@@ -603,10 +603,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@colors/colors@npm:1.5.0":
-  version: 1.5.0
-  resolution: "@colors/colors@npm:1.5.0"
-  checksum: 10c0/eb42729851adca56d19a08e48d5a1e95efd2a32c55ae0323de8119052be0510d4b7a1611f2abcbf28c044a6c11e6b7d38f99fccdad7429300c37a8ea5fb95b44
+"@colors/colors@npm:1.6.0, @colors/colors@npm:^1.6.0":
+  version: 1.6.0
+  resolution: "@colors/colors@npm:1.6.0"
+  checksum: 10c0/9328a0778a5b0db243af54455b79a69e3fb21122d6c15ef9e9fcc94881d8d17352d8b2b2590f9bdd46fac5c2d6c1636dcfc14358a20c70e22daf89e1a759b629
   languageName: node
   linkType: hard
 
@@ -1671,6 +1671,15 @@ __metadata:
   version: 2.0.0
   resolution: "abbrev@npm:2.0.0"
   checksum: 10c0/f742a5a107473946f426c691c08daba61a1d15942616f300b5d32fd735be88fef5cba24201757b6c407fd564555fb48c751cfa33519b2605c8a7aadd22baf372
+  languageName: node
+  linkType: hard
+
+"abort-controller@npm:^3.0.0":
+  version: 3.0.0
+  resolution: "abort-controller@npm:3.0.0"
+  dependencies:
+    event-target-shim: "npm:^5.0.0"
+  checksum: 10c0/90ccc50f010250152509a344eb2e71977fbf8db0ab8f1061197e3275ddf6c61a41a6edfd7b9409c664513131dd96e962065415325ef23efa5db931b382d24ca5
   languageName: node
   linkType: hard
 
@@ -2902,6 +2911,20 @@ __metadata:
   version: 1.8.1
   resolution: "etag@npm:1.8.1"
   checksum: 10c0/12be11ef62fb9817314d790089a0a49fae4e1b50594135dcb8076312b7d7e470884b5100d249b28c18581b7fd52f8b485689ffae22a11ed9ec17377a33a08f84
+  languageName: node
+  linkType: hard
+
+"event-target-shim@npm:^5.0.0":
+  version: 5.0.1
+  resolution: "event-target-shim@npm:5.0.1"
+  checksum: 10c0/0255d9f936215fd206156fd4caa9e8d35e62075d720dc7d847e89b417e5e62cf1ce6c9b4e0a1633a9256de0efefaf9f8d26924b1f3c8620cffb9db78e7d3076b
+  languageName: node
+  linkType: hard
+
+"events@npm:^3.3.0":
+  version: 3.3.0
+  resolution: "events@npm:3.3.0"
+  checksum: 10c0/d6b6f2adbccbcda74ddbab52ed07db727ef52e31a61ed26db9feb7dc62af7fc8e060defa65e5f8af9449b86b52cc1a1f6a79f2eafcf4e62add2b7a1fa4a432f6
   languageName: node
   linkType: hard
 
@@ -4632,17 +4655,17 @@ __metadata:
   languageName: node
   linkType: hard
 
-"logform@npm:^2.3.2, logform@npm:^2.4.0":
-  version: 2.5.1
-  resolution: "logform@npm:2.5.1"
+"logform@npm:^2.6.0, logform@npm:^2.6.1":
+  version: 2.6.1
+  resolution: "logform@npm:2.6.1"
   dependencies:
-    "@colors/colors": "npm:1.5.0"
+    "@colors/colors": "npm:1.6.0"
     "@types/triple-beam": "npm:^1.3.2"
     fecha: "npm:^4.2.0"
     ms: "npm:^2.1.1"
     safe-stable-stringify: "npm:^2.3.1"
     triple-beam: "npm:^1.3.0"
-  checksum: 10c0/d11c36b4c42063abc816fda2fd149cff9969a9943d42afd95ddd1426804980b4e92e24f2ea6a9916fd490224b1c97578734a37d3b40ce3a9418495ce52e8ef23
+  checksum: 10c0/c20019336b1da8c08adea67dd7de2b0effdc6e35289c0156722924b571df94ba9f900ef55620c56bceb07cae7cc46057c9859accdee37a131251ba34d6789bce
   languageName: node
   linkType: hard
 
@@ -5656,7 +5679,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"readable-stream@npm:^3.4.0, readable-stream@npm:^3.6.0":
+"readable-stream@npm:^3.4.0":
   version: 3.6.2
   resolution: "readable-stream@npm:3.6.2"
   dependencies:
@@ -5664,6 +5687,19 @@ __metadata:
     string_decoder: "npm:^1.1.1"
     util-deprecate: "npm:^1.0.1"
   checksum: 10c0/e37be5c79c376fdd088a45fa31ea2e423e5d48854be7a22a58869b4e84d25047b193f6acb54f1012331e1bcd667ffb569c01b99d36b0bd59658fb33f513511b7
+  languageName: node
+  linkType: hard
+
+"readable-stream@npm:^4.5.2":
+  version: 4.5.2
+  resolution: "readable-stream@npm:4.5.2"
+  dependencies:
+    abort-controller: "npm:^3.0.0"
+    buffer: "npm:^6.0.3"
+    events: "npm:^3.3.0"
+    process: "npm:^0.11.10"
+    string_decoder: "npm:^1.3.0"
+  checksum: 10c0/a2c80e0e53aabd91d7df0330929e32d0a73219f9477dbbb18472f6fdd6a11a699fc5d172a1beff98d50eae4f1496c950ffa85b7cc2c4c196963f289a5f39275d
   languageName: node
   linkType: hard
 
@@ -6173,7 +6209,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"string_decoder@npm:^1.1.1":
+"string_decoder@npm:^1.1.1, string_decoder@npm:^1.3.0":
   version: 1.3.0
   resolution: "string_decoder@npm:1.3.0"
   dependencies:
@@ -6791,33 +6827,33 @@ __metadata:
   languageName: node
   linkType: hard
 
-"winston-transport@npm:^4.5.0":
-  version: 4.5.0
-  resolution: "winston-transport@npm:4.5.0"
+"winston-transport@npm:^4.7.0":
+  version: 4.8.0
+  resolution: "winston-transport@npm:4.8.0"
   dependencies:
-    logform: "npm:^2.3.2"
-    readable-stream: "npm:^3.6.0"
+    logform: "npm:^2.6.1"
+    readable-stream: "npm:^4.5.2"
     triple-beam: "npm:^1.3.0"
-  checksum: 10c0/110a47c5acc87c3aa0f101741c0a992e52a86802272838c18aede8178d2b5e80254d2433dcac3439cefbc2777d9e22e65f84e9cee3130681c58e4ae5d58f50c3
+  checksum: 10c0/e32fe791ef46f1f33a6afcfcdc03309b46e9825226c95f3560e18692cf788b72564d8ed97dc03d45796d822270dfaf862b14e72373b78186d62127903128579a
   languageName: node
   linkType: hard
 
 "winston@npm:*, winston@npm:^3.8.2":
-  version: 3.8.2
-  resolution: "winston@npm:3.8.2"
+  version: 3.16.0
+  resolution: "winston@npm:3.16.0"
   dependencies:
-    "@colors/colors": "npm:1.5.0"
+    "@colors/colors": "npm:^1.6.0"
     "@dabh/diagnostics": "npm:^2.0.2"
     async: "npm:^3.2.3"
     is-stream: "npm:^2.0.0"
-    logform: "npm:^2.4.0"
+    logform: "npm:^2.6.0"
     one-time: "npm:^1.0.0"
     readable-stream: "npm:^3.4.0"
     safe-stable-stringify: "npm:^2.3.1"
     stack-trace: "npm:0.0.x"
     triple-beam: "npm:^1.3.0"
-    winston-transport: "npm:^4.5.0"
-  checksum: 10c0/8d302d992e53e46c8f0355fae515356190d2dc9feaa8ae99afa5bba227f1fe2343ca9e367e5949a9b711f5f982e5b9280393d16be99fcd432660fd9597749954
+    winston-transport: "npm:^4.7.0"
+  checksum: 10c0/306e971da56c8162d5ad0b619da2c48a6c1a331f739f87c2dba37810430c00b99d466262f16490bcca65aa37f3f4339e581ef9ac110a2b4f5223edcb2f5d67b9
   languageName: node
   linkType: hard
 
