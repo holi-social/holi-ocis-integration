@@ -682,7 +682,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@databases/pg-config@npm:^3.1.1, @databases/pg-config@npm:^3.2.0":
+"@databases/pg-config@npm:^3.2.0":
   version: 3.2.0
   resolution: "@databases/pg-config@npm:3.2.0"
   dependencies:
@@ -734,42 +734,42 @@ __metadata:
   linkType: hard
 
 "@databases/pg-schema-cli@npm:^4.3.1":
-  version: 4.3.1
-  resolution: "@databases/pg-schema-cli@npm:4.3.1"
+  version: 4.4.0
+  resolution: "@databases/pg-schema-cli@npm:4.4.0"
   dependencies:
-    "@databases/pg-config": "npm:^3.1.1"
-    "@databases/pg-schema-introspect": "npm:^4.1.0"
-    "@databases/pg-schema-print-types": "npm:^4.4.1"
+    "@databases/pg-config": "npm:^3.2.0"
+    "@databases/pg-schema-introspect": "npm:^4.2.0"
+    "@databases/pg-schema-print-types": "npm:^4.5.0"
     chalk: "npm:^4.1.0"
     interrogator: "npm:^2.0.0"
     is-interactive: "npm:^1.0.0"
     parameter-reducers: "npm:^2.0.0"
   bin:
     pg-schema: lib/cli.js
-  checksum: 10c0/9c4020fb2ca779cb7ce61f88737e5928a64830ac575fa292358a94ef301f2667f1eec8ff58c824684d7512c440165ca9698cb2044c5745fb7d7b31275127353a
+  checksum: 10c0/c0bccefd8b85f67b410f14a62d9d8b89b1ae8916038bbf304b1bae604b2d0d7fe02622f9ec172dcfde5b8ad6d431dc846da1cc50cfe42f2dec725219ca13913c
   languageName: node
   linkType: hard
 
-"@databases/pg-schema-introspect@npm:^4.1.0":
-  version: 4.1.0
-  resolution: "@databases/pg-schema-introspect@npm:4.1.0"
+"@databases/pg-schema-introspect@npm:^4.2.0":
+  version: 4.2.0
+  resolution: "@databases/pg-schema-introspect@npm:4.2.0"
   dependencies:
-    "@databases/pg": "npm:^5.0.0"
-  checksum: 10c0/1cc8c6e75830f76b0209120f9889f7fa689fe2bd4cb178872ce6646bdb38e9c8bffb0f010a973eb7260506f8a552a7f16b0578fa69dfab6d21c3e94b23a524db
+    "@databases/pg": "npm:^5.5.0"
+  checksum: 10c0/baaa935215e4dfc3d99c7b70d3b4c8cd9494d08b7a6d8a19cc546eec8e2525af7644886ade5317e631bc23e185ab76d6078b0d8364e30fe17280cad72c11b61b
   languageName: node
   linkType: hard
 
-"@databases/pg-schema-print-types@npm:^4.4.1":
-  version: 4.4.1
-  resolution: "@databases/pg-schema-print-types@npm:4.4.1"
+"@databases/pg-schema-print-types@npm:^4.5.0":
+  version: 4.5.0
+  resolution: "@databases/pg-schema-print-types@npm:4.5.0"
   dependencies:
-    "@databases/pg-config": "npm:^3.1.1"
+    "@databases/pg-config": "npm:^3.2.0"
     "@databases/pg-data-type-id": "npm:^3.0.0"
     "@databases/shared-print-types": "npm:^1.2.0"
     assert-never: "npm:^1.2.1"
   peerDependencies:
     "@databases/pg-schema-introspect": "*"
-  checksum: 10c0/43253fc22da8d5063705ac96a7b9e35782ea20ea558ff0a10d59a01e7fb7a1c3bd347ad7ca600f2861d90fa1cd34c5c476c45fd276f9e04e4f347079a2865f1f
+  checksum: 10c0/cb7a457da1cb68e7f1415ebb9366f883c2abe9a0c19ccb023b849d2f262ed64656086388daf71e3697bad33d17e749c8b86ac243b8c27203617475be8e101ae3
   languageName: node
   linkType: hard
 
@@ -784,7 +784,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@databases/pg@npm:^5.0.0, @databases/pg@npm:^5.4.1, @databases/pg@npm:^5.5.0":
+"@databases/pg@npm:^5.4.1, @databases/pg@npm:^5.5.0":
   version: 5.5.0
   resolution: "@databases/pg@npm:5.5.0"
   dependencies:
