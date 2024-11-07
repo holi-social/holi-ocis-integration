@@ -24,7 +24,7 @@ install_dependencies:
       - .yarn/
   script:
     - corepack enable
-    - yarn install --immutable --check-cache
+    - yarn install --immutable
   only:
     changes:
       - package.json
