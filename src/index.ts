@@ -5,7 +5,7 @@ import { spaceUserLeftHandler } from './handlers/space-user-left-handler'
 import { spaceUserRemovedHandler } from './handlers/space-user-removed-handler'
 import { userDeletedHandler } from './handlers/user-deleted-handler'
 import { userNameUpdatedHandler } from './handlers/user-name-updated-handler'
-import { logPhase, logger } from './logger'
+import { logPhase, logInfo, logger } from './logger'
 
 import { EventType } from './types'
 import { spaceUpdatedHandler } from './handlers/space-updated-handler'
@@ -68,7 +68,8 @@ export const receiveEvent = async (request, response): Promise<void> => {
         response.sendStatus(200)
         break
       default:
-        throw new Error(`Received unexpected event of type ${eventType}`)
+        logInfo(messageId, 'Ignoring unexpected event of type: ' + eventType)
+        response.sendStatus(200)
     }
   } catch (e) {
     logger.error('[' + messageId + '] Error while processing message:', e)

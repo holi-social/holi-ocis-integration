@@ -5,6 +5,10 @@ export const logger = createLogger({
   level: 'debug',
 })
 
+export const logInfo = (messageId: string, message: string) => {
+  logger.info('[' + messageId + '] ' + message)
+}
+
 export const logPhase = (messageId: string, phaseName: string) => (fn: () => Promise<any>) => {
   const before = Date.now()
   logger.debug('[' + messageId + '] Starting ' + phaseName)
