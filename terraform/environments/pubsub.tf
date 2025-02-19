@@ -4,6 +4,12 @@ resource "google_pubsub_subscription" "okuna" {
   topic   = local.environment_name == "production" ? data.terraform_remote_state.okuna_common_state.outputs.google_pubsub_topic_okuna_production : data.terraform_remote_state.okuna_common_state.outputs.google_pubsub_topic_okuna_staging
 
   ack_deadline_seconds = 10 * 60 # 10 minutes, max. value
+
+  retry_policy {
+    maximum_backoff = "600s"
+    minimum_backoff = "10s"
+  }
+
   expiration_policy {
     ttl = "" # never expire
   }
