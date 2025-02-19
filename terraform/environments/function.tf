@@ -47,9 +47,10 @@ resource "google_cloudfunctions2_function" "holi_ocis_integration" {
   }
 
   service_config {
-    max_instance_count = local.environment_name == "production" ? 3 : 1
-    min_instance_count = 0
-    available_memory   = "128Mi"
+    max_instance_count = 1
+    min_instance_count = local.environment_name == "production" ? 1 : 0
+    max_instance_request_concurrency = 1
+    available_memory   = "256Mi"
     timeout_seconds    = 60
     environment_variables = {
       ENVIRONMENT              = local.environment_name
