@@ -19,3 +19,4 @@ coverage/
 !.yarn/releases
 !.yarn/sdks
 !.yarn/versions
+/.gitlab-ci-local
