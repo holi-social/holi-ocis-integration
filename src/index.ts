@@ -33,6 +33,11 @@ export const receiveEvent = async (request, response): Promise<void> => {
 
   const { eventType, event, messageId } = extractEventDetails(request)
 
+  if (event.space?.id === "9a33a9e3-6077-4e30-91bd-f68eaa2942ff") {
+    logger.info("Discarding event of holi Community Space")
+    return
+  }
+
   try {
     switch (eventType) {
       case EventType.SPACE_CREATED:
