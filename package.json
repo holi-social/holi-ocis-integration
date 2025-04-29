@@ -32,7 +32,7 @@
     "@databases/pg": "^5.4.1",
     "@databases/pg-schema-cli": "^4.3.1",
     "@databases/pg-typed": "^4.4.1",
-    "@google-cloud/functions-framework": "^3.3.0",
+    "@google-cloud/functions-framework": "^4.0.0",
     "axios": "^1.3.4",
     "https": "^1.0.0",
     "pg": "^8.4.0",
